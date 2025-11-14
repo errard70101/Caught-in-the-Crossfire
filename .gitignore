@@ -1,0 +1,167 @@
+# Caught in the Crossfire - Git Ignore File
+# Created: 2025-11-14
+
+# ============================================
+# Large Data Files (Phase 1)
+# ============================================
+data/raw/**/*.csv
+data/raw/**/*.xlsx
+data/raw/**/*.xls
+data/cleaned/**/*.csv
+data/final/**/*.csv
+data/**/*.rds
+data/**/*.RData
+
+# Keep directory structure but ignore data files
+!data/raw/.gitkeep
+!data/cleaned/.gitkeep
+!data/final/.gitkeep
+
+# Data documentation should be kept
+!data/README.md
+!data/data_dictionary.xlsx
+!data/**/*_metadata.txt
+
+# ============================================
+# MCMC Output Files (Phase 2-3)
+# ============================================
+results/mcmc_output/**/*.mat
+results/mcmc_output/**/*.rds
+results/mcmc_output/**/*.RData
+results/**/*_draws.csv
+results/**/*_posterior.csv
+
+# Keep convergence diagnostics (usually small PDFs)
+!results/convergence_diagnostics.pdf
+
+# ============================================
+# Large Figure Files
+# ============================================
+figures/**/*.png
+figures/**/*.jpg
+figures/**/*.tif
+
+# Keep PDFs for paper (usually compressed)
+!figures/**/*.pdf
+
+# ============================================
+# Intermediate Code Output
+# ============================================
+code/**/*.log
+code/**/__pycache__/
+code/**/*.pyc
+code/**/.Rhistory
+code/**/.RData
+code/**/.Rproj.user
+code/**/*.o
+code/**/*.so
+code/**/*.dll
+
+# ============================================
+# LaTeX Compilation Files
+# ============================================
+paper/**/*.aux
+paper/**/*.bbl
+paper/**/*.blg
+paper/**/*.log
+paper/**/*.out
+paper/**/*.synctex.gz
+paper/**/*.toc
+paper/**/*.lof
+paper/**/*.lot
+paper/**/*.fls
+paper/**/*.fdb_latexmk
+paper/**/*.nav
+paper/**/*.snm
+paper/**/*.vrb
+
+# Keep the final PDFs
+!paper/**/*.pdf
+!research_proposal.pdf
+
+# ============================================
+# Presentation Files (Keep PDFs, ignore source in progress)
+# ============================================
+presentations/**/*.pptx~
+presentations/**/*.key~
+
+# ============================================
+# Temporary Files
+# ============================================
+**/*~
+**/*.swp
+**/*.swo
+**/.DS_Store
+**/Thumbs.db
+**/*.tmp
+
+# ============================================
+# Environment Files (with sensitive data)
+# ============================================
+.env
+.env.local
+**/*_credentials.json
+**/*_api_keys.txt
+
+# ============================================
+# IDE and Editor Files
+# ============================================
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+.Rproj.user
+.Rhistory
+
+# ============================================
+# Archive (keep structure, ignore large old files)
+# ============================================
+archive/**/*.csv
+archive/**/*.mat
+
+# ============================================
+# Exceptions - Always Keep These
+# ============================================
+# Small example datasets for testing
+!data/raw/example_small.csv
+
+# Descriptive statistics tables (small)
+!tables/**/*.tex
+!tables/**/*.csv
+
+# Code and scripts (always version controlled)
+!code/**/*.R
+!code/**/*.py
+!code/**/*.m
+!code/**/*.jl
+!code/**/*.do
+!code/**/*.sh
+
+# Documentation
+!**/*.md
+!**/*.txt
+!**/*.pdf
+
+# ============================================
+# Project Management (always keep)
+# ============================================
+!project_management/**/*
+
+# ============================================
+# Git LFS (if using for large files)
+# ============================================
+# Uncomment if using Git LFS
+# *.csv filter=lfs diff=lfs merge=lfs -text
+# *.mat filter=lfs diff=lfs merge=lfs -text
+
+# ============================================
+# Notes
+# ============================================
+# This .gitignore is designed for a research project with:
+# - Large datasets (40+ variables, 300+ months)
+# - MCMC estimation output (can be 100+ MB)
+# - LaTeX paper compilation
+# - R/Python/MATLAB code
+#
+# Adjust as needed for your workflow
+# Last updated: 2025-11-14
