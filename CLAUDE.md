@@ -41,6 +41,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ├── llm_logs/                    # LLM conversation logs for research brainstorming
 │   ├── 2025-11-08_discussion.md # Extensive discussion on methodology and data
 │   └── discussion-template.md   # Template for logging new discussions
+├── literature/                  # Literature review and related work
+│   └── uncertainty_shock_literature.md  # Comprehensive literature review
 ├── references/                  # Reference papers and materials
 │   └── Investigating Economic Uncertain.pdf  # Davidson, Hou, Koop (2025)
 └── research_proposal.md         # Research proposal template (to be filled)
@@ -61,9 +63,55 @@ When adding new discussion logs:
 - Include date, model used, and purpose
 - Document key insights and next action items
 
+## Working with Literature Review
+
+The `literature/` directory contains comprehensive literature review materials to strengthen research motivation and identify gaps.
+
+**Key document**: `uncertainty_shock_literature.md` provides systematic review organized in 4 phases:
+
+1. **Phase 1: Core Uncertainty Shock Literature**
+   - Foundational measurement papers (Baker-Bloom-Davis EPU, Jurado-Ludvigson-Ng)
+   - VAR-based identification (Carriero-Clark-Marcellino, Banbura-Giannone-Reichlin)
+   - Order-invariant methods (Chan-Koop-Yu 2024) directly supporting DHK (2025)
+
+2. **Phase 2: Small Open Economy & Uncertainty Transmission**
+   - International spillover mechanisms and transmission channels
+   - Panel VAR studies including Taiwan as emerging market
+   - Korea and Singapore as comparable cases
+
+3. **Phase 3: Decomposition of Uncertainty Types**
+   - Separating macro vs. financial uncertainty (Caldara et al., Brianti 2025)
+   - Different policy responses required for each type
+   - Macro uncertainty causes deflation; financial uncertainty doesn't
+
+4. **Phase 4: Taiwan/Asia-Pacific Context**
+   - Taiwan-specific studies (Sin 2015, Huang et al. 2019)
+   - US-China trade war impacts on Taiwan
+   - Taiwan's "caught in crossfire" position
+
+**Research Gaps Identified**:
+- No order-invariant SVMVAR applied to small open economies
+- No macro vs. financial uncertainty decomposition for Taiwan
+- No quantitative study of dual US-China uncertainty exposure
+- No guidance for CBC on responding to different uncertainty types
+
+**Novel Contributions This Research Makes**:
+1. First order-invariant SVMVAR for small open economy
+2. First dual US-China exposure quantification
+3. Taiwan-specific geopolitical risk integration
+4. Solves real CBC policy puzzle
+5. Validates DHK (2025) in new context
+6. Globally relevant (semiconductor industry)
+
 ## Expected Research Workflow
 
-### Phase 1: Data Collection (Current Challenge)
+### Phase 0: Literature Review ✓ (Completed)
+- Systematic review of global uncertainty shock literature
+- Identification of methodological foundations
+- Documentation of research gaps
+- Positioning of Taiwan research contributions
+
+### Phase 1: Data Collection (Current Phase)
 - Assemble 40+ monthly frequency variables from ~1990 onward
 - Include Taiwan macro variables (IPI, CPI, unemployment, exports, etc.)
 - Include Taiwan financial variables (TAIEX, interest rates, credit spreads, etc.)
