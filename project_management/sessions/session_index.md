@@ -9,15 +9,17 @@
 
 | 日期 | 階段ID | 任務簡述 | AI模型 | 完成任務 | 文件連結 |
 |------|--------|---------|--------|---------|---------|
+| 2025-11-14 | review-literature-integration-instructions-01LRNFzNDc4P9pDgmAUQ3eri | 文獻整合至研究提案動機段落 | Claude Sonnet 4.5 | DOC-015 | [連結](2025-11-14_literature-integration-to-proposal.md) |
 | 2025-11-14 | review-folder-structure-01WxdNHeSuY7JZVUCZZM6hdk | 資料夾結構重整與任務管理系統建立 | Claude Sonnet 4.5 | SETUP-001 | [連結](2025-11-14_folder-restructure-and-task-system.md) |
 
 ---
 
 ## 📊 統計
 
-- **總工作階段數**: 1
+- **總工作階段數**: 2
 - **涵蓋時間範圍**: 2025-11-14 至今
 - **主要AI模型**: Claude Sonnet 4.5
+- **Phase 0完成**: ✅ 100% (包含research_proposal.tex修訂)
 
 ---
 

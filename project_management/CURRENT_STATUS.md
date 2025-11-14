@@ -1,6 +1,6 @@
 # 專案當前狀態
 
-**最後更新**: 2025-11-14 by Claude (session: review-folder-structure-01WxdNHeSuY7JZVUCZZM6hdk)
+**最後更新**: 2025-11-14 by Claude (session: review-literature-integration-instructions-01LRNFzNDc4P9pDgmAUQ3eri)
 **當前階段**: Phase 1 - 資料收集（0% 完成）
 **專案總體進度**: 15%
 
@@ -8,10 +8,14 @@
 
 ## ⚡ 現在正在做什麼
 
-**🔧 資料夾結構重整與任務管理系統建立**
-- 建立project_management/任務追蹤系統
-- 為Phase 1-5建立完整資料夾架構
-- 設計人類與多AI協作的工作流程
+**✅ 剛完成：研究提案動機段落修訂**
+- 文獻整合至research_proposal.tex
+- 研究問題重新定位（傳導管道 vs. 不確定性類型）
+- 與正確研究方向對齊
+
+**🔜 下一步：資料收集準備**
+- 建立data/資料夾結構
+- 準備開始Phase 1資料收集
 
 ---
 
@@ -52,16 +56,20 @@
 
 ## 📝 最近完成的任務（最近10項）
 
-1. ✅ 2025-11-14: 建立project_management/任務追蹤系統
-2. ✅ 2025-11-14: 創建CURRENT_STATUS.md（本文件）
-3. ✅ 2025-11-14: 完成資料夾重整規劃
-4. ✅ 2025-11-14: 完成AI協作指引文件（INSTRUCTIONS_FOR_AI_literature_integration.md）
-5. ✅ 2025-11-14: 整合文獻回顧到專案文件
-6. ✅ 2025-11-14: 建立詳細研究方向與里程碑文件
-7. ✅ 2025-11-14: 更新CLAUDE.md和README.md
-8. ✅ 2025-11-08: 完成核心方法論決策（不延伸DHK模型）
-9. ✅ 2025-11-08: 確認變數分類策略（外部變數放unclassified）
-10. ✅ 2025-11-08: 完成全球不確定性衝擊文獻回顧（40+篇論文）
+1. ✅ 2025-11-14: **修訂research_proposal.tex動機段落（重大更新）**
+   - 研究問題重新定位：從"哪種不確定性主導？"改為"哪種傳導管道？"
+   - 整合40+篇文獻證據支持論述
+   - 明確區隔與DHK (2025)的差異（novel application vs. country replication）
+   - 新增Brianti (2025), Banbura et al. (2010)等關鍵引用
+2. ✅ 2025-11-14: 建立project_management/任務追蹤系統
+3. ✅ 2025-11-14: 創建CURRENT_STATUS.md（本文件）
+4. ✅ 2025-11-14: 完成資料夾重整規劃
+5. ✅ 2025-11-14: 完成AI協作指引文件（INSTRUCTIONS_FOR_AI_literature_integration.md）
+6. ✅ 2025-11-14: 整合文獻回顧到專案文件
+7. ✅ 2025-11-14: 建立詳細研究方向與里程碑文件
+8. ✅ 2025-11-14: 更新CLAUDE.md和README.md
+9. ✅ 2025-11-08: 完成核心方法論決策（不延伸DHK模型）
+10. ✅ 2025-11-08: 確認變數分類策略（外部變數放unclassified）
 
 ---
 
