@@ -1,7 +1,7 @@
 # 當前進行中的任務
 
-**更新時間**: 2025-11-16 (by Claude - session: general-session-01WfouuZkY5WApMNLg5XdJbJ)
-**當前Phase**: Phase 1 - 資料收集
+**更新時間**: 2025-11-16 (by Claude - session: economic-uncertainty-paper-plan-01Fzd3sUR5qhsCJELNawabmx)
+**當前Phase**: Phase 2.1 - DHK (2025) Paper Replication
 
 ---
 
@@ -12,6 +12,257 @@
 ---
 
 ## 🟡 待開始 (Ready to Start)
+
+### 📌 DHK (2025) Replication Tasks - HIGH PRIORITY
+
+### Task-DHK-001: Review DHK Replication Plan
+- **任務ID**: DHK-PLAN-001
+- **優先級**: P0 (最高 - 需要人類決策)
+- **負責**: User
+- **預計時間**: 2-3 hours
+- **階段**: Phase 2.1 準備
+
+**說明**:
+閱讀並討論DHK (2025) paper replication plan。需要做出關鍵決策才能開始實施。
+
+**文件位置**:
+- 📄 **Executive Summary**: `docs/DHK_REPLICATION_SUMMARY.md` ← START HERE
+- 📄 **Full Plan**: `llm_logs/2025-11-16_DHK_replication_plan.md`
+- 📄 **Technical Instructions**: `code/DHK_original/MODULE_INSTRUCTIONS.md`
+- 📄 **User Guide**: `code/DHK_original/README.md`
+
+**需要決策的問題**:
+1. **程式語言**: R (推薦) vs MATLAB vs Python?
+2. **時程**: 3-4個月可接受嗎？
+3. **複製程度**: 完整複製 vs 重點複製 vs 最小可行複製？
+4. **運算資源**: 有HPC cluster嗎？還是用個人電腦？
+5. **實施者**: 你會寫code？還是需要完整程式碼？
+6. **聯繫作者**: 是否寫信向DHK作者索取replication code？
+
+**檢查清單**:
+- [ ] 閱讀 DHK_REPLICATION_SUMMARY.md
+- [ ] 瀏覽 2025-11-16_DHK_replication_plan.md (14,000字)
+- [ ] 理解8個modules結構
+- [ ] 回答6個決策問題
+- [ ] 與Claude討論plan
+- [ ] 批准或修改plan
+
+---
+
+### Task-DHK-002: 決定程式語言並設定開發環境
+- **任務ID**: DHK-SETUP-001
+- **優先級**: P1 (高)
+- **負責**: 待分配
+- **預計時間**: 3-4 hours
+- **階段**: Module 0 - Setup
+- **前置任務**: Task-DHK-001 (plan approval)
+
+**說明**:
+選擇程式語言（推薦R）並安裝所有必要套件和開發環境。
+
+**如果選擇R**:
+```r
+# 1. 安裝R和RStudio
+# 2. 安裝必要套件
+install.packages(c(
+  "Matrix",      # 稀疏矩陣
+  "spam",        # 帶狀矩陣 (速度關鍵!)
+  "mvtnorm",     # 多元常態分佈
+  "MCMCpack",    # MCMC工具
+  "coda",        # 收斂診斷
+  "ggplot2",     # 視覺化
+  "dplyr", "tidyr"  # 資料處理
+))
+```
+
+**檢查清單**:
+- [ ] 決定語言: R / MATLAB / Python
+- [ ] 下載安裝IDE (RStudio / MATLAB / VSCode)
+- [ ] 安裝所需套件/toolboxes
+- [ ] 測試basic functionality
+- [ ] 設定git workflow for code
+- [ ] 記錄在 code/DHK_original/setup/installation_log.md
+
+---
+
+### Task-DHK-003: 聯繫DHK作者索取replication code
+- **任務ID**: DHK-CONTACT-001
+- **優先級**: P1 (高 - 可平行進行)
+- **負責**: User (需人類執行)
+- **預計時間**: 1 hour (撰寫 + 等待數週)
+- **階段**: Module 0 - Setup
+- **前置任務**: 無 (可立即開始)
+
+**說明**:
+聯繫Davidson, Hou, Koop (2025)作者，禮貌地請求提供OI-SVMVAR replication code。即使獲得code，仍需深入理解才能adapt to Taiwan。
+
+**作者資訊**:
+- **Sharada Nia Davidson**: University of Strathclyde
+- **Chenghan Hou**: Hunan University (chenghan.hou@hotmail.com)
+- **Gary Koop**: University of Strathclyde
+- **Journal**: Journal of Business & Economic Statistics (2025)
+- **DOI**: 10.1080/07350015.2025.2455064
+
+**Email要點**:
+- [ ] 簡短自我介紹（PhD student/researcher）
+- [ ] 說明研究目的：applying DHK framework to Taiwan (small open economy)
+- [ ] 禮貌請求replication code (MATLAB/R/Python)
+- [ ] 表示願意引用致謝
+- [ ] 提及online appendix是否包含code
+
+**備註**: Claude可協助撰寫email草稿，但需要你發送。
+
+---
+
+### Task-DHK-004: 下載FRED-MD資料集
+- **任務ID**: DHK-M1-001
+- **優先級**: P1 (高)
+- **負責**: 待分配
+- **預計時間**: 2 hours
+- **階段**: Module 1 - Data Collection
+- **前置任務**: Task-DHK-002 (development environment)
+
+**說明**:
+下載FRED-MD monthly dataset (1960-2021)，extract 43 variables用於empirical application。
+
+**資料來源**:
+- Website: https://research.stlouisfed.org/econ/mccracken/fred-databases/
+- Direct download: https://files.stlouisfed.org/files/htdocs/fred-md/monthly/current.csv
+- Documentation: FRED-MD appendix
+
+**Variable List** (from Online Appendix B):
+- 30-variable baseline (CCM model)
+- 43-variable extended (OI-TVC-43 model)
+- Classification: 18 macro, 12 financial, 13 unclassified
+
+**檢查清單**:
+- [ ] 下載current FRED-MD dataset
+- [ ] Extract subset: 1960-01 to 2021-10
+- [ ] Verify 43 variables present
+- [ ] 儲存至 data/raw/fredmd_raw.csv
+- [ ] 記錄download date and source
+- [ ] Create variable classification file
+- [ ] 更新 data/README.md
+
+**輸出檔案**:
+- `data/raw/fredmd_raw.csv`
+- `data/processed/variable_list_43var.csv`
+- `data/processed/classification_scheme.csv`
+
+---
+
+### Task-DHK-005: 資料轉換與標準化
+- **任務ID**: DHK-M1-002
+- **優先級**: P1 (高)
+- **負責**: 待分配
+- **預計時間**: 3 hours
+- **階段**: Module 1 - Data Processing
+- **前置任務**: Task-DHK-004
+
+**說明**:
+Apply transformation codes (log, first difference, etc.) to each FRED-MD variable, then standardize to zero mean and unit variance.
+
+**Transformation Codes** (from FRED-MD):
+- 1: No transformation
+- 2: First difference
+- 4: Log
+- 5: First difference of log
+- etc.
+
+**Standardization**:
+- Mean = 0, SD = 1 for each variable
+- **Critical**: Save mean and SD for later rescaling of IRFs
+
+**檢查清單**:
+- [ ] 實施 `code/DHK_original/data_processing/02_transform_data.R`
+- [ ] Apply correct transformation to each variable
+- [ ] 檢查stationarity (ADF test optional)
+- [ ] Standardize: (x - mean)/sd
+- [ ] Save transformation parameters
+- [ ] Create 6-var, 30-var, 43-var subsets
+- [ ] 儲存processed data
+
+**輸出檔案**:
+- `data/processed/fredmd_transformed.csv`
+- `data/processed/fredmd_standardized.csv`
+- `data/processed/transformation_params.csv` (mean, sd for each variable)
+- `data/processed/test_6var.csv` (for testing)
+
+---
+
+### Task-DHK-006: 實施Model Equations
+- **任務ID**: DHK-M2-001
+- **優先級**: P1 (高)
+- **負責**: 待分配
+- **預計時間**: 40 hours (1-2 weeks)
+- **階段**: Module 2 - Model Specification
+- **前置任務**: Task-DHK-002
+
+**說明**:
+Implement core OI-SVMVAR equations (1)-(7) from DHK paper. This is foundational for all MCMC steps.
+
+**Equations to Implement**:
+1. Equation (1): VAR with SV in mean
+2. Equation (2): Covariance structure
+3. Equations (3)-(5): Volatility decomposition (macro, financial, unclassified)
+4. Equation (6): Common volatility dynamics
+5. Equation (7): Idiosyncratic volatilities
+
+**參考**:
+- Paper: Section 2.1
+- Instructions: `code/DHK_original/MODULE_INSTRUCTIONS.md` - Module 2
+
+**檢查清單**:
+- [ ] Create `code/DHK_original/model/svmvar_equations.R`
+- [ ] Implement create_lags() function
+- [ ] Implement compute_var_mean() - Equation (1)
+- [ ] Implement compute_covariance_matrix() - Equation (2)
+- [ ] Implement decompose_volatility() - Equations (3)-(5)
+- [ ] Implement compute_h_mean() - Equation (6)
+- [ ] Implement AR(1) for idiosyncratic - Equation (7)
+- [ ] Test on toy 6-variable example
+- [ ] Write unit tests
+
+---
+
+### 🔥 Task-DHK-007: 實施B0 Sampler (Order-Invariant Algorithm)
+- **任務ID**: DHK-M3-001
+- **優先級**: P1 (最高 - CRITICAL)
+- **負責**: 待分配
+- **預計時間**: 80 hours (2 weeks intensive)
+- **階段**: Module 3 - MCMC Algorithm
+- **前置任務**: Task-DHK-006
+
+**說明**:
+實施DHK paper的核心創新：order-invariant B0 sampler using parameter transformation. **This is the hardest task.**
+
+**Algorithm Steps** (Section 2.2):
+1. Transform b̃0,i to w (Equation 14)
+2. Sample w1 from absolute normal (Proposition 1)
+3. Sample w_{-1} from conditional Gaussian (Equation 18)
+4. Transform back to b̃0,i (Equation 15)
+
+**Key Challenge**: Absolute normal distribution requires mixture approximation (Villani 2009, Appendix C)
+
+**參考**:
+- Paper: Section 2.2, Equations (8)-(18), Proposition 1
+- Instructions: MODULE_INSTRUCTIONS.md - M3.1
+
+**檢查清單**:
+- [ ] Study Section 2.2 thoroughly
+- [ ] Implement transform_b_to_w() - Equation (14)
+- [ ] Implement sample_absolute_normal() - Proposition 1
+- [ ] Implement sample_w_minus1() - Equation (18)
+- [ ] Implement transform_w_to_b() - Equation (15)
+- [ ] Assemble sample_B0_row()
+- [ ] Implement sample_B0() (loop over all rows)
+- [ ] Test on synthetic data with known B0
+- [ ] Verify: diagonal elements = 1
+- [ ] Check acceptance rate (target: 30-50%)
+
+**Success Criterion**: Algorithm recovers known B0 in simulation
+
+---
 
 ### Task-001: 下載台灣工業生產指數（IPI）
 - **任務ID**: DATA-1.1.1
@@ -194,7 +445,15 @@
 
 ## 🟢 已完成 (Completed) - 最近10項
 
-1. ✅ **SETUP-001**: 建立專案管理系統與資料夾重整 (2025-11-16)
+1. ✅ **PLAN-DHK-001**: 創建DHK (2025) Replication Plan (2025-11-16)
+   - 完整14,000字詳細計畫 (llm_logs/2025-11-16_DHK_replication_plan.md)
+   - 模組化結構：8個modules, 詳細timeline
+   - 技術說明文件 (code/DHK_original/MODULE_INSTRUCTIONS.md)
+   - 使用指南 (code/DHK_original/README.md)
+   - Executive Summary (docs/DHK_REPLICATION_SUMMARY.md)
+   - 資料夾結構建立complete
+
+2. ✅ **SETUP-001**: 建立專案管理系統與資料夾重整 (2025-11-16)
    - 建立完整 Phase 1-5 資料夾架構（方案B：完整架構）
    - 創建 34 個 .gitkeep 檔案保留空資料夾
    - 資料夾包含：data/(8個子資料夾), code/(5個), results/(5個), figures/(6個), tables/, paper/, presentations/, policy_brief/, docs/, archive/
@@ -239,10 +498,17 @@
 ## 📊 任務統計
 
 - **進行中**: 0 tasks
-- **待開始**: 6 tasks
-- **已完成**: 11 tasks (Phase 0 + SETUP-001)
+- **待開始**: 13 tasks (6 Taiwan data + 7 DHK replication)
+- **已完成**: 12 tasks (Phase 0 + SETUP + DHK Plan)
 - **暫停**: 0 tasks
 - **已取消**: 0 tasks
+
+### DHK Replication Progress
+- **Module 0 (Setup)**: 0/3 tasks
+- **Module 1 (Data)**: 0/2 tasks
+- **Module 2 (Model)**: 0/1 tasks
+- **Module 3 (MCMC)**: 0/1 tasks (critical!)
+- **Modules 4-8**: Not yet created
 
 ---
 
@@ -255,8 +521,23 @@
 4. **每次工作**: 結束後建立工作階段紀錄（sessions/資料夾）
 
 ### 給人類協作者
-1. **Task-006（聯繫DHK作者）**: 需要人類執行，可請AI協助撰寫email
-2. **資料下載**: 大部分任務AI可執行，但需要檢查資料品質
+
+#### 🔥 URGENT: DHK Replication需要你的決策 (Task-DHK-001)
+**請先閱讀**: `docs/DHK_REPLICATION_SUMMARY.md` (Executive Summary)
+
+**關鍵決策** (需要你回答):
+1. 程式語言: R (推薦) vs MATLAB vs Python?
+2. 時程: 3-4個月可以嗎？
+3. 複製程度: 完整 vs 重點 vs 最小可行？
+4. 運算資源: HPC cluster or 個人電腦?
+5. 你會寫code嗎？還是需要完整程式碼？
+6. 是否聯繫DHK作者要code?
+
+**請與Claude討論後再開始實施**
+
+#### 其他提醒
+1. **Task-DHK-003（聯繫DHK作者）**: 需要人類執行，可請AI協助撰寫email
+2. **Taiwan資料下載**: 大部分任務AI可執行，但需要檢查資料品質
 3. **任務分配**: 可在"負責"欄位填寫負責人名稱
 
 ---
@@ -271,9 +552,46 @@
 - **LIT-XXX**: 文獻回顧
 - **DEC-XXX**: 決策紀錄
 - **PHASEXX-XXX**: 階段性總結任務
+- **DHK-XXX**: DHK (2025) Paper Replication tasks
+  - **DHK-PLAN-XXX**: Planning and documentation
+  - **DHK-SETUP-XXX**: Setup and environment (Module 0)
+  - **DHK-M1-XXX**: Data collection (Module 1)
+  - **DHK-M2-XXX**: Model specification (Module 2)
+  - **DHK-M3-XXX**: MCMC algorithm (Module 3) 🔥
+  - **DHK-M4-XXX**: Simulation study (Module 4)
+  - **DHK-M5-XXX**: Empirical application (Module 5)
+  - **DHK-M6-XXX**: Analysis tools (Module 6)
+  - **DHK-M7-XXX**: Visualization (Module 7)
+  - **DHK-M8-XXX**: Documentation (Module 8)
 
 ---
 
 **更新紀錄**:
-- 2025-11-16: 完成 SETUP-001 (資料夾結構建立 - 方案B完整架構)
+- 2025-11-16 (afternoon): 加入 DHK Replication 完整計畫與tasks (7個初始tasks)
+- 2025-11-16 (morning): 完成 SETUP-001 (資料夾結構建立 - 方案B完整架構)
 - 2025-11-14: 初始建立，加入Phase 0完成任務與Phase 1初始任務
+
+---
+
+## 📚 DHK Replication 資源
+
+### 必讀文件 (Priority Order)
+1. 🔴 **START HERE**: `docs/DHK_REPLICATION_SUMMARY.md` - Executive Summary
+2. 📘 **Full Plan**: `llm_logs/2025-11-16_DHK_replication_plan.md` - 14,000 words
+3. 🔧 **Technical**: `code/DHK_original/MODULE_INSTRUCTIONS.md` - Implementation cookbook
+4. 📖 **User Guide**: `code/DHK_original/README.md` - How to run
+5. 📄 **Original Paper**: `references/Investigating Economic Uncertain.pdf`
+
+### 計畫概要
+- **8 Modules**: Data → Model → MCMC → Simulation → Empirical → Analysis → Viz → Docs
+- **Timeline**: 3-4 months (300-400 hours)
+- **Critical Module**: M3 (MCMC) - 最困難，novel algorithm
+- **Computational Cost**: 120+ hours of machine time
+- **Language**: R recommended (可討論)
+
+### 關鍵里程碑
+- **Week 1-2**: Data collection + Model equations
+- **Week 3-6**: MCMC algorithm implementation (HARD!) 🔥
+- **Week 7-8**: Simulation study validation
+- **Week 9-11**: Empirical application (mostly waiting)
+- **Week 12-13**: Finalization and documentation
