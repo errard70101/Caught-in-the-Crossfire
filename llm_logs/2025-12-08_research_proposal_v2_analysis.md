@@ -9,7 +9,7 @@
 
 ### 1.1 目前 v2 的內容
 
-`research_proposal_v2.tex` 目前僅包含一個簡短的 Introduction 段落（約15行），主要聚焦於：
+`research_proposal_v2.tex` 包含一個 Introduction section，有兩個標記為 `=== to be modified ===` 的段落待修改。目前內容主要聚焦於：
 
 1. **Taiwan 的地緣經濟位置**：深度整合於美中經濟體系
 2. **政策不確定性的時間維度**：強調重大政策變動從宣布到形成穩定政策軌跡之間存在漫長的不確定期間
@@ -228,3 +228,178 @@ CCM (2018) "Measuring Uncertainty and Its Impact on the Economy" 提出的主要
 > "When using large order-dependent SVMVARs, however, the uncertainty estimates produced depend on the variable ordering, distorting impulse response analysis. Thus, it becomes critical to adopt an order-invariant specification." (p.1)
 
 > "We also find that many variables change classification with changes often occurring during crisis periods." (p.1)
+
+---
+
+## 5. 標記段落的具體修改建議
+
+### 5.1 原始標記段落
+
+**段落 A（第一個 `=== to be modified ===` 後）：**
+```
+Empirically, however, identifying external uncertainty shocks and their effects
+on Taiwan is challenging. First, it is difficult to separate shocks to the
+expected path of policies from shocks to current policy levels, even though
+both often move together in response to the same news. Second, external and
+domestic sources of uncertainty are tightly intertwined: developments in
+U.S.–China relations can simultaneously alter global risk sentiment, Taiwan's
+domestic political outlook, and expectations about cross-strait policy. Third,
+existing measures of uncertainty, such as global financial volatility or
+U.S.-based policy uncertainty indices, may not fully capture how external
+shocks are transmitted to a small open economy like Taiwan.
+```
+
+**段落 B（第二個 `=== to be modified ===` 前）：**
+```
+Against this background, this project addresses the following questions. First,
+how do external monetary policy and trade policy uncertainty shocks affect
+Taiwan's real activity, trade flows, and financial markets? Second, to what
+extent do these effects differ across sectors with different exposures to the
+United States and China? Third, has the transmission of external uncertainty
+to Taiwan changed over time, particularly since the escalation of U.S.–China
+tensions in the late 2010s?
+```
+
+### 5.2 段落 A 評估與修改建議
+
+**評估：**
+
+| 原文論點 | 相容性 | 建議 |
+|---------|--------|------|
+| 難以分離預期政策路徑衝擊與當前政策水準衝擊 | ⚠️ 部分相關 | 這更適合 narrative identification，非 DHK 框架重點 |
+| 外部與國內不確定性來源糾纏 | ✅ 高度相關 | 正是需要大型模型的原因，可保留並強化 |
+| 現有不確定性測量無法捕捉傳導機制 | ✅ 高度相關 | 這正是 DHK 方法論的貢獻，應強化論述 |
+
+**建議修改方向：**
+
+1. **刪除**關於「分離預期與當前政策衝擊」的論述（與 DHK 框架不直接相關）
+2. **保留並強化**「外部與國內糾纏」的論點，連結到遺漏變數偏誤
+3. **新增** CCM (2018) 對兩階段方法的批評
+4. **新增**關於「傳導管道」識別的挑戰
+
+**建議修改後文本：**
+
+```latex
+Empirically, however, identifying external uncertainty shocks and quantifying
+their effects on Taiwan presents several methodological challenges. First,
+external and domestic sources of uncertainty are tightly intertwined:
+developments in U.S.–China relations can simultaneously alter global risk
+sentiment, Taiwan's domestic political outlook, and expectations about
+cross-strait policy. This interconnection means that small-scale econometric
+models may suffer from severe omitted variable bias, potentially misattributing
+domestic uncertainty dynamics to external sources or vice versa
+\citep{carriero2018measuring}. Second, many existing approaches adopt a
+two-step procedure---first estimating an uncertainty measure, then assessing
+its macroeconomic effects in a separate model. This approach treats estimated
+uncertainty as observable data, introducing potential measurement error bias
+and model inconsistency \citep{carriero2018measuring}. Third, existing
+uncertainty measures, such as global financial volatility indices or
+country-specific policy uncertainty indices, do not distinguish between the
+\textit{channels} through which uncertainty transmits to the economy. For a
+small open economy like Taiwan, understanding whether external shocks propagate
+primarily through macroeconomic channels (trade flows, production linkages) or
+financial channels (capital flows, asset prices) carries distinct policy
+implications.
+```
+
+### 5.3 段落 B 評估與修改建議
+
+**評估：**
+
+| 原文研究問題 | 與 DHK 框架相容性 | 建議 |
+|-------------|------------------|------|
+| 外部貨幣與貿易政策不確定性衝擊如何影響台灣？ | ✅ 可達成 | 保留，但需更精確 |
+| 不同產業暴露程度的差異 | ⚠️ 需要額外資料 | 這需要產業層級資料，超出 DHK 框架 |
+| 傳導是否隨時間變化？ | ✅ 核心特色 | 強化，這是 DHK 框架的主要優勢 |
+
+**建議修改方向：**
+
+1. **聚焦於傳導管道**：將「影響有多大」改為「通過哪個管道傳導」
+2. **刪除或弱化**產業層級分析（除非有明確計畫）
+3. **強調時變特性**：這是 DHK 框架的核心貢獻
+4. **明確連結方法論**：說明為何 OI-SVMVAR 適合回答這些問題
+
+**建議修改後文本：**
+
+```latex
+Against this background, this project addresses the following questions. First,
+do external uncertainty shocks from the United States and China transmit to
+Taiwan's economy primarily through \textit{macroeconomic channels}---affecting
+real activity, trade flows, and production---or through \textit{financial
+channels}---impacting asset prices, credit conditions, and capital flows?
+Second, which external sources---U.S. monetary policy, U.S.–China trade policy
+uncertainty, or broader geopolitical risks---contribute most to Taiwan's
+domestic economic uncertainty? Third, has the transmission mechanism changed
+over time, particularly during episodes of heightened U.S.–China tensions such
+as the 2018–2019 trade war or the post-2020 technology decoupling?
+
+To address these questions, this project employs the order-invariant stochastic
+volatility in mean vector autoregression (OI-SVMVAR) framework developed by
+\citet{davidson2025investigating}. This framework offers three key advantages
+for our research objectives. First, it accommodates large-scale models (40+
+variables), mitigating the omitted variable bias that plagues smaller models
+\citep{carriero2018measuring}. Second, its order-invariant specification
+ensures that results do not depend on arbitrary variable ordering---a critical
+feature for credible inference in large VAR systems. Third, its time-varying
+classification mechanism allows us to identify \textit{when} and \textit{how}
+external shocks shift between macroeconomic and financial transmission
+channels.
+```
+
+### 5.4 完整修改後的 Introduction 架構
+
+建議將修改後的段落整合成以下結構：
+
+```
+[保留原有第一段：Taiwan's geoeconomic position]
+
+[保留原有第二段：Policy uncertainty as a process - 從宣布到實施的時間間隔]
+
+[修改後的段落 A：方法論挑戰]
+- 外部與國內糾纏 → 遺漏變數偏誤風險
+- 兩階段方法的問題 → CCM (2018) 批評
+- 傳導管道識別的重要性
+
+[修改後的段落 B：研究問題與方法論]
+- 三個核心研究問題（聚焦傳導管道）
+- OI-SVMVAR 框架的三大優勢
+- 時變分類如何回答傳導管道問題
+```
+
+### 5.5 新增引用建議
+
+需要在 `research_proposal.bib` 中確保包含以下引用：
+
+```bibtex
+@article{carriero2018measuring,
+  title={Measuring Uncertainty and Its Impact on the Economy},
+  author={Carriero, Andrea and Clark, Todd E and Marcellino, Massimiliano},
+  journal={Review of Economics and Statistics},
+  volume={100},
+  number={5},
+  pages={799--815},
+  year={2018}
+}
+
+@article{davidson2025investigating,
+  title={Investigating Economic Uncertainty Using Stochastic Volatility in
+         Mean VARs: The Importance of Model Size, Order-Invariance and
+         Classification},
+  author={Davidson, James and Hou, Chenghan and Koop, Gary},
+  journal={Journal of Econometrics},
+  year={2025},
+  note={Forthcoming}
+}
+```
+
+---
+
+## 6. 後續行動項目
+
+| 優先級 | 項目 | 說明 |
+|--------|------|------|
+| **高** | 修改段落 A | 整合 CCM (2018) 批評，聚焦方法論挑戰 |
+| **高** | 修改段落 B | 重新聚焦研究問題於傳導管道，連結 DHK 框架 |
+| **中** | 檢查 .bib 檔案 | 確保包含 CCM (2018) 和 DHK (2025) 引用 |
+| **中** | 統一術語 | 區分 policy uncertainty（衝擊來源）vs. economic uncertainty（測量目標） |
+| **低** | 產業分析決策 | 決定是否保留產業層級分析問題，或留待後續研究 |
