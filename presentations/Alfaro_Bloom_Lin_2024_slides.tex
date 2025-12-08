@@ -1,0 +1,731 @@
+% LaTeX Beamer Presentation: The Finance Uncertainty Multiplier
+% Alfaro, Bloom, and Lin (2024)
+% Journal of Political Economy
+
+\documentclass[aspectratio=169,11pt]{beamer}
+
+% Theme and color settings
+\usetheme{Madrid}
+\usecolortheme{default}
+
+% Packages
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{tikz}
+\usepackage{multicol}
+
+% Title information
+\title[Finance Uncertainty Multiplier]{The Finance Uncertainty Multiplier}
+\author[Alfaro, Bloom, Lin]{%
+  Iv\'an Alfaro\inst{1} \and
+  Nicholas Bloom\inst{2} \and
+  Xiaoji Lin\inst{3}
+}
+\institute[]{
+  \inst{1}BI Norwegian Business School \and
+  \inst{2}Stanford University \and
+  \inst{3}University of Minnesota
+}
+\date{Journal of Political Economy, 2024}
+
+\begin{document}
+
+% Title slide
+\begin{frame}
+  \titlepage
+\end{frame}
+
+% Table of contents
+\begin{frame}{Outline}
+  \tableofcontents
+\end{frame}
+
+%=============================================================================
+\section{Introduction and Motivation}
+%=============================================================================
+
+\begin{frame}{Research Question}
+\begin{block}{Central Question}
+How do real and financial frictions \textbf{amplify, prolong, and propagate} the negative impact of uncertainty shocks?
+\end{block}
+
+\vspace{0.5cm}
+
+\begin{itemize}
+  \item Uncertainty shocks play significant role in economic crises (2008 financial crisis, COVID-19)
+  \item \textbf{Empirical challenge}: Identifying causal effects of second-moment shocks
+  \item \textbf{Theoretical challenge}: Generating large, persistent responses matching slow recovery
+\end{itemize}
+
+\vspace{0.3cm}
+
+\begin{alertblock}{Key Insight}
+Financial frictions substantially amplify uncertainty's impact by preventing firms from costlessly buffering shocks via financial channels
+\end{alertblock}
+\end{frame}
+
+\begin{frame}{Motivation: Why Study Uncertainty and Finance Together?}
+
+\begin{columns}[T]
+\column{0.5\textwidth}
+\textbf{Empirical Evidence:}
+\begin{itemize}
+  \item Sharp output drops during recent crises
+  \item Slow recovery after Great Recession
+  \item Correlation between uncertainty (VIX) and real/financial outcomes
+  \item Financial conditions deteriorate during recessions
+\end{itemize}
+
+\column{0.5\textwidth}
+\textbf{Theoretical Gaps:}
+\begin{itemize}
+  \item Real-only models: rapid bounce-back, no persistence
+  \item Financial-only models: miss real-option effects
+  \item Need interaction between both frictions
+  \item Propagation to financial variables unexplained
+\end{itemize}
+\end{columns}
+
+\vspace{0.5cm}
+
+\begin{block}{This Paper's Contribution}
+Shows that uncertainty shocks and financial shocks should NOT be considered individually, but \textbf{jointly} --- they amplify each other
+\end{block}
+
+\end{frame}
+
+%=============================================================================
+\section{Empirical Strategy}
+%=============================================================================
+
+\begin{frame}{Identification Challenge}
+
+\begin{block}{The Endogeneity Problem}
+\begin{itemize}
+  \item Uncertainty measures (stock volatility) are endogenous
+  \item First-moment effects (downturns) correlated with second-moment effects (uncertainty)
+  \item When commodity prices fall, uncertainty rises simultaneously
+  \item Standard approach (lagged uncertainty) insufficient
+\end{itemize}
+\end{block}
+
+\vspace{0.3cm}
+
+\begin{exampleblock}{Novel Solution: Differential Exposure Instrumentation}
+Exploit firms' \textbf{differential industry-level exposure} to:
+\begin{enumerate}
+  \item Energy price volatility (oil)
+  \item Exchange rate volatility (7 major currencies)
+  \item Policy uncertainty (EPU)
+\end{enumerate}
+\end{exampleblock}
+
+\end{frame}
+
+\begin{frame}{Instrumentation Strategy: Key Intuition}
+
+\textbf{Example: Oil Price Uncertainty}
+
+\vspace{0.3cm}
+
+\begin{center}
+\begin{tabular}{lcc}
+\toprule
+\textbf{Firm Type} & \textbf{Directional Exposure} & \textbf{Uncertainty Exposure} \\
+ & (First Moment) & (Second Moment) \\
+\midrule
+Mining/Oil exploration & Positive (+) & Positive (+) \\
+Airlines & Negative (--) & Positive (+) \\
+Business services & Zero (0) & Zero (0) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\vspace{0.5cm}
+
+\begin{block}{Key Separation}
+Using absolute value of exposures $|\beta_j|$ multiplied by volatility shocks $\Delta\sigma$ allows us to:
+\begin{itemize}
+  \item \textbf{Control for} oil price level exposure (first moment)
+  \item \textbf{Identify from} oil price uncertainty exposure (second moment)
+\end{itemize}
+\end{block}
+
+\end{frame}
+
+\begin{frame}{Construction of Instruments}
+
+\textbf{Step 1: Estimate Industry-Level Sensitivities}
+
+$$r_{i,t}^{\text{risk-adj}} = \alpha_j + \sum_c \beta_j^c \times r_t^c + \epsilon_{i,t}$$
+
+where $\beta_j^c$ captures industry $j$'s sensitivity to commodity/currency/policy $c$
+
+\vspace{0.5cm}
+
+\textbf{Step 2: Construct Nine Instruments}
+
+$$z_{i,t-1}^c = |\beta_{j,t-3}^c| \times \Delta\sigma_{t-1}^c$$
+
+\begin{itemize}
+  \item Absolute value $|\beta|$: nondirectional exposure (second-moment)
+  \item $\Delta\sigma^c$: change in volatility of oil, 7 currencies, policy
+  \item Time lag (3 years): ensures predetermined exposure
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Data and Sample}
+
+\begin{block}{Data Sources}
+\begin{itemize}
+  \item \textbf{Stock returns}: CRSP daily data (1965--2019)
+  \item \textbf{Accounting data}: Compustat annual (1965--2019)
+  \item \textbf{Firm volatility}: 12-month standard deviation of daily returns
+  \item \textbf{Option-implied volatility}: OptionMetrics (1996--2019)
+  \item \textbf{Main 2SLS sample}: 1993--2019 (56,172 firm-year observations)
+\end{itemize}
+\end{block}
+
+\vspace{0.3cm}
+
+\begin{block}{Dependent Variables (Real \& Financial)}
+\begin{itemize}
+  \item \textbf{Real}: Investment rate, intangible investment, employment, COGS, sales
+  \item \textbf{Financial}: Cash holdings, debt, corporate payout (dividends + repurchases)
+\end{itemize}
+\end{block}
+
+\end{frame}
+
+%=============================================================================
+\section{Main Empirical Results}
+%=============================================================================
+
+\begin{frame}{Investment Results: OLS vs. 2SLS}
+
+\begin{table}
+\centering
+\small
+\begin{tabular}{lccccc}
+\toprule
+& \multicolumn{2}{c}{OLS Realized} & \multicolumn{2}{c}{IV Realized} & IV Implied \\
+\cmidrule(lr){2-3} \cmidrule(lr){4-5} \cmidrule(lr){6-6}
+Investment rate$_{i,t}$ & (1) & (2) & (3) & (4) & (5) \\
+\midrule
+$\Delta$Volatility$_{i,t-1}$ & $-0.023^{***}$ & $-0.024^{***}$ & $-0.057^{***}$ & $-0.041^{***}$ & $-0.058^{**}$ \\
+ & (0.002) & (0.002) & (0.014) & (0.014) & (0.022) \\
+\midrule
+Firm controls & No & No & No & Yes & Yes \\
+IV first-moment controls & No & No & Yes & Yes & Yes \\
+Sample period & 1965--2019 & 1993--2019 & 1993--2019 & 1993--2019 & 1998--2019 \\
+Observations & 95,394 & 56,172 & 56,172 & 56,172 & 26,977 \\
+First-stage F-test &  &  & 87.22 & 79.68 & 69.91 \\
+\bottomrule
+\end{tabular}
+\caption{Source: Alfaro, Bloom, and Lin (2024), Table 3}
+\end{table}
+
+\vspace{0.3cm}
+
+\textbf{Key Findings:}
+\begin{itemize}
+  \item 2SLS estimates 1.7--2.4$\times$ larger than OLS
+  \item Strong first-stage (F $>$ 70)
+  \item Results robust to realized vs. implied volatility
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Effects on Real and Financial Variables}
+
+\begin{center}
+\small
+\begin{tabular}{lcccc}
+\toprule
+& Investment & Intangible & Employment & Sales \\
+& Rate & Investment & Growth & Growth \\
+\midrule
+$\Delta$Volatility$_{i,t-1}$ & $-0.041^{***}$ & $-0.052^{***}$ & $-0.032^{*}$ & $-0.217^{**}$ \\
+ & (0.014) & (0.016) & (0.016) & (0.082) \\
+\midrule
+& Payout & Debt & Cash & \\
+& Growth & Growth & Growth & \\
+\midrule
+$\Delta$Volatility$_{i,t-1}$ & $-0.423^{***}$ & $-0.137^{**}$ & $0.167^{**}$ & \\
+ & (0.085) & (0.053) & (0.067) & \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\vspace{0.5cm}
+
+\begin{block}{Key Patterns}
+\begin{itemize}
+  \item \textbf{Real variables}: Investment, employment, sales all decline
+  \item \textbf{Financial variables}: Firms increase cash, cut debt and payouts
+  \item Consistent with \textbf{precautionary savings} channel
+\end{itemize}
+\end{block}
+
+\end{frame}
+
+\begin{frame}{Amplification by Financial Frictions}
+
+\textbf{Does uncertainty impact vary with financial conditions?}
+
+\vspace{0.3cm}
+
+\begin{center}
+\small
+\begin{tabular}{lcccc}
+\toprule
+Investment rate$_{i,t}$ & Baseline & + Fin Index & + Firm & Triple \\
+ & & Interaction & Constraint & Interaction \\
+\midrule
+$\Delta\sigma_{i,t-1}$ & $-0.041^{***}$ & $-0.022^{**}$ & $-0.034^{***}$ & $-0.023^{**}$ \\
+ & (0.014) & (0.010) & (0.012) & (0.010) \\
+$\Delta\sigma_{i,t-1} \times$ Fin\_index$_t$ &  & $-0.023^{**}$ &  & $-0.019^{**}$ \\
+ &  & (0.009) &  & (0.008) \\
+$\Delta\sigma_{i,t-1} \times D_{i,t-5}^{\text{constrained}}$ &  &  & $-0.020^{***}$ & $0.002$ \\
+ &  &  & (0.006) & (0.009) \\
+$\Delta\sigma_{i,t-1} \times D_{i,t-5}^{\text{constrained}} \times$ Fin\_index$_t$ &  &  &  & $-0.014^{***}$ \\
+ &  &  &  & (0.005) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\vspace{0.3cm}
+
+\begin{alertblock}{Amplification Effect}
+Impact of uncertainty on constrained firms during high financial friction periods:
+$$-0.023 - 0.019 + 0.002 - 0.014 = -0.054$$
+This is \textbf{2.35$\times$} the baseline impact!
+\end{alertblock}
+
+\end{frame}
+
+\begin{frame}{Time-Varying Impact: 2008-09 Financial Crisis}
+
+\begin{center}
+\includegraphics[width=0.75\textwidth]{figure2_placeholder}
+\end{center}
+
+\textbf{Key Findings from Time-Series Analysis:}
+\begin{itemize}
+  \item Mean impact normally around $-1.5$ percentage points
+  \item During 2008--09: impact \textbf{tripled} to $-5.0$ percentage points
+  \item Driven by both worsening credit conditions (Aaa-Baa spread) and binding firm constraints
+  \item Explains why uncertainty is so damaging during recessions
+\end{itemize}
+
+\end{frame}
+
+%=============================================================================
+\section{Theoretical Model}
+%=============================================================================
+
+\begin{frame}{Model Overview}
+
+\begin{block}{Key Features}
+\textbf{Dynamic Stochastic General Equilibrium (DSGE) Model with:}
+\begin{enumerate}
+  \item Heterogeneous firms
+  \item \textbf{Real frictions}: Fixed capital adjustment costs (Ss bands)
+  \item \textbf{Financial frictions}: Costly external financing, cash management
+  \item \textbf{Uncertainty shocks}: Time-varying volatility (macro \& micro)
+  \item \textbf{Financial shocks}: Time-varying financing costs
+\end{enumerate}
+\end{block}
+
+\vspace{0.3cm}
+
+\begin{itemize}
+  \item Firms maximize equity value by choosing investment and cash holdings
+  \item Production function: $y_{j,t} = X_t z_{j,t} k_{j,t}^{\alpha}$ (decreasing returns)
+  \item Stochastic productivity (aggregate $X_t$ and firm-specific $z_{j,t}$)
+  \item Two-state Markov processes for volatilities and financing costs
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Firm's Problem}
+
+\textbf{Value function:}
+$$v_{j,t} = \max_{i_{j,t}, n_{j,t+1}} \left\{ e_{j,t} - \psi_{j,t} + E_t M_{t,t+1} v_{j,t+1} \right\}$$
+
+\vspace{0.3cm}
+
+\textbf{Key Components:}
+
+\begin{itemize}
+  \item \textbf{Payout before financing cost}: $e_{j,t} = y_{j,t} - i_{j,t} - h_{j,t} - g_{j,t}$
+  \item \textbf{Real adjustment cost}: $g_{j,t} = c_k y_{j,t} \mathbf{1}_{\{i_{j,t} \neq 0\}}$ (nonconvex)
+  \item \textbf{Financial adjustment cost}: $\psi_{j,t} = \eta_t |e_{j,t}| \mathbf{1}_{\{e_{j,t} < 0\}}$ (proportional)
+  \item \textbf{Capital accumulation}: $k_{j,t+1} = (1-\delta)k_{j,t} + i_{j,t}$
+  \item \textbf{Cash accumulation}: $n_{j,t+1} = R_n n_{j,t} + h_{j,t}$ (with $R_n < R$)
+\end{itemize}
+
+\vspace{0.3cm}
+
+\begin{block}{Uncertainty Processes}
+Macro and micro volatilities: $\sigma^X \in \{\sigma_L^X, \sigma_H^X\}$, $\sigma_{j,t}^z \in \{\sigma_L^z, \sigma_H^z\}$
+\end{block}
+
+\end{frame}
+
+\begin{frame}{Policy Functions: Ss Bands and Financial Frictions}
+
+\begin{center}
+\includegraphics[width=0.85\textwidth]{figure3_placeholder}
+\end{center}
+
+\textbf{Key Insights from Policy Functions:}
+\begin{itemize}
+  \item Classic Ss band behavior: invest/inaction/disinvest regions
+  \item \textbf{Financial frictions expand Ss bands} beyond real-only model
+  \item \textbf{Uncertainty expands bands further} (real-option + cash-option effects)
+  \item Second flat region appears with financial constraints (binding $E=0$)
+  \item Triple interaction (high $\sigma$, high $\eta$, high $k$) creates largest inaction region
+\end{itemize}
+
+\end{frame}
+
+%=============================================================================
+\section{Model Results}
+%=============================================================================
+
+\begin{frame}{Calibration Strategy}
+
+\begin{columns}[T]
+\column{0.5\textwidth}
+\textbf{Standard Parameters:}
+\begin{itemize}
+  \item Discount factor: $\beta = 0.988$
+  \item Capital share: $\alpha = 0.70$
+  \item Depreciation: $\delta = 0.05$
+  \item Return on cash: $R_n = 0.97 R$
+\end{itemize}
+
+\column{0.5\textwidth}
+\textbf{Matched Moments:}
+\begin{itemize}
+  \item Investment slope in IV regression
+  \item Cash/revenue ratio
+  \item Real adj. cost: $c_k = 0.03$
+  \item Fin. costs: $\eta_L = 0.03$, $\eta_H = 0.06$
+\end{itemize}
+\end{columns}
+
+\vspace{0.5cm}
+
+\textbf{Uncertainty Calibration (following Bloom et al. 2018):}
+\begin{itemize}
+  \item Baseline: $\sigma_L^X = 0.0067$, $\sigma_L^z = 0.051$
+  \item High state: $\sigma_H^X = 1.6 \times \sigma_L^X$, $\sigma_H^z = 4.1 \times \sigma_L^z$
+  \item Transition: $\Pr(L \to H) = 0.026$, $\Pr(H \to H) = 0.943$ (shocks every 9.6 years)
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Main Quantitative Results}
+
+\begin{table}
+\centering
+\begin{tabular}{lc}
+\toprule
+\textbf{Model Specification} & \textbf{Peak Drop in Output (\%)} \\
+\midrule
+Real frictions only & $-1.8$ \\
+Real + Financial frictions & $-3.9$ \\
+\midrule
+\textbf{Amplification factor} & \textbf{2.17$\times$} \\
+\bottomrule
+\end{tabular}
+\caption{Impact of Uncertainty Shocks (Table 1 from paper)}
+\end{table}
+
+\vspace{0.5cm}
+
+\begin{block}{Three Key Model Predictions}
+\begin{enumerate}
+  \item \textbf{Amplification}: Financial frictions \textbf{double} the impact on output
+  \item \textbf{Persistence}: Duration of drops doubles (1 period $\to$ 2+ periods)
+  \item \textbf{Propagation}: Effects spread to financial variables (cash $\uparrow$, payouts $\downarrow$)
+\end{enumerate}
+\end{block}
+
+\end{frame}
+
+\begin{frame}{Impulse Responses: Real vs. Real+Financial Frictions}
+
+\begin{center}
+\includegraphics[width=0.9\textwidth]{figure4_placeholder}
+\end{center}
+
+\textbf{Comparing Models:}
+\begin{itemize}
+  \item \textbf{Real-only (black X)}: Sharp drop, rapid bounce-back, overshooting
+  \item \textbf{Real+Financial (red triangle)}: Larger drop, persistent decline, slow recovery
+  \item Financial model matches slow recovery after Great Recession
+  \item TFP drops due to increased misallocation under uncertainty
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Propagation to Financial Variables}
+
+\textbf{Model with Real Frictions Only:}
+\begin{itemize}
+  \item Investment drops, output falls
+  \item Dividends \textbf{increase} (pay out profits)
+  \item No cash dynamics
+\end{itemize}
+
+\vspace{0.5cm}
+
+\textbf{Model with Real + Financial Frictions:}
+\begin{itemize}
+  \item Investment drops, output falls
+  \item \textbf{Cash holdings increase} (precautionary savings)
+  \item \textbf{Dividends and equity payouts fall}
+  \item \textbf{Debt issuance falls}
+  \item Matches empirical evidence in Table 4
+\end{itemize}
+
+%\vspace{0.5cm}
+
+\begin{alertblock}{Key Mechanism}
+Firms build cautionary cash balances after uncertainty shock, limiting internal funds available for investment rebound $\Rightarrow$ \textbf{persistence}
+\end{alertblock}
+
+\end{frame}
+
+\begin{frame}{Robustness Checks}
+
+\begin{center}
+\includegraphics[width=0.7\textwidth]{figure5_placeholder}
+\end{center}
+
+\textbf{Alternative Specifications Tested:}
+\begin{itemize}
+  \item Different transition probabilities for financial shocks
+  \item Model without cash
+  \item Constant vs. proportional financial costs
+  \item Nonconvex financial adjustment costs
+  \item $\pm 10\%$ variations in real and financial adjustment cost parameters
+\end{itemize}
+
+\vspace{0.3cm}
+
+\textbf{Conclusion}: Qualitative results robust across specifications
+
+\end{frame}
+
+%=============================================================================
+\section{Policy Implications}
+%=============================================================================
+
+\begin{frame}{Policy Implications}
+
+\begin{block}{1. Uncertainty and Finance are Complements, Not Substitutes}
+\begin{itemize}
+  \item Should NOT view as "uncertainty shocks vs. financial shocks"
+  \item Instead: uncertainty shocks \textbf{amplified by} financial conditions
+  \item Policy interventions should target \textbf{both} simultaneously
+\end{itemize}
+\end{block}
+
+\vspace{0.3cm}
+
+\begin{block}{2. Financial Interventions Most Effective During High Uncertainty}
+\begin{itemize}
+  \item Reducing financial frictions (e.g., credit facilities) has largest impact when uncertainty is elevated
+  \item Explains rationale for emergency lending facilities (2008, 2020)
+  \item Even small reductions in financing costs can have large effects
+\end{itemize}
+\end{block}
+
+\vspace{0.3cm}
+
+\begin{block}{3. Timing Matters: Act Early}
+\begin{itemize}
+  \item Effects are persistent (2+ quarters)
+  \item Early intervention can prevent slow recovery dynamics
+  \item Cash hoarding by firms limits investment rebound
+\end{itemize}
+\end{block}
+
+\end{frame}
+
+\begin{frame}{Recent Applications}
+
+\textbf{COVID-19 Crisis (2020):}
+\begin{itemize}
+  \item Massive uncertainty spike (VIX $>$ 80)
+  \item Simultaneous tightening of financial conditions
+  \item Model predicts tripling of impact $\Rightarrow$ justifies aggressive policy response
+  \item PPP loans, Fed facilities targeted at maintaining firm liquidity
+\end{itemize}
+
+\vspace{0.5cm}
+
+\textbf{Silicon Valley Bank Collapse (2023):}
+\begin{itemize}
+  \item Banking sector shock creates financial friction spike
+  \item Heightened uncertainty about financial stability
+  \item Paper's framework suggests amplified effects on investment
+  \item Supports case for rapid intervention to prevent cascade
+\end{itemize}
+
+\end{frame}
+
+%=============================================================================
+\section{Conclusion}
+%=============================================================================
+
+\begin{frame}{Summary of Contributions}
+
+\begin{enumerate}
+  \item \textbf{Empirical}: Novel instrumentation strategy addressing endogeneity
+  \begin{itemize}
+    \item Differential exposure to energy, currency, policy uncertainty
+    \item Causal identification of second-moment effects
+    \item Shows OLS underestimates by factor of 1.7--2.4
+  \end{itemize}
+
+  \vspace{0.3cm}
+
+  \item \textbf{Empirical}: Amplification by financial frictions
+  \begin{itemize}
+    \item Constrained firms respond 60\% more than unconstrained
+    \item Impact triples during financial crises (2008--09)
+    \item Effects extend to real \textbf{and} financial variables
+  \end{itemize}
+
+  \vspace{0.3cm}
+
+  \item \textbf{Theoretical}: DSGE model with real and financial frictions
+  \begin{itemize}
+    \item Amplification: doubles impact on output
+    \item Persistence: doubles duration of drops
+    \item Propagation: spreads effects to cash, debt, payouts
+  \end{itemize}
+\end{enumerate}
+
+\end{frame}
+
+\begin{frame}{Key Takeaways}
+
+\begin{alertblock}{Main Result}
+Financial frictions are a \textbf{multiplier} for uncertainty shocks:
+\begin{itemize}
+  \item Prevent costless buffering via financial channels
+  \item Create cash-option effects complementing real-option effects
+  \item Generate persistent responses via precautionary savings
+\end{itemize}
+\end{alertblock}
+
+\vspace{0.5cm}
+
+\begin{block}{For Policymakers}
+\begin{itemize}
+  \item Target uncertainty \textbf{and} financial conditions jointly
+  \item Financial interventions most effective during high uncertainty periods
+  \item Small reductions in financing costs can have large macroeconomic effects
+\end{itemize}
+\end{block}
+
+\vspace{0.3cm}
+
+\begin{block}{For Researchers}
+\begin{itemize}
+  \item Instrumentation strategy applicable to other uncertainty studies
+  \item Framework useful for analyzing other shock interactions
+  \item Importance of modeling both real and financial margins
+\end{itemize}
+\end{block}
+
+\end{frame}
+
+\begin{frame}[standout]
+  \begin{center}
+    {\Huge Thank You!}
+
+    \vspace{1cm}
+
+    {\large Questions and Discussion}
+
+    \vspace{1.5cm}
+
+    \small
+    \textbf{The Finance Uncertainty Multiplier}\\
+    Alfaro, Bloom, and Lin (2024)\\
+    \textit{Journal of Political Economy}, Vol. 132, No. 2
+
+    \vspace{0.5cm}
+
+    Replication code: \texttt{https://nbloom.people.stanford.edu/research}
+  \end{center}
+\end{frame}
+
+%=============================================================================
+% Appendix (optional additional slides)
+%=============================================================================
+
+\appendix
+
+\begin{frame}{Appendix: First-Stage Results}
+
+\textbf{Nine Instruments:}
+\begin{itemize}
+  \item Oil price volatility exposure
+  \item 7 major currency volatility exposures (EUR, CAD, JPY, GBP, CHF, AUD, SEK)
+  \item Economic Policy Uncertainty (EPU) exposure
+\end{itemize}
+
+\vspace{0.3cm}
+
+\textbf{First-Stage Performance:}
+\begin{itemize}
+  \item F-statistics: 70--87 (well above threshold of 10)
+  \item Sargan-Hansen J-test: Cannot reject instrument validity (p $>$ 0.4)
+  \item Instruments strong across all specifications
+\end{itemize}
+
+\vspace{0.3cm}
+
+\textbf{Controls:}
+\begin{itemize}
+  \item 9 aggregate first-moment controls (price levels, not volatility)
+  \item 2 firm-level controls (Tobin's Q, stock returns)
+  \item 4 standard finance controls (tangibility, leverage, ROA, size)
+  \item 8 lagged dependent variables (autocorrelation)
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Appendix: Model Details}
+
+\textbf{Aggregate Productivity Process:}
+$$\log(X_{t+1}) = \log(\bar{X})(1-\rho^X) + \rho^X \log(X_t) + \sigma_t^X \varepsilon_{t+1}^X$$
+
+\textbf{Firm Productivity Process:}
+$$\log(z_{j,t+1}) = \rho^z \log(z_{j,t}) + \sigma_{j,t}^z \varepsilon_{j,t+1}^z$$
+
+\vspace{0.3cm}
+
+\textbf{Stochastic Volatility (Two-State Markov):}
+\begin{align*}
+\sigma^X &\in \{\sigma_L^X, \sigma_H^X\}, \quad \Pr(\sigma_{t+1}^X = \sigma_l^X | \sigma_t^X = \sigma_k^X) = \pi_{k,l}^{\sigma^X} \\
+\sigma_{j}^z &\in \{\sigma_L^z, \sigma_H^z\}, \quad \Pr(\sigma_{j,t+1}^z = \sigma_l^z | \sigma_{j,t}^z = \sigma_k^z) = \pi_{k,l}^{\sigma^z}
+\end{align*}
+
+\textbf{Financing Cost Shocks:}
+$$\eta_t \in \{\eta_L, \eta_H\}, \quad \Pr(\eta_{t+1} = \eta_l | \eta_t = \eta_k) = \pi_{k,l}^{\eta}$$
+
+\end{frame}
+
+\end{document}

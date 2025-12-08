@@ -1,0 +1,598 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{hyperref}
+\usepackage{setspace}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{indentfirst}
+\usepackage{titlesec}
+
+\onehalfspacing
+\setlength{\parindent}{2em}
+
+% Section formatting
+\titleformat{\section}{\normalfont\large\bfseries}{\thesection.}{1em}{}
+\titleformat{\subsection}{\normalfont\normalsize\bfseries}{(\arabic{subsection})}{1em}{}
+
+\title{\textbf{Caught in the Crossfire: Time-Varying Transmission of U.S.-China Uncertainty to Taiwan}}
+
+\author{Principal Investigator: Shih-Yang Lin \\
+Institution: Department of Economics, National Dong Hwa University}
+
+\date{}
+
+\begin{document}
+
+\maketitle
+
+%===============================================================================
+\section{Research Project Background}
+%===============================================================================
+
+
+\subsection{Research Motivation and Questions}
+
+Taiwan is deeply integrated with both the U.S. and Chinese economic systems, exposing it to substantial external uncertainty. Events such as U.S. Federal Reserve rate hikes, U.S.--China trade frictions, or episodes of heightened cross-strait geopolitical tension do not only affect Taiwan directly; they also increase uncertainty about future U.S. monetary policy, Chinese economic conditions, and cross-strait relations. This paper focuses on this uncertainty component. We study how external uncertainty shocks related to the U.S., China, and cross-strait geopolitics affect Taiwan’s real economy and financial conditions, including output, employment, exports, asset prices, capital flows, and credit markets.
+
+\subsection{Research Motivation and Questions}
+
+Taiwan is deeply integrated with both the U.S. and Chinese economic systems, exposing it to substantial external uncertainty. Events such as U.S. Federal Reserve rate hikes, U.S.--China trade frictions, or episodes of heightened cross-strait geopolitical tension do not only affect Taiwan directly; they also increase uncertainty about future U.S. monetary policy, Chinese economic conditions, and cross-strait relations. This paper focuses on this uncertainty component. When external uncertainty about the U.S., China, and cross-strait geopolitics rises, do the resulting uncertainty shocks primarily propagate to Taiwan through \textbf{macroeconomic channels} (exports, industrial production, employment) or through \textbf{financial channels} (capital flows, credit spreads, exchange rates)? Do these transmission patterns remain stable over time, or has the relative importance of these channels changed?
+
+\subsection{Research Motivation and Questions}
+
+Taiwan is deeply integrated with both the U.S. and Chinese economic systems, which exposes it to substantial external uncertainty. When external shocks---such as U.S. Federal Reserve rate hikes, U.S.--China trade frictions, or episodes of heightened cross-strait geopolitical tension---hit Taiwan, they can reduce exports and industrial production, weaken employment, trigger capital outflows, widen credit spreads, and generate exchange rate volatility. This research asks through which channels these shocks matter most for Taiwan, and whether these channels remain stable over time.
+
+To address these questions, this project applies the \textbf{Order-Invariant Stochastic Volatility in Mean VAR (OI-SVMVAR)} framework developed by Davidson, Hou, and Koop (2025, hereafter DHK). DHK (2025) show that three methodological issues plague existing empirical work on uncertainty: (1) model size matters---small VARs with roughly 30 variables can deliver biased estimates; (2) variable ordering in large VARs creates order-dependence; and (3) researcher-imposed classifications of variables as ``macroeconomic'' or ``financial'' may be inappropriate.
+
+\textbf{Core Research Questions}. When external uncertainty shocks from the U.S. and China transmit to Taiwan, do they primarily operate through macroeconomic channels (exports, industrial production, employment) or financial channels (capital flows, credit spreads, exchange rates)? How has the relative importance of these channels evolved over time?
+
+
+
+
+Taiwan is deeply integrated with both the U.S. and Chinese economic systems, exposing it to substantial external uncertainty. When external shocks---such as U.S. Federal Reserve rate hikes, U.S.-China trade frictions, or Chinese credit tightening---affect Taiwan (name some consequences here). (bring up the first research problem, accessing the impact of uncertainty shocks to taiwan)
+
+
+
+
+
+, do they transmit primarily through \textbf{macroeconomic channels} (affecting exports, industrial production, employment) or \textbf{financial channels} (affecting capital flows, credit spreads, exchange rates)? More critically, does this transmission mechanism change over time?
+
+This research project applies the \textbf{Order-Invariant Stochastic Volatility in Mean VAR (OI-SVMVAR)} framework developed by Davidson, Hou, and Koop (2025, hereafter DHK) to provide rigorous empirical analysis of these questions. DHK (2025) demonstrate that three critical methodological issues plague existing uncertainty research: (1) model size matters---small models with approximately 30 variables produce biased estimates; (2) variable ordering in large VARs creates order-dependence problems; (3) researcher-imposed classification of variables as ``macroeconomic'' or ``financial'' may be inappropriate.
+
+\textbf{Core Research Question}: When external uncertainty shocks from the U.S. and China transmit to Taiwan, do they primarily operate through macroeconomic or financial channels? How does this transmission mechanism evolve over time?
+
+\subsection{Literature Review and Research Gaps}
+
+Existing Taiwan uncertainty research suffers from important methodological limitations. Sin (2015) employs a six-variable SVAR (four Taiwan variables plus two China variables) to study the effects of Chinese economic policy uncertainty on Taiwan, finding that China's EPU significantly affects Taiwan's output and exchange rate, with shocks explaining approximately 15\% of Taiwan's output forecast error variance. However, this small-scale approach likely suffers from the omitted variable bias that DHK's large-model framework was designed to overcome. Huang et al. (2019) construct a Taiwan EPU index, and the World Uncertainty Index (Ahir et al., 2022) provides quarterly uncertainty data from 1956, but neither employs structural identification methods capable of distinguishing macroeconomic from financial transmission channels.
+
+In the international literature, Carriere-Swallow and C\'{e}spedes (2013) study uncertainty shock effects on emerging markets, and Brianti (2025) demonstrates that macroeconomic uncertainty shocks trigger deflationary patterns, allowing central banks to simultaneously stabilize output and inflation, while financial uncertainty shocks require policy trade-offs. For Taiwan's central bank, understanding the transmission channel of external shocks directly determines the appropriate policy toolkit.
+
+\textbf{Research gaps filled by this study}:
+\begin{itemize}[noitemsep]
+    \item First application of ``unclassified variables'' mechanism to identify external shock transmission channels
+    \item First large-scale (43+ variable) uncertainty model for Taiwan
+    \item First quantification of the relative importance of U.S., China, and U.S.-China relations triple exposure
+    \item Empirical evidence on time-varying transmission mechanisms
+\end{itemize}
+
+\begin{table}[htbp]
+\centering
+\caption{Comparison with Existing Taiwan Uncertainty Research}
+\label{tab:comparison}
+\small
+\begin{tabular}{lcc}
+\toprule
+\textbf{Dimension} & \textbf{Sin (2015)} & \textbf{This Study} \\
+\midrule
+Number of variables & 6 & 43+ \\
+Taiwan variables & 4 & 28+ \\
+China variables & 2 (EPU, IPI) & 3+ \\
+U.S. variables & 0 & 4+ \\
+Global indicators & 0 & 4+ \\
+\midrule
+Methodology & SVAR & OI-SVMVAR \\
+Variable classification & Fixed (researcher-imposed) & Time-varying (data-driven) \\
+Order-invariance & No & Yes \\
+Stochastic volatility & No & Yes \\
+\midrule
+Research question & Impact magnitude & Transmission channels \\
+Policy implication & ``China matters'' & ``Which channel to respond to'' \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Methodological Innovation: The DHK (2025) Framework}
+
+The OI-SVMVAR developed by DHK (2025) has the following key features:
+
+\textbf{(a) Model Specification}
+
+Consider an $n$-dimensional vector of endogenous variables $y_t$. The basic model is:
+\begin{equation}
+y_t = \sum_{i=1}^{p} B_i y_{t-i} + \sum_{j=0}^{q} A_j h_{t-j} + B_0^{-1} \epsilon_t^y
+\label{eq:main}
+\end{equation}
+where $h_t = (h_{m,t}, h_{f,t})'$ is a two-dimensional vector of latent uncertainty factors representing macroeconomic and financial uncertainty, respectively. $B_0$ is a lower triangular structural matrix, $\epsilon_t^y \sim N(0, \Omega_t)$, where $\Omega_t$ is a diagonal matrix.
+
+\textbf{(b) Variable Classification and Volatility Structure}
+
+DHK's core innovation lies in the variable classification mechanism. The $n$ variables are divided into three categories: $n_m$ macroeconomic variables, $n_f$ financial variables, and $n_u$ unclassified variables, where $n = n_m + n_f + n_u$.
+
+For the $i$-th variable, its log-volatility $\omega_{i,t}$ depends on its classification:
+
+\textbf{Macroeconomic variables} ($i = 1, \ldots, n_m$):
+\begin{equation}
+\omega_{i,t}^m = \eta_{i,t}^m + h_{m,t}
+\end{equation}
+
+\textbf{Financial variables} ($i = n_m+1, \ldots, n_m+n_f$):
+\begin{equation}
+\omega_{i,t}^f = \eta_{i,t}^f + h_{f,t}
+\end{equation}
+
+\textbf{Unclassified variables} ($i = n_m+n_f+1, \ldots, n$):
+\begin{equation}
+\omega_{i,t}^u = \eta_{i,t}^u + h_{s_{i,t},t}, \quad s_{i,t} \in \{m, f\}
+\label{eq:unclassified}
+\end{equation}
+where $s_{i,t}$ is a discrete latent state variable determining the classification of the $i$-th unclassified variable at time $t$, and $\eta_{i,t}$ is the idiosyncratic stochastic volatility component.
+
+\textbf{(c) Time-Varying Classification Mechanism}
+
+The classification probability $\pi_i = P(s_{i,t} = m)$ for unclassified variables is endogenously determined by the model. DHK adopt a Beta prior:
+\begin{equation}
+\pi_i \sim \text{Beta}(\underline{a}_\pi, \underline{b}_\pi)
+\end{equation}
+The baseline setting $\underline{a}_\pi = \underline{b}_\pi = 1$ corresponds to a uniform distribution, letting the data determine classification.
+
+\textbf{(d) Common Log-Volatility Dynamics}
+
+The common uncertainty factors $h_t$ follow a VAR(1) process:
+\begin{equation}
+h_t = \mu_h + \Phi_h (h_{t-1} - \mu_h) + \epsilon_t^h, \quad \epsilon_t^h \sim N(0, \Sigma_h)
+\end{equation}
+This specification allows for dynamic interaction between macroeconomic and financial uncertainty.
+
+\textbf{(e) Order-Invariance}
+
+DHK's key methodological contribution is developing an order-invariant MCMC algorithm. Traditional large VARs use lower triangular identification, making results dependent on variable ordering. DHK achieve order-invariance through:
+
+\begin{enumerate}[noitemsep]
+    \item Symmetric prior structure on $B_0$
+    \item Joint sampling of all volatility states
+    \item Symmetric treatment of variables within classification categories
+\end{enumerate}
+
+\textbf{(f) Novel Application in This Study}
+
+This research applies DHK's ``unclassified variables'' mechanism to identify external shock transmission channels---an application not explored in the original paper:
+
+\begin{itemize}[noitemsep]
+    \item \textbf{DHK's application}: Resolve classification ambiguity of domestic variables (e.g., is the S\&P 500 a macro or financial indicator for the U.S.?)
+    \item \textbf{Our application}: Place \textit{all external shock sources} in the unclassified category to identify their \textbf{transmission channels} to Taiwan
+\end{itemize}
+
+When an external variable (e.g., U.S. FFR) is classified as ``macro'' ($\pi_i \to 1$), it indicates the shock primarily transmits through macroeconomic channels; if classified as ``financial'' ($\pi_i \to 0$), it primarily transmits through financial channels.
+
+%===============================================================================
+\section{Year One: Model Construction and Data Preparation}
+%===============================================================================
+
+\subsection{Research Methods, Procedures, and Implementation Schedule}
+
+\textbf{Year One Focus}: Construct a large-scale Taiwan dataset, implement the DHK (2025) MCMC algorithm, conduct preliminary estimation and validation.
+
+\subsubsection*{Step 1: Data Collection and Processing (Months 1-4)}
+
+Construct a 43+ variable monthly dataset covering January 1995 to December 2024 (360 observations):
+
+\textbf{(A) Taiwan Macroeconomic Variables} (19 variables):
+\begin{itemize}[noitemsep]
+    \item Output and activity: Industrial Production Index, Manufacturing Production Index, Export Orders Index, Real Retail Sales, Real Exports, Real Imports, Manufacturing PMI, Non-Manufacturing NMI, Business Cycle Indicator Score
+    \item Prices: CPI YoY growth, Core CPI YoY growth, Wholesale Price Index YoY, Import Price Index YoY, Export Price Index YoY
+    \item Labor market: Unemployment Rate, Manufacturing Employment, Services Employment, Real Manufacturing Wage YoY growth
+\end{itemize}
+
+\textbf{(B) Taiwan Financial Variables} (9 variables):
+\begin{itemize}[noitemsep]
+    \item Interest rates and spreads: Overnight Call Loan Rate, 10-Year Government Bond Yield, Term Spread, Credit Spread
+    \item Equity market: TAIEX Monthly Return, Average Daily Trading Volume, Monthly Volatility, Net Foreign Investment, Margin Trading Balance YoY change
+\end{itemize}
+
+\textbf{(C) Unclassified Variables---External Shock Sources} (11 variables):
+\begin{itemize}[noitemsep]
+    \item U.S. variables: Federal Funds Rate, Industrial Production Index YoY, BAA-AAA Credit Spread, Economic Policy Uncertainty Index
+    \item China variables: Industrial Production YoY, Producer Price Index YoY, Total Social Financing YoY
+    \item Global indicators: VIX, Geopolitical Risk Index (GPR), Global Economic Policy Uncertainty Index, U.S.-China Trade Policy Uncertainty Index
+\end{itemize}
+
+\textbf{(D) Unclassified Variables---Taiwan Domestic Ambiguous Variables} (6 variables):
+\begin{itemize}[noitemsep]
+    \item Policy and money: CBC Rediscount Rate, M1b YoY growth, M2 YoY growth
+    \item Asset prices: TWD/USD Exchange Rate, TAIEX Index Level, Housing Price Index YoY growth
+\end{itemize}
+
+Data sources: DGBAS, Central Bank of China (Taiwan), Taiwan Stock Exchange, Taiwan Economic Journal (TEJ), FRED, CEIC.
+
+\subsubsection*{Step 2: MCMC Algorithm Implementation (Months 3-6)}
+
+Implement DHK (2025)'s order-invariant MCMC algorithm. Key steps include:
+
+\textbf{(a) Prior Specification}
+
+VAR coefficients use Minnesota-type priors:
+\begin{equation}
+\text{vec}(B) \sim N(\underline{b}, \underline{V}_B)
+\end{equation}
+where $\underline{V}_B$ follows the shrinkage principles of Banbura et al. (2010).
+
+Volatility process parameters:
+\begin{align}
+\mu_h &\sim N(\underline{\mu}_h, \underline{V}_{\mu_h}) \\
+\text{vec}(\Phi_h) &\sim N(\underline{\phi}_h, \underline{V}_{\Phi_h}) \\
+\Sigma_h &\sim IW(\underline{\nu}_h, \underline{S}_h)
+\end{align}
+
+Classification probabilities: $\pi_i \sim \text{Beta}(1, 1)$ (uniform prior).
+
+\textbf{(b) MCMC Sampling Steps}
+
+Core sampling steps in the DHK algorithm:
+
+\begin{enumerate}
+    \item \textbf{Sample $h_t$ sequence}:
+
+    Given other parameters, the conditional posterior of $h_t$ is non-standard. DHK use a precision sampler:
+    \begin{equation}
+    p(h | y, \theta) \propto \exp\left( -\frac{1}{2} h' K_h h + k_h' h \right)
+    \end{equation}
+    where $K_h$ is the precision matrix and $k_h$ is the corresponding vector, both determined by model parameters and data.
+
+    \item \textbf{Sample classification states $s_{i,t}$}:
+
+    For each unclassified variable $i$ and time $t$:
+    \begin{equation}
+    P(s_{i,t} = m | \cdot) = \frac{\pi_i \cdot p(\omega_{i,t} | h_{m,t}, \eta_{i,t}^m)}{\pi_i \cdot p(\omega_{i,t} | h_{m,t}, \eta_{i,t}^m) + (1-\pi_i) \cdot p(\omega_{i,t} | h_{f,t}, \eta_{i,t}^f)}
+    \end{equation}
+
+    \item \textbf{Sample classification probabilities $\pi_i$}:
+
+    Given classification states $\{s_{i,t}\}_{t=1}^T$:
+    \begin{equation}
+    \pi_i | \{s_{i,t}\} \sim \text{Beta}\left(1 + \sum_{t=1}^T \mathbf{1}(s_{i,t}=m), 1 + \sum_{t=1}^T \mathbf{1}(s_{i,t}=f)\right)
+    \end{equation}
+
+    \item \textbf{Sample VAR parameters $(B_i, A_j)$}:
+
+    Standard Bayesian VAR methods, conditional on volatility states.
+
+    \item \textbf{Sample volatility process parameters $(\mu_h, \Phi_h, \Sigma_h)$}:
+
+    Standard Bayesian VAR estimation with $h_t$ sequence as dependent variable.
+
+    \item \textbf{Sample idiosyncratic volatilities $\eta_{i,t}$}:
+
+    Use Kim, Shephard, and Chib (1998) mixture normal approximation.
+\end{enumerate}
+
+\textbf{(c) Achieving Order-Invariance}
+
+The key innovation is in the treatment of $B_0^{-1}$. DHK use:
+\begin{equation}
+B_0^{-1} = L D^{1/2}
+\end{equation}
+where $L$ is a unit lower triangular matrix and $D$ is a diagonal matrix. By adopting symmetric priors on $L$ and performing random permutations in the MCMC, results become independent of variable ordering.
+
+\subsubsection*{Step 3: Model Validation (Months 5-6)}
+
+\begin{enumerate}[noitemsep]
+    \item Replicate DHK's results using their original U.S. data to verify code correctness
+    \item Conduct convergence diagnostics: trace plots, Geweke diagnostics, effective sample size calculations
+    \item Perform preliminary estimation tests with Taiwan data subsets
+\end{enumerate}
+
+\subsection{Anticipated Problems and Means of Resolution}
+
+\textbf{Problem 1: Data Availability}
+
+Some Taiwan variables may not have complete series from 1995.
+
+\textbf{Resolution}:
+\begin{itemize}[noitemsep]
+    \item Prioritize key variables with longest available series
+    \item For shorter series, assess whether proxy variables can be used or the variable excluded
+    \item Adjust sample start to 2000 if necessary
+\end{itemize}
+
+\textbf{Problem 2: Computational Complexity}
+
+DHK report that a 43-variable model requires approximately 30 hours per estimation run.
+
+\textbf{Resolution}:
+\begin{itemize}[noitemsep]
+    \item Apply for high-performance computing resources from the National Center for High-performance Computing
+    \item Optimize code using matrix operations for acceleration
+    \item Prioritize baseline model completion; conduct robustness checks sequentially
+\end{itemize}
+
+\textbf{Problem 3: MCMC Algorithm Implementation}
+
+DHK's order-invariant algorithm involves complex joint sampling.
+
+\textbf{Resolution}:
+\begin{itemize}[noitemsep]
+    \item Carefully study DHK paper and supplementary materials
+    \item First replicate original results with U.S. data to confirm code correctness
+    \item Contact original authors for code or technical advice if necessary
+\end{itemize}
+
+\subsection{Expected Work Items and Outcomes}
+
+\textbf{Year One Expected Outcomes}:
+
+\begin{enumerate}
+    \item \textbf{Complete dataset}: 43+ variable, 1995-2024 monthly database with full documentation
+    \item \textbf{Code implementation}: Complete OI-SVMVAR MCMC estimation program (MATLAB/R)
+    \item \textbf{Validation report}: Technical report successfully replicating DHK (2025) U.S. results
+    \item \textbf{Preliminary results}: Initial estimation results and convergence diagnostics for Taiwan data
+    \item \textbf{Conference paper}: Submission to domestic economics conference (e.g., Taiwan Economic Association Annual Meeting)
+\end{enumerate}
+
+%===============================================================================
+\section{Year Two: Empirical Analysis and Policy Implications}
+%===============================================================================
+
+\subsection{Research Methods, Procedures, and Implementation Schedule}
+
+\textbf{Year Two Focus}: Complete full estimation, conduct three-step analysis, develop policy implications, write papers.
+
+\subsubsection*{Step 1: Full Model Estimation (Months 7-9)}
+
+\textbf{(a) Baseline Model Estimation}
+
+Execute full 43+ variable OI-SVMVAR estimation:
+\begin{itemize}[noitemsep]
+    \item MCMC: 50,000 iterations, 25,000 burn-in, retain every 5th draw
+    \item Expected computation time: approximately 30 hours
+    \item Convergence diagnostics: Geweke statistics, trace plots, effective sample size
+\end{itemize}
+
+\textbf{(b) Robustness Checks}
+
+\begin{table}[htbp]
+\centering
+\small
+\begin{tabular}{lcc}
+\toprule
+\textbf{Model Specification} & \textbf{Estimation Runs} & \textbf{Expected Hours} \\
+\midrule
+Baseline large model (43 variables) & 1 & 30 \\
+Small model comparison (30 variables) & 1 & 15 \\
+Pre-COVID sample (1995-2019) & 1 & 30 \\
+Alternative variable classifications & 2 & 60 \\
+COVID dummy specifications & 2 & 60 \\
+\midrule
+\textbf{Total} & \textbf{7} & \textbf{$\sim$195} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsubsection*{Step 2: Three-Step Analytical Framework (Months 9-12)}
+
+\textbf{Analysis Step One: Identify Transmission Channels}
+
+Tool: Time-varying classification probabilities $\pi_{i,t}$
+
+For each external variable $i$ (U.S. FFR, China IPI, VIX, etc.), plot the time series of classification probabilities:
+\begin{equation}
+\pi_{i,t} = P(s_{i,t} = m | \text{data})
+\end{equation}
+
+When $\pi_{i,t} \to 1$: External variable $i$ at time $t$ primarily transmits through \textbf{macroeconomic channels} to Taiwan.
+
+When $\pi_{i,t} \to 0$: Primarily transmits through \textbf{financial channels}.
+
+Expected findings:
+\begin{itemize}[noitemsep]
+    \item U.S. monetary policy (FFR) transmits through financial channels during normal periods, shifts to macro channels during global recessions
+    \item Chinese economic shocks (IPI) primarily transmit through macro channels (trade and supply chain effects)
+    \item VIX and GPR primarily transmit through financial channels (capital flows and risk premia)
+    \item After the 2018 U.S.-China trade war, transmission channels of U.S.-China relations indicators may undergo structural shifts
+\end{itemize}
+
+\textbf{Analysis Step Two: Quantify Shock Sources}
+
+Tool: Forecast Error Variance Decomposition (FEVD)
+
+Calculate the proportion of Taiwan's domestic uncertainty explained by each external source:
+\begin{equation}
+\text{FEVD}_{h_{m,t}}^{(x_j)} = \frac{\text{Var}(h_{m,t+k} | x_j)}{\text{Var}(h_{m,t+k})}
+\end{equation}
+
+Analysis dimensions:
+\begin{itemize}[noitemsep]
+    \item U.S. variables' explanatory power for Taiwan's $h_{m,t}$ and $h_{f,t}$
+    \item China variables' contribution to Taiwan's uncertainty
+    \item Relative importance of U.S.-China relations indicators
+    \item Impact of global risk indicators (VIX, GPR)
+\end{itemize}
+
+\textbf{Analysis Step Three: Analyze Economic Consequences}
+
+Tool: Impulse Response Functions (IRF)
+
+Calculate dynamic responses of Taiwan's economic variables to uncertainty shocks:
+\begin{align}
+\frac{\partial y_{i,t+k}}{\partial h_{m,t}} &: \text{Response to macroeconomic uncertainty shock} \\
+\frac{\partial y_{i,t+k}}{\partial h_{f,t}} &: \text{Response to financial uncertainty shock}
+\end{align}
+
+Key analyses:
+\begin{itemize}[noitemsep]
+    \item Differences in Taiwan's industrial production response to $h_{m,t}$ vs. $h_{f,t}$ shocks
+    \item Stock market and exchange rate response patterns to different shock types
+    \item Response differences across historical episodes: 2008 financial crisis, 2018 trade war, 2020 pandemic
+\end{itemize}
+
+\subsubsection*{Step 3: Policy Implications Development (Months 12-14)}
+
+Based on empirical results, develop central bank policy recommendations:
+
+\textbf{Scenario 1}: If external shocks primarily transmit through financial channels
+\begin{itemize}[noitemsep]
+    \item Prioritize exchange rate management and capital flow monitoring
+    \item Deploy macroprudential tools (loan-to-value limits, capital buffers)
+    \item Coordinate with financial supervisory authorities
+\end{itemize}
+
+\textbf{Scenario 2}: If external shocks primarily transmit through macro channels
+\begin{itemize}[noitemsep]
+    \item Focus on conventional interest rate policy
+    \item Coordinate with fiscal policy
+    \item Support industrial structural adjustment policies
+\end{itemize}
+
+\textbf{Scenario 3}: Time-varying transmission mechanisms
+\begin{itemize}[noitemsep]
+    \item Develop real-time monitoring indicators
+    \item Design state-contingent policy rules
+    \item Build institutional capacity for rapid policy toolkit switching
+\end{itemize}
+
+\subsubsection*{Step 4: Paper Writing and Dissemination (Months 14-18)}
+
+\begin{itemize}[noitemsep]
+    \item Complete full research paper (English)
+    \item Write central bank policy brief (Chinese)
+    \item Submit to international academic journal (target: Journal of International Economics, Journal of Monetary Economics, or Journal of Applied Econometrics)
+    \item Present at international conferences
+\end{itemize}
+
+\subsection{Anticipated Problems and Means of Resolution}
+
+\textbf{Problem 1: COVID-19 Period Outlier Treatment}
+
+The 2020-2021 pandemic period generated extreme outliers that may dominate estimation results.
+
+\textbf{Resolution}:
+\begin{itemize}[noitemsep]
+    \item Dummy variable approach: Add COVID dummies (2020M2-2020M6 acute phase, 2020M2-2021M12 extended period)
+    \item Robust estimation: Winsorize COVID period observations at 1st and 99th percentiles
+    \item Split-sample analysis: Estimate separately for pre-COVID (1995-2019) and full sample (1995-2024)
+    \item Interpretation framework: Treat COVID as ``unprecedented shock''; focus policy conclusions on non-COVID periods
+\end{itemize}
+
+\textbf{Problem 2: Model Size and Computation Time Trade-off}
+
+Multiple specification estimates require approximately 195 total hours of computation time.
+
+\textbf{Resolution}:
+\begin{itemize}[noitemsep]
+    \item Prioritize baseline model and most critical robustness checks
+    \item Use high-performance computing resources for parallel processing of independent estimation tasks
+    \item If time insufficient, defer secondary robustness checks to future research
+\end{itemize}
+
+\textbf{Problem 3: Ensuring Policy Relevance}
+
+Technical results must be translated into actionable policy recommendations.
+
+\textbf{Resolution}:
+\begin{itemize}[noitemsep]
+    \item Maintain communication with central bank researchers during the project
+    \item Present results using concrete policy scenario frameworks
+    \item Prepare both academic paper and policy brief outputs
+\end{itemize}
+
+\subsection{Expected Work Items and Outcomes}
+
+\textbf{Year Two Expected Outcomes}:
+
+\begin{enumerate}
+    \item \textbf{Academic Contributions}:
+    \begin{itemize}[noitemsep]
+        \item Complete OI-SVMVAR Taiwan full estimation results
+        \item First identification of time-varying characteristics of external shock transmission channels
+        \item Quantification of relative importance of U.S., China, and U.S.-China relations
+        \item Discovery of model size effects on Taiwan uncertainty research
+    \end{itemize}
+
+    \item \textbf{Policy Contributions}:
+    \begin{itemize}[noitemsep]
+        \item Provide transmission channel-specific policy guidance for the central bank
+        \item Establish external shock monitoring priority rankings
+        \item Provide empirical foundation for exchange rate regime design
+    \end{itemize}
+
+    \item \textbf{Concrete Outputs}:
+    \begin{itemize}[noitemsep]
+        \item 1 international journal submission
+        \item 1 central bank policy brief
+        \item 2-3 international conference presentations
+        \item Replicable code and dataset (for subsequent research use)
+    \end{itemize}
+\end{enumerate}
+
+%===============================================================================
+\section{Integrated Research Project Description}
+%===============================================================================
+
+This is an individual research project without an integrated project structure.
+
+Possible future extensions include:
+\begin{itemize}[noitemsep]
+    \item Extend the framework to other small open economies facing dual external exposures (South Korea, Singapore, ASEAN countries)
+    \item Develop real-time transmission channel monitoring systems
+    \item Combine with firm-level data to analyze industry heterogeneity
+\end{itemize}
+
+%===============================================================================
+\section{References}
+%===============================================================================
+
+\begin{thebibliography}{99}
+
+\bibitem{ahir2022}
+Ahir, H., Bloom, N., \& Furceri, D. (2022). The World Uncertainty Index. \textit{NBER Working Paper No. 29763}.
+
+\bibitem{baker2016}
+Baker, S. R., Bloom, N., \& Davis, S. J. (2016). Measuring economic policy uncertainty. \textit{The Quarterly Journal of Economics}, 131(4), 1593--1636.
+
+\bibitem{banbura2010}
+Banbura, M., Giannone, D., \& Reichlin, L. (2010). Large Bayesian vector autoregressions. \textit{Journal of Applied Econometrics}, 25(1), 71--92.
+
+\bibitem{brianti2025}
+Brianti, M. (2025). Financial Shocks, Uncertainty Shocks, and Corporate Liquidity. \textit{Journal of Applied Econometrics} (forthcoming).
+
+\bibitem{carriere2013}
+Carriere-Swallow, Y., \& C\'{e}spedes, L. F. (2013). The impact of uncertainty shocks in emerging economies. \textit{Journal of International Economics}, 90(2), 316--325.
+
+\bibitem{carriero2019}
+Carriero, A., Clark, T. E., \& Marcellino, M. (2019). Large Bayesian vector autoregressions with stochastic volatility and non-conjugate priors. \textit{Journal of Econometrics}, 212(1), 137--154.
+
+\bibitem{chan2020}
+Chan, J. C. (2020). Large Bayesian VARs: A flexible Kronecker error covariance structure. \textit{Journal of Business \& Economic Statistics}, 38(1), 68--79.
+
+\bibitem{davidson2025}
+Davidson, J., Hou, C., \& Koop, G. (2025). Investigating economic uncertainty using stochastic volatility in mean VARs: The importance of model size, order-invariance and classification. \textit{Journal of Business \& Economic Statistics} (forthcoming).
+
+\bibitem{huang2019}
+Huang, Y.-F., Shih, P.-T., \& Wang, C.-W. (2019). Measuring economic policy uncertainty in Taiwan. \textit{Taiwan Economic Review}, 47(3), 361--401.
+
+\bibitem{jurado2015}
+Jurado, K., Ludvigson, S. C., \& Ng, S. (2015). Measuring uncertainty. \textit{American Economic Review}, 105(3), 1177--1216.
+
+\bibitem{kim1998}
+Kim, S., Shephard, N., \& Chib, S. (1998). Stochastic volatility: Likelihood inference and comparison with ARCH models. \textit{Review of Economic Studies}, 65(3), 361--393.
+
+\bibitem{sin2015}
+Sin, C.-Y. (2015). The economic effects of China's economic policy uncertainty on Taiwan. \textit{Taiwan Economic Forecast and Policy}, 46(1), 55--93.
+
+\end{thebibliography}
+
+\end{document}
