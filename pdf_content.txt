@@ -1,0 +1,1429 @@
+Journal of Business & Economic Statistics
+ISSN: 0735-0015 (Print) 1537-2707 (Online) Journal homepage: www.tandfonline.com/journals/ubes20
+Investigating Economic Uncertainty Using
+Stochastic Volatility in Mean VARs: The
+Importance of Model Size, Order-Invariance and
+Classiﬁcation
+Sharada Nia Davidson, Chenghan Hou & Gary Koop
+To cite this article: Sharada Nia Davidson, Chenghan Hou & Gary Koop (10 Mar 2025):
+Investigating Economic Uncertainty Using Stochastic Volatility in Mean VARs: The Importance of
+Model Size, Order-Invariance and Classiﬁcation, Journal of Business & Economic Statistics, DOI:
+10.1080/07350015.2025.2455064
+To link to this article:  https://doi.org/10.1080/07350015.2025.2455064
+View supplementary material 
+Published online: 10 Mar 2025.
+Submit your article to this journal 
+Article views: 208
+View related articles 
+View Crossmark data
+Citing articles: 2 View citing articles 
+Full Terms & Conditions of access and use can be found at
+https://www.tandfonline.com/action/journalInformation?journalCode=ubes20
+
+JOURNALOFBUSINESS&ECONOMICSTATISTICS
+2025,VOL.00,NO.0,1–16
+https://doi.org/10.1080/07350015.2025.2455064
+InvestigatingEconomicUncertaintyUsingStochasticVolatilityinMeanVARs:The
+ImportanceofModelSize,Order-InvarianceandClassification
+SharadaNiaDavidson a,ChenghanHou b,andGaryKoop a
+aDepartmentofEconomics,UniversityofStrathclyde,Glasgow,UK; bCenterforEconomics,FinanceandManagementStudies,HunanUniversity,Hunan,
+China
+ABSTRACT
+Stochastic Volatility in Mean Vector Autoregressions (SVMVARs) are popularly used to jointly estimate
+uncertainty and its economic effects. However, existing studies analyzing macroeconomic and financial
+uncertaintyrequiretheresearchertoclassifyeachvari ableasmacroeconomicorfinancialbeforeestimation,
+donotconsiderwhetherresultsaresensitivetomodels izeandadoptaspecificationwhereresultsdepend
+on the way the variables are ordered. We overcome these limitations, developing a novel Markov Chain
+MonteCarloalgorithmforlarge,order-invariantSVMVARswithunclassifiedvariables.Foreachunclassified
+variable, the algorithm determines the appropriate classification at each point in time. Using a simulation
+studyandlargeU.S.dataset,weuncoverthefollowing.SmallerSVMVARsoverstatetheeffectsofuncertainty,
+failing to reveal that only financial uncertainty has an adverse effect on the economy. When using large
+order-dependentSVMVARs,however,theuncertaintyestimatesproduceddependonthevariableordering,
+distortingimpulseresponseanalysis.Thus,itbecomescriticaltoadoptanorder-invariantspecification.We
+alsofindthatmanyvariableschangeclassificationwithchangesoftenoccurringduringcrisisperiods.
+ARTICLE HISTORY
+ReceivedJuly2022
+AcceptedJanuary2025
+KEYWORDS
+LargeVAR;Orderinvariance;
+Stochasticvolatility;
+Uncertainty
+1. Introduction
+Itiswidelyrecognizedthateconomicuncertaintycanadversely
+affect the economy (see Bloom2009; Bachmann, Elstner, and
+Sims 2013;S c o t t i2016;B a k e r ,B l o o m ,a n dD a v i s2016 among
+many others). However, the role played by different types of
+uncertainty is less well understood. Some theories suggest that
+macroeconomicuncertaintyrelatingtoeconomicfundamentals
+dampenseconomicactivity(seeLudvigson,Ma,andNg 2021for
+an overview). Others instead argue that uncertainty primarily
+arises from or is propagated via financial markets (Gilchrist,
+Sim,andZakrajsek 2014;Christiano,Motto,andRostagno 2014;
+Bonciani and Van Roye2016; Alfaro, Bloom, and Lin2024).
+Understanding the relative importance of macroeconomic and
+financialuncertaintyiscrucialwhendevelopingpolicyprescrip-
+tions. If macroeconomic uncertainty dominates, policymakers
+need to act decisively minimizing uncertainty, for instance, via
+forward guidance. However, if financial uncertainty dominates,
+otheractionssuchasincreasingliquidityinthefinancialsystem
+ar elikelytobecri tical(Caggianoetal. 2021).
+In response to these issues, frameworks are being developed
+tomeasureandcontrasttheeffectsofmacroeconomicandfinan-
+cial uncertainty. An important strand of the literature equates
+uncertaintywithStochasticVolatility(SV)(seeBerger,Grabert,
+and Kempa2016; Carriero, Clark, and Marcellino2020;H o u
+2020;M u m t a za n dM u s s o2021 among many others). Within
+this literature, a popular model is the Stochastic Volatility in
+CONTACT ChenghanHou chenghan.hou@hotmail.com CenterforEconomics,FinanceandManagementStudies,HunanUniversity,122AdministrationBuilding,
+HunanUniversity,109ShijiachongRoad,Yue luDistrict,ChangshaHunan,410006,China
+Supplementarymaterialsforthisarticleareavailableonline.Pleasegoto www.tandfonline.com/UBES.
+MeanVectorAutoregression(SVMVAR).Anattractiveproperty
+oftheSVMV ARistha titjoin tlyestima tesuncertain ty(through
+the SV in the errors) and produces an estimate of its impact on
+theeconomy(byallowingtheSVstoentertheconditionalmean
+of the VAR).
+This article contributes to the literature by tackling a num-
+ber of problems which continue to plague SVMVAR analysis,
+making it difficult to robustly measure and analyze macroeco-
+nomic and financial uncertainty. Closely related to our work is
+the study by Carriero, Clark, and Marcellino (2018), hereafter
+CCM, who develop a new SVMVAR model. Using data on 30
+variables,theymodelmacroeconomic(financial)uncertaintyas
+thecommonSV,thecommoncomponentdrivingthevolatilities
+of all macroeconomic (financial) variables. However, due to the
+challenges associated with estimating SVMVARs, several issues
+requirefurtherconsideration.
+First, existing SVMVAR specifications including CCM rely
+on using a lower triangular parameterization to model the
+reduced-form error covariance matrix. This does not relate to
+structural identification. Rather, it facilitates model estimation
+and improves computational efficiency (Chan2023). However,
+recent studies show that this parameterization results in an
+order-dependenceissuewheretheresultscanchangedepending
+on the way variables are ordered. This can affect estimation
+of reduced-form error variances (Chan et al.2018), forecast
+performance (Arias, Rubio-Ramírez, and Shin 2023)a n d
+©2025AmericanStatisticalAssociation
+
+2 S.N.DAVIDSON,C.HOU,ANDG.KOOP
+structural analysis (Bognanni2018;H a r t w i g2020), becoming
+a more important issue in large models (Chan, Koop, and Yu
+2024).
+Second, Kim, Shephard, and Chib (1998)e ffi c i e n tM a r k o v
+Chain Monte Carlo (MCMC) algorithm, typically used to
+estimate VARs with SV, cannot be applied once SV is added
+tothemean.AlternativeapproachesinvolvingaMetropolisstep
+(seeJacquier,Polson,andRossi 2002)orparticleGibbsstep(see
+Andrieu, Doucet, and Holenstein2010 and Lindsten, Jordan,
+and Schon2014) must instead be used. While these algorithms
+typically work well when estimating small models, the compu-
+tational burden and poor MCMC mixing properties become
+more severe as model size increases. Such problems limit the
+number of variables which can be included in a SVMVAR
+despitetherecentfocusonlargeVARs(see,amongmanyothers,
+Banbura, Giannone, and Reichlin2010; Koop and Korobilis
+2013; Carriero, Clark, and Marcellino2019;G e f a n g ,K o o p ,a n d
+Poon2022;a n dC h a n2022). It is therefore unclear whether the
+findings obtained from SVMVARs are sensitive to the model’s
+size.
+Third, it remains unclear how dozens of series should be
+classified prior to estimation of the SVMVAR. Should variables
+relating to money supply, credit, exchange rates, interest rates
+and stock prices be assigned to the macroeconomic block or
+assignedtothefinancialblock?If10suchvariablesareincluded
+in a model, this means there are 10
+2 possible classification
+schemes which the researcher must choose between. In the
+uncertainty literature, this means that different studies (e.g.,
+CCM,Ludvigson,Ma,andNg 2021andRedl 2020)c la s s i fyk ey
+variablesdifferently.
+To circumvent these challenges, we develop a novel MCMC
+algorithm for estimating large SVMVARs which are order-
+invariant and have unclassified variables. Although we use our
+model to investigate macroeconomic and financial uncertainty,
+we stress that our SVMVAR and algorithm can be used in
+other contexts where large and order-invariant SVMVARs are
+required. Our starting point is Cross et al. (2023), hereafter
+CHKP, who propose a fast MCMC algorithm for SVMVARs,
+exploiting band and sparse matrix algorithms to sample the
+common SVs and improve efficiency. Our new algorithm uses
+the computationally efficient approach developed by CHKP to
+samplethecommonSVsbutisenrichedwithadditionalfeatures,
+leadingtoseveralnewcontributions.
+First,weintroduceorder-invariance.Notably,existingorder-
+invariant algorithms developed by Bertsche and Braun (2022)
+and Chan, Koop, and Yu (2024) for the VAR with SV can-
+not be applied to our SVMVAR. We therefore develop a novel
+algorithm for estimating our proposed point-identified order-
+invariant SVMVAR (OI-SVMVAR). Second, since we follow
+CHKP when sampling the common SVs, having contended
+with order dependence issues, we can robustly estimate very
+largeSVMVARs,assessinghowmodelsizeinfluencestheresults
+obtained. We can also investigate whether order dependence
+issues worsen as the size of the SVMVAR increases. Third,
+we distinguish between macroeconomic, financial and unclas-
+sified variables, allowing the algorithm to determine whether
+each unclassified variable should be included in the macroeco-
+nomic or financial block of variables. As the economy’s struc-
+ture evolves or experiences crises, a variable’s classification may
+changeovertime.Consequently,weallowforMarkovswitching
+time-varyingclassification.
+Our article also contributes to the literature seeking to ana-
+lyze the effects of macroeconomic and financial uncertainty on
+the economy. This literature almost exclusively deploys a two
+step approach. In the first step, uncertainty measures are pro-
+ducedorobtained.Inthesecondstep,theeffectsofuncertainty
+areanalyzedbyincludingtheuncertaintyproxiesinsmallstruc-
+turalVARs(SVARs).Earlystudiesseparatelyanalyzemacroeco-
+nomic and financial uncertainty (see, e.g., Bloom2009;B a c h -
+mann, Elstner, and Sims2013 or Scotti2016). In later work,
+Casarinetal.( 2018)directlycontrastmacroeconomicandfinan-
+cial uncertainty finding the latter to be more important. How-
+ever,thetwouncertaintytypesareproxiedindifferentwaysvia
+survey data and the VIX, respectively. In their analysis, Ma and
+Samaniego (2019) use firm-level data, also finding that uncer-
+tainty among financial firms has a larger economic impact than
+non-financial uncertainty. More recently, Ludvigson, Ma, and
+Ng (2021), hereafter LMN, follow Jurado, Ludvigson, and Ng
+(2015),producingcomparablemeasuresofmacroandfinancial
+uncertainty by extracting the common variation in the unfore-
+castable component of a large number of macroeconomic and
+financial time series. Using a SVAR with a novel identification
+scheme, LMN also find that financial uncertainty rather than
+macroeconomic uncertainty is a likely source of U.S. output
+fluctuations.
+Importantly, though, Angelini et al. (2019), using a differ-
+ent identification scheme refuted by LMN, and CCM, using a
+SVMVAR, find that both macro and financial uncertainty have
+adverseeconomiceffects.Additionally,asoutlinedinCCM,the
+two step approach deployed by LMN and others faces limita-
+tions:theassumptionthatvariableshavetime-varyingvolatility
+in the first step is inconsistent with the use of a homoscedas-
+tic SVAR in the second step; the second step fails to account
+for measurement error and uncertainty around the uncertainty
+estimates themselves; and the SVAR itself is likely to suffer
+fromomittedvariablesbiasduetoitssmallsize.CCM’sdeploy-
+ment of a SVMVAR circumvents these limitations, however,
+as discussed, issues around order-dependence, model size and
+classificationrequireinvestigation.
+OursimulationstudyshowsthatwhensmallerSVMVARsare
+used, uncertainty and its effects are likely to be overstated. Like
+CCM, we therefore find that when using U.S. data, results from
+smaller30variableSVMVARsindicatethatmacroeconomicand
+financialuncertaintybothhaveadverseeffectsontheeconomy.
+In contrast, when a larger 43 variable SVMVAR is deployed,
+omittedvariablesbiascanbealleviatedanditbecomesclearthat
+financial not macroeconomic uncertainty has adverse effects.
+However,toobtainrobustestimationresultsfromthe43variable
+SVMVAR it is critical to use an order-invariant specification.
+Whenusingthelowertriangularparameterization,manystudies
+order macroeconomic variables before the financial variables.
+This implicitly assumes that variation in financial variables is
+not only explained by the volatility of financial variables (i.e.,
+financialuncertainty)butthevolatilityofmacroeconomicvari-
+ables (i.e., macroeconomic uncertainty). Our simulation study
+therefore shows that the uncertainty estimates obtained from
+large SVMVARs depend on the variable ordering, distorting
+impulse response analysis. In our empirical work, the large
+
+JOURNALOFBUSINESS&ECONOMICSTATISTICS 3
+order-dependent SVMVAR thus fails to detect that financial
+uncertainty adversely affects the economy. Our proposed OI-
+SVMVARdoesnotsufferfromtheseissues.
+We also show that our algorithm can detect cases in which
+unclassified variables exhibit constant classification and cases
+in which time-varying classification is present. In terms of the
+l a t t e r ,w efi n dt h a tm a n yv a r i a b l e sc h a n g ec l a s s i fi c a t i o nw i t h
+changesoftenoccurringduringcrises.Allowingforunclassified
+variables therefore ensures that variables are assigned to the
+appropriate block when our uncertainty measures and their
+impactsareestimated.
+The remainder of this article is organized as follows.Sec-
+tion 2introduces our OI-SVMVAR model with time-varying
+classification and MCMC algorithm. Section 3 presents our
+simulation study.Section 4outlines the data used and different
+model specifications before discussing our empirical results.
+Section5 concludes.OurOnlineAppendixcontainsaTechnical
+Appendix,DataAppendixandsupplementaryfigures.
+2. TheOrder-InvariantStochasticVolatilityinMean
+VectorAutoregression
+This section describes a new SVMVAR model which is order-
+invariant and allows for uncertainty in the way variables are
+classified.Inaddition,itderivesanovelMCMCalgorithmwhich
+extendsthealgorithminCHKPtohandletime-varyingclassifi-
+cation uncertainty and order dependence issues. Full details of
+the priors and additional details of the algorithm are provided
+inOnlineAppendixA(sectionsA1andA2).
+2.1. TheModel
+W h i l et h eO I - S V M V A Rw ed e v e l o pc a nb eu s e di nd i ff e r e n t
+contexts, in this article we will analyze macroeconomic and
+financial uncertainty. We therefore lety
+m
+t = (ym
+1,t,... ,ym
+nm,t)′ be
+annm × 1vectorofmacrovariables, yf
+t = (yf
+1,t,... ,yf
+nf ,t)′ bean
+nf × 1vectoroffinancialvariables,and yu
+t = (yu
+1,t,... ,yu
+nu,t)′ be
+annu ×1vectorofunclassifiedvariableswhereeachunclassified
+variable could belong to either the macro or financial block.
+We consider the following SVMVAR model, denotingyt =
+(ym′
+t ,yu′
+t ,yf ′
+t )′ andn = nm + nf + nu:
+yt =
+p∑
+i=1
+Biyt−i +
+q∑
+j=0
+Ajht−j + B−1
+0 ϵy
+t , ϵy
+t ∼ N (0,Ut),( 1 )
+where B0 is a nonsingular matrix with ones on the diagonal,
+B1,... ,Bp are n × n VAR coefficient matrices and ht =
+(hm,t,hf ,t)′ is a 2× 1 vector of common log-volatilities which
+capture the co-movement in the time-varying volatilities of the
+macro and financial variables respectively. We usee
+1
+2hm,t and
+e
+1
+2hf ,t asourmeasuresofmacroandfinancialuncertainty—these
+willbedescribedinmoredetailshortly.Thecoefficientmatrices
+A0,... ,Aq areofdimension n × 2andcapturetheeffectsofthe
+contemporaneous and lagged common log-volatilities on the
+VAR variables.
+A key contribution of our article is to propose an SVMVAR
+which is order-invariant. We therefore depart from the widely
+applied assumption that the impact matrix B
+0 has a lower
+triangularstructure.Recentstudiesshowthatorderdependence
+issues resulting from this parameterization tend to become
+serious in large models. Consequently, Bertsche and Braun
+(2022) and Chan, Koop, and Yu (2024)proposeorder-invariant
+approaches, allowing B
+0 to be an unrestricted nonsingular
+matrixwhichisidentifieduptopermutationsandsignchanges.
+We follow Lütkepohl and Wo´zniak (2020), restricting diagonal
+elements of B0 to be ones and leaving other parameters
+unrestricted. This setup allows us to show thatB0 is point-
+identified (see Online Appendix A3) and also order-invariant
+(see Online Appendix A5). We then verify our identification
+assumption ex-post, demonstrating that this assumption holds
+in our empirical study (see Online Appendix A.3.2).1 We also
+imposeaHorseshoeprioronthefreeparametersof B0 toachieve
+sparsitywhereappropriate.
+Returning to our uncertainty measures, the matrixUt is
+assumedtobediago nal:
+Ut =
+⎛
+⎝
+/Omega1m,t 00
+0 /Omega1u,t 0
+00 /Omega1f ,t
+⎞
+⎠,( 2 )
+where the volatilities of the macro, financial and unclassified
+variables are respectively defined as/Omega1m,t = diag(eωm
+1,t ,... ,
+eωm
+nm,t ), /Omega1f ,t = diag(eωf
+1,t ,... ,e
+ωf
+nf ,t ) and /Omega1u,t = diag(eωu
+1,t ,... ,
+eωu
+nu,t ).
+For variables in the macro and financial blocks, their log-
+volatilitiesarespecifiedas
+ωm
+i,t = ηm
+i,t + hm,t, i = 1,... ,nm,( 3 )
+ωf
+i,t = ηf
+i,t + hf ,t, i = 1,... ,nf ,( 4 )
+where ηm
+i,t and ηf
+i,t are the idiosyncratic volatility components
+associated with theith macro and financial variables, respec-
+tively. Equations (3)a n d(4)i n d i c a t et h a tt h ev o l a t i l i t yo fe a c h
+variable in the macro (financial) block is defined as the sum of
+its idiosyncratic volatility and the common log-volatility of the
+macro(financial)variables. 2
+Another contribution of this article lies in the treatment of
+ourunclassifiedvariables.Thelog-volatilitiesfortheunclassified
+variablesarespecifiedas
+ωu
+i,t = ηu
+i,t + hsi,t,t, i = 1,... ,nu,( 5 )
+wheresi,t ∈{ m,f }istheindicatorvariableforthe ithunclassified
+variable,whichisassumedtofollowaMarkovswitchingprocess
+with transition probabilityp(si,t = k|si,t−1 = l) = pi
+l,k,
+k,l ∈{ m,f }.N o t et h a tt h ev o l a t i l i t yo ft h eith unclassified
+variable is again defined as the sum of two components. The
+1Recentstudies(seeKorobilis 2022andChan,Matthes,andYu 2023)propose
+efficientalgorithmsforidentifyinglargeSVARsusingsignrestrictions.How-
+ever,thesemethodsarenotdesignedforimposingequalityrestrictionsso
+donotallowforrestrictingthediagonalelementsof B
+0 tobeone.Thusonly
+set-identificationcanbeachieved.
+2Equations (3) and (4) can be viewed as a factor model where the factor
+loadings are set to be one. However, we can modify our algorithm to
+estimatethefactorloadings(seeOnlineAppendixA.2.1).Intheunreported
+estimation results, we find that estimating the factor loadings does not
+alter the main findings in our empirical study. This is because most of the
+estimatedfactorloadingsareclosetooneconsistentwithCCM.
+
+4 S.N.DAVIDSON,C.HOU,ANDG.KOOP
+first component is the idiosyncratic component,ηu
+i,t,a n dt h e
+secondcomponent, hsi,t,t,isdeterminedbytheindicatorvariable
+si,t and is either the common log-volatility of the macro block
+or the financial block. For example, ifsi,t = m,t h e nhsi,t,t =
+hm,t, indicating that theith unclassified variable belongs to the
+block of macro variables at timet. This specification not only
+allows each unclassified variable to be assigned to either block,
+but does so in a time-varying fashion. So it is possible that
+a variable switches from the macroeconomic to the financial
+block (or vice versa). This allows us to investigate a range of
+interestingpossibilities.Forinstance,avariablemaybeclassified
+i no n eb l o c kd u r i n gc r i s e sa n da n o t h e rb l o c kd u r i n gn o r m a l
+times.
+Note that the decision to classify a variable in one block
+as opposed to another is made based on the co-movement of
+its SV process with the variables which are definitively clas-
+sified as being in one block or the other. In times when the
+volatility of an unclassified variable is behaving like the volatil-
+ities in the macroeconomic (financial) block it will be clas-
+sified as a macroeconomic (financial) variable. An important
+goal of our paper is to robustly measure uncertainty and its
+effects.Allowingforunclassifiedvariablesthereforeensuresthat,
+statistically speaking, variables are assigned to the appropriate
+block when our uncertainty measures and their impacts are
+estimated.
+Recallthat h
+t = (hm,t,hf ,t)′ isa2 × 1vectorofcommonlog-
+volatilitiesused to capture macro and financial uncertainty. We
+assumetheyevolveasthefollowingVARprocess:
+ht =
+ph∑
+i=1
+/Phi1iht−i +
+py∑
+j=1
+/Psi1jyt−j + ϵh
+t , ϵh
+t ∼ N (0,/Sigma1h) ,( 6 )
+where ϵh
+t = (ϵh
+m,t,ϵh
+f ,t)′ is a 2× 1 vector of error terms and
+t h ei n i t i a ls t a t ei ss p e c i fi e da sh1 ∼ N (0,Vh).O u rs p e c i fi -
+cation therefore follows CCM and we assume that: financial
+uncertainty can affect macro uncertainty and vice versa; our
+uncertainty measures depend not only on their past values but
+also past values of the VAR variables; andϵ
+h
+m,t and ϵh
+f ,t are
+permittedtobecorrelatedsincecommonshocksmayaffectboth
+typesofuncertainty.
+When undertaking impulse response analysis using the
+SVMVAR, uncertainty shocks are orthogonal to the VAR
+shocks by construction, providing structural identification. To
+separately identify the effects of shocks to macro and financial
+uncertainty,wefollowCCMbyassumingthatmacrouncertainty
+affects financial uncertainty contemporaneously while financial
+uncertainty affects macro uncertainty with a lag. Specifically,
+in our main empirical analysis, we assume that the reduced-
+form errors in (6)c a nb ed e c o m p o s e da sϵ
+h
+t = Leh
+t where
+L is a lower triangular matrix such that LL′ = /Sigma1h and
+eh
+t = (eh
+m,t,eh
+f ,t)′ is a vector of uncorrelated structural shocks
+with eh
+m,t andeh
+f ,t denoting the macro and financial uncertainty
+shocks,respectively.
+The idiosyncratic log-volatilities associated with each vari-
+able do not enter the conditional mean of the VAR and are
+assumedtofollo wsta tio naryAR(1)p r ocesses:
+ηk
+i,t = μk,i + ρk,iηk
+i,t−1 + ϵk
+i,t, ϵk
+i,t ∼ N (0,σ2
+k,i),( 7 )
+for i = 1,... ,nk, k ∈{ m,f ,u} and |ρk,i| < 1. The initial state
+isspecifiedas ηk
+i,1 ∼ N
+(
+0,
+σ2
+k,i
+1−ρ2
+k,i
+)
+.Wealsonotethatin( 1)and
+(6) we follow CCM in setting the lag orders of our models to
+p = 6,q = 2and ph = 2and py = 1,respectively.
+2.2. ANewMCMCAlgorithmfortheOI-SVMVAR
+Bayesian inference in VARs with SV is typically undertaken
+usingMCMCmethodsinvolvingtheauxiliarymixturesampler
+ofKim,Shephard,andChib( 1998).However,onceSVisadded
+tothemeantheauxiliarymixturesamplercannolongerbeused.
+Thus,studiesdeployingSVMVARssuchasCCMusetheparticle
+Gibbs algorithmproposedby Andrieu,Doucet,andHolenstein
+(2010)todrawthelog-SVsfromtheposteriordistribution.The
+particle Gibbs algorithm can be computationally burdensome
+in large models and suffer from particle degeneracy problems.
+This is shown by CHKP who develop an MCMC algorithm
+which uses an independent Acceptance–Rejection Metropolis-
+Hastingsstep.WhileJacquier,Polson,andRossi( 2002)alsouse
+a Metropolis step to draw the log-volatilities this must be done
+date-by-date. CHKP sample the log-volatilities across all dates
+in a single step, significantly reducing computation time and
+improving mixing. This involves a Gaussian candidate gener-
+ating density with variance depending on the Hessian of the
+conditional posterior of the log-volatilities. Crucially, this Hes-
+sian is block-banded. Band and sparse matrix algorithms can
+thusbeexploitedtoallowforefficientcomputationeveninlarge
+SVMVARs.
+In this article, we use CHKP to efficiently sample the log-
+volatilities but extend this algorithm to account for possible
+order-dependence issues. We restrict the diagonal elements of
+theimpactmatrix B
+0 tobeones,allowingustodemonstratethat
+B0 is point-identified. However, this means the order-invariant
+algorithm for the VAR with SV proposed by Chan, Koop, and
+Yu (2024)cannotbeusedtodraw B0.Inthissubsection,wethus
+develop a novel parameter transformation sampling approach
+for drawingB0.S a m p l i n gB0 in this way does not increase the
+computational burden thus we retain the speed of CHKP. This
+opens the door to robust estimation of very large SVMVARs
+suchasthoseconsideredinthisarticle.
+We also build on CHKP by allowing for variables whose
+classification is uncertain. Conditional on knowing the way
+the variables are classified (i.e., conditional on(s
+i,1,... ,si,T)
+for i = 1,... ,nu), we can transform our model, reordering
+the equations of the unclassified variables so that they can be
+groupedappropriatelywiththepredeterminedmacroandfinan-
+cialvariables.Afterthistransformation,thetransformedmodel
+reduces to a standard SVMVAR and the methods of CHKP can
+be directly applied to sample the log-volatilities(h
+1,... ,hT).I t
+c a nt h e nb es h o w nt h a t ,g i v e nt h el o g - v o l a t i l i t i e s(h1,... ,hT),
+draws of the indicator variable(si,1,... ,si,T),i = 1,... ,nu
+and the Markov transition probabilities(pi
+m,m,pi
+m,f ,pi
+f ,m,pi
+f ,f )
+can be directly obtained using the algorithm of Chib (1996).
+Further details about the posterior sampler are provided in
+OnlineAppendixA2.
+We now present our sampling approach for drawingB
+0.T o
+setthestage,wefirstnotethatourmodelspecifiedin( 1)canbe
+
+JOURNALOFBUSINESS&ECONOMICSTATISTICS 5
+rewritten as
+˜yt = B−1
+0 ϵy
+t , ϵy
+t ∼ N (0,Ut),
+where˜yt = yt − ∑ p
+i=1 Biyt−i − ∑ q
+j=0 Ajht−j.L e t t i n g˜Y =
+(˜y1,... ,˜yT)′ andE = (ϵy′
+t ,... ,ϵy′
+T )′, we can express our model
+morecompactlyas
+˜YB′
+0 = E.
+Thus,for i = 1,... ,n,weha ve
+˜Yb0,i = Ei, Ei ∼ N (0,/Omega1i),( 8 )
+whereEi isthe ithcolumnof E,b′
+0,i isthe ithrowof B0 and
+/Omega1i =
+⎧
+⎪⎪
+⎪
+⎪
+⎨
+⎪⎪⎪
+⎪
+⎩
+diag(ω
+m
+i,1,... ,ωm
+i,T),i f1 ≤ i ≤ nm,
+diag(ωu
+i−nm,1,... ,ωu
+i−nm,T),i fnm + 1 ≤ i ≤ nm + nu,
+diag(ωf
+i−nm−nu,1,... ,ωf
+i−nm−nu,T),
+ifnm + nu + 1 ≤ i ≤ nm + nu + nf .
+Since the diagonal elements ofB0 a r er e s t r i c t e dt ob eo n e s
+(i.e., theith element ofb0,i i ss e tt ob e1 ) ,t h e r ea r e(n − 1) free
+parameters inb0,i that need to be estimated. We let˜b0,i be the
+(n −1)×1vectorthatcollectsthesefreeparametersin b0,i,and
+wethenassumeanindependentGaussianpriorfor ˜b0,i:
+˜b0,i ∼ N (βi,Vi), i = 1,... ,n.( 9 )
+We develop an algorithm for sequentially drawing the free
+parameters in each row ofB0. Specifically, we propose a novel
+samplingmethodthatiterativelydrawsfrom p(˜b0,i|B0,−i,/Omega1i,˜Y)
+fori = 1,... ,n,where B0,−i = (b0,1,... ,b0,i−1,b0,i+1,... ,b0,n).
+Sincewecanalwayspermuteanyrowof B0 tobeupdatedtothe
+firstrow,withoutlossofgeneralitywewillillustrateourmethod
+fordrawingtheconditionalposteriorofthefirstrowof B0,˜b0,1.
+Sincethediagonalelementsof B0 arerestrictedtobeones,we
+haveb0,1 = (1,˜b′
+0,1)′.S u p p o s ew ew r i t e˜Y = (f1,... ,fn),t h e n
+(8)wi thi = 1canbeexpressedas
+f1 + ˜Y−1˜b0,1 = E1, E1 ∼ N (0,/Omega11), (10)
+where˜Y−1 = (f2,... ,fn). Hence, the conditional posterior of
+˜b0,1 isgivenby
+p(˜b0,1|B0,−1,/Omega11,˜Y) ∝| detB0|Te
+−1
+2
+(
+f1+˜Y−1˜b0,1
+)′
+/Omega1−1
+1
+(
+f1+˜Y−1˜b0,1
+)
+× e
+−1
+2
+(
+˜b0,1−β1
+)′
+V−1
+1
+(
+˜b0,1−β1
+)
+∝| detB0|Te
+−1
+2
+(
+˜b0,1−ˆ˜b0,1
+)′
+K
+(
+˜b0,1−ˆ˜b0,1
+)
+,
+(11)
+where
+K = ˜Y′
+−1/Omega1−1
+1 ˜Y−1 + V−1
+1 , ˆ˜b0,1 = K−1 (
+V−1
+1 β1 − ˜Y′
+−1/Omega1−1
+1 f1
+)
+.
+To further simplify the expression of the conditional poste-
+riorp(˜b0,1|B0,−1,/Omega11,˜Y),wepartition B0:
+B0 =
+(
+1 ˜b′
+0,1
+b0,21 B0,22
+)
+,
+whereb0,21 is(n − 1) × 1and B0,22 is(n − 1) × (n − 1).U sing
+a standard property of partitionedmatrices, the determinant of
+B0 canbeexp r essedas
+detB0 = detB0,22 × (1− b′
+0,21B
+′−1
+0,22˜b0,1). (12)
+Bysubstituting( 12)in to(11),wehave
+p(˜b0,1|B0,−1,/Omega11,˜Y) ∝| 1− b′
+0,21B
+′−1
+0,22˜b0,1|T
+e
+−1
+2
+(
+˜b0,1−ˆ˜b0,1
+)′
+K
+(
+˜b0,1−ˆ˜b0,1
+)
+. (13)
+Since the conditional posterior p(˜b0,1|B0,−1,/Omega11,˜Y) speci-
+fi e di n(13) is not a standard distribution, direct sampling is
+notfeasible.Tofacilitatesamplingfrom p(˜b0,1|B0,−1,/Omega11,˜Y),we
+introduce a parameter transformation scheme that transforms
+˜b0,1 tow = (w1,... ,wn−1)′ asfollows
+w = d + Q˜b0,1, (14)
+where
+Q =
+(
+−b′
+0,21B
+′−1
+0,22
+0(n−2)×1 In−2
+)
+, d =
+( 1
+0(n−2)×1
+)
+.
+The parameter transformation given in (14) defines an one-to-
+oneaffinetransformationfrom ˜b0,1 tow.Thus,wecandefinean
+inversemappingfrom w to˜b0,1:
+˜b0,1 = Q−1w − Q−1d. (15)
+To sample fromp(˜b0,1|B0,−1,/Omega11,˜Y),wecandrawfromthecon-
+ditional posterior ofw, p(w|B0,−1,/Omega11,˜Y),a n dt h e nt r a n s f o r m
+the obtainedw back to˜b0,1 via the inverse mapping outlined
+in (15). It is important to note that the Jacobian of the inverse
+mapping(15)isindependentof ˜b0,1 andw.Hence,wecangetthe
+conditional posteriorp(w|B0,−1,/Omega11,˜Y) by simply substituting
+(15)in to(13),whichgives
+p(w|B0,−1,/Omega11,˜Y)
+∝| w1|Te−1
+2(Q−1w−Q−1d−ˆ˜b0,1)′K(Q−1w−Q−1d−ˆ˜b0,1)
+∝| w1|Te−1
+2(w−ˆw)′ˆK(w−ˆw), (16)
+where
+ˆK−1 = QK−1Q′, ˆw = d + Qˆ˜b0,1.
+To samplew = (w1,... ,wn−1)′,w ep r o p o s ead i r e c ts a m -
+pling approach for first drawingw1 ∼ p(w1|B0,−1,/Omega11,˜Y),a n d
+thendrawing w−1 = (w2,... ,wn−1)′ ∼ p(w−1|w1,B0,−1,/Omega11,˜Y).
+To derivep(w1|B0,−1,/Omega11,˜Y) and p(w−1|w1,B0,−1,/Omega11,˜Y),w e
+firstpartition ˆK−1 andˆw as
+ˆK−1 =
+(λ11 λ′
+21
+λ21 /Lambda122
+)
+, ˆw = (ˆw1,ˆw′
+−1)′,
+whereλ11 isascalar, λ21 is(n − 2) × 1,/Lambda122 is(n − 2) × (n − 2)
+andˆw−1 = (ˆw2,... ,ˆwn−1)′.Theni tcanbesho wntha t
+p(w1|B0,−1,/Omega11,˜Y) ∝| w1|Te− 1
+2λ11 (w1−ˆw1)2
+, (17)
+p(w−1|w1,B0,−1,/Omega11,˜Y) ∝ e
+−1
+2
+(
+w−1−ˆμw−1
+)′
+/Sigma1−1
+w−1
+(
+w−1−ˆμw−1
+)
+,
+(18)
+
+6 S.N.DAVIDSON,C.HOU,ANDG.KOOP
+Table 1. SummaryofSVMVARmodelsinsimulationstudy.
+Models 6variables 23variables Time-varyingclassi fication(TVC) Order-invariant(OI) Specificationof B0
+1.CCM-6 • lowertriangular
+2.OI-6 • • unrestricted
+3.CCM-TVC-23 •• lowertriangular
+4.OI-TVC-23 •• • unrestricted
+where ˆμw−1 = ˆw−1 + w1−ˆw1
+λ11 λ21 and /Sigma1w−1 = /Lambda122 − λ21λ′
+21
+λ11 .
+Note that (18) implies that the conditional posterior ofw−1 is
+aG a u s s ia nd i s tri b u ti o nwi thm ea nˆμw−1 and covariance matrix
+/Sigma1w−1. However, the conditional posterior ofw1 givenby (17)is
+nonstandard. Therefore inProposition 1we propose a parame-
+ter transformation approach for sampling the conditional pos-
+terior ofω
+1.T h ep r o o fo fProposition 1is in Online Appendix
+A4.Toapply Proposition1,wesamplefromtheabsolutenormal
+distribution, ˜w1 ∼ AN ( ˆw1√Tλ11
+, 1
+T ),u s i n gt h en o r m a lm i x t u r e
+approximation proposed in Appendix C of Villani (2009).3
+Proposition 1. Suppose˜w1 ∼ AN ( ˆw1√Tλ11
+, 1
+T ),w h e r eAN (a,b)
+denotes the absolute normal distribution that has the density
+function
+fAN (x;a,b) ∝| x|
+1
+b e− 1
+2b (x−a)2
+, x ∈ R,b ∈ R+,a ∈ R.
+Let w1 = ˜w1 × √Tλ11,t h e nw1 follows a distribution with
+densityfunctiongivenby ( 17).
+3. SimulationStudy
+This section undertakes a simulation study to demonstrate the
+performance of our proposed algorithm. We also show that
+omittingrelevantvariablesandusinganorder-dependentspec-
+ificationcandistortresults.
+3.1. DataGeneratingProcessandModels
+In our simulation study, we use the SVMVAR specified in (1)–
+(7)w i t hp = 2, q = 1, p
+h = 1, py = 0a n dT = 600. We
+alsosettheidiosyncraticlog-volatilitiestobezerosforsimplicity,
+that is,ηi,t = 0f o ri ∈{ m,f ,u}.W ew o r kw i t ha2 3 - v a r i a b l e
+system with one block ofnm = 10 variables, a second block of
+nf = 10 variables andnu = 3u n c l a s s i fi e dv a r i a b l e s .W ew i l l
+refer to the first block as the macro variables and the second
+as the financial variables. For the unclassified variables, we set
+s
+1,t = m and s3,t = f for t = 1,... ,600. This means the first
+variable is a macro variable and the third variable is a financial
+variable. We then haves2,t = f when t = 1,... ,200 or t =
+401,... ,600, and s2,t = m when t = 201,... ,400. Thus, the
+secondunclassifiedvariableistypicallyclassifiedasfinancialbut
+is temporarily assigned to the macro block in the middle of the
+sample.
+3Our algorithm for drawingB0 and the one by Braun (2023), which extends
+Waggoner and Zha (2003), both implement a parameter transformation,
+facilitatingestimation.Thisinvolvesanapproximationstepusingamixture
+oftwoGaussiansinthesamplingprocedure.Whileouralgorithminvolves
+approximatinganabsolutenormaldistribution,Braun( 2023)approximates
+ageneralizedabsolutenormaldistribution.
+The true impact matrixB0 i sa s s u m e dt ob eaf u l ln o n z e r o
+matrix with ones on its diagonal and off-diagonal elements
+generated fromN (0,0.2). FortheVAR coefficients, parameters
+on the diagonal and off-diagonal ofB
+1 are fromU(0,0.6) and
+U(−0.2,0.2), respectively. The elements inBi, i > 1, are gen-
+erated fromN (0,0.12/i2). The coefficient matrices associated
+with the common log-volatilities in the mean equation (i.e.,
+A
+i,i = 0,... ,q) are generated fromN (0,0.52/(i + 1)2).F o r
+thecommonlog-volatilities,weset /Phi11 = 0.95I and/Sigma1h = 0.05I.
+We consider four SVMVAR models in total which are
+described in Table 1. This includes our true model OI-TVC-
+23, a 23 variable OI-SVMVAR with unclassified variables, and
+three misspecified models: CCM-TVC-23, OI-6, and CCM-
+6. CCM-TVC-23 is the same as OI-TVC-23 but its impact
+matrix B
+0 is restricted to be lower triangular so the variable
+ordering matters. The two other misspecified models, OI-6
+andCCM-6,aresmallversionsofOI-TVC-23 andCCM-TVC-
+23 respectively, only containing the first three macro and first
+threefinancialvariablesandnounclassifiedvariables.Following
+common practice, in our order-dependent specifications, we
+order our macro variables before our financial variables. All
+resultsarebasedonproducing15,000draws,discardingthefirst
+5000asburnin.
+3.2. AlgorithmPerformance
+Figure 1reports our estimates of macro and financial uncer-
+tainty for all four models. It is clear that OI-TVC-23 recovers
+t h et r u ev a l u e sw e l l ,d e m o n s t r a t i n gt h es o u n dp e r f o r m a n c eo f
+our algorithm. Two further points are clear from our analysis.
+First, relative to the true values, CCM-TVC-23 overestimates
+macro uncertainty and underestimates financial uncertainty.
+This is because the trueB
+0 is a full nonzero matrix but CCM-
+TVC-23imposesalowertriangularparameterization.Sinceour
+macro variables are ordered before our financial variables, the
+variation in financial variables will be explained not only by
+financial uncertainty (proxied by the common SV of finan-
+cial variables) but also macroeconomic uncertainty (proxied
+by the common SV of macroeconomic variables). Thus, macro
+uncertainty explains a larger share of variation in the data than
+financialuncertainty.
+Second,OI-6andCCM-6sufferfromomittedvariablesbias,
+generating estimates of macro and financial uncertainty larger
+thanthetruevalues.Thisresultisintuitivesincetheproportion
+ofvariationinthedataexplainedbyomittedvariablesisinstead
+captured by the models’ residuals. This increases the residuals’
+v o l a t i l i t y ,i nt u r nl e a d i n gt ot h eo v e r e s t i m a t i o no fm a c r oa n d
+financial uncertainty. Order dependence issues are also present
+inoursmallermodels:relativetoOI-6,order-dependentCCM-6
+generatesslightlyhighervaluesofmacrouncertaintyandlower
+valuesoffinancialuncertainty.
+
+JOURNALOFBUSINESS&ECONOMICSTATISTICS 7
+Figure 1. Simulationstudyuncertaintyestimates:posteriormediansofthemacro, e
+1
+2hm,t ,(toppanel)andfinancialuncertainty, e
+1
+2hf,t ,(bottompanel).
+Figure 2. Simulation study impulse responsesfor one standard deviation macro (top) and financial (bottom) uncertainty shocks: posterior medians and 70% credible
+intervals.
+Next, Figure 2 presents impulse responses to a one stan-
+d a r dd e v i a t i o nm a c r oa n dfi n a n c i a lu n c e r t a i n t ys h o c ki no u r
+four models. To facilitate comparisons, we report the posterior
+medians and 70% credible intervals for the six variables com-
+mon across models. Again, our results show that OI-TVC-23
+r e c o v e r st h et r u ev a l u e sw e l lw i t ht h e7 0 %c r e d i b l ei n t e r v a l s
+containingthetruevaluesacrossalmostallhorizons.Incontrast,
+impulse responses obtained using CCM-TVC-23, OI-6, and
+CCM-6 clearly deviate from the path of the true values. These
+deviations, however, arise from different forms of model mis-
+specification. CCM-TVC-23 fails to recover the true responses
+due to order dependence issues. These issues are so severe that
+OI-6 and CCM-6 tend to perform better in approximating the
+trueresponses.
+In contrast, the responses obtained from OI-6 and CCM-6
+areverysimilar,demonstratingthatorderdependenceissuesare
+less severe in small models. These similarities, however, do not
+meanresultsarerobust.Withfewervariablesinthemodel,larger
+effects are more likely to be detected. Consequently, relative to
+OI-TVC-23, OI-6, and CCM-6 can overestimate the effects of
+shocks, particularly when the true response is near zero. For
+example, results from OI-TVC-23 indicate that when the first
+andthirdvariablesrespondtoafinancialuncertaintyshockthe
+credible bands span zero for most horizons. However, CCM-6
+andOI-6detectapositivenonzeroresponse.
+Finally, Figure 3plots the estimated posterior probabilities
+thateachunclassifiedvariableisassignedtothemacroblock.W e
+show that our algorithm can effectively detect the appropriate
+classification. For the variable with time-varying classification,
+thealgorithmperformswellandforvariableswithconstantclas-
+sification,ouralgorithmassignseachvariabletotheappropriate
+blocka teachpo in tintimewi thhighp r obab ili ty .
+4. MeasuringandAnalyzingtheEffectsof
+MacroeconomicandFinancialUncertainty
+Adeeperunderstandingoftherelativeimportanceofmacroand
+financial uncertainty is required so that appropriate policy pre-
+scriptionscanbeadministered.Whilethereisgrowingevidence
+suggestingthatfinancialuncertaintydominates,existingstudies
+typicallydeployatwostepapproach,firstestimatinguncertainty
+
+8 S.N.DAVIDSON,C.HOU,ANDG.KOOP
+Figure 3. The blue lines are the estimated posterior probabilityp(si,t = m|y) for each of the unclassified variablesi = 1,2,3. The black dashed lines indicate the true
+values.
+Table 2. SummaryofSVMVARmodelsinempiricalanalysis.
+Mainempiricalanalysis
+Models 30variables 43var iables Time-varyingclassification(TVC) Order-invariant(OI) Specificationof B0
+1.CCM-30 • lowertriangular
+2.OI-30 • • unrestricted
+3.CCM-TVC-43 •• lowertriangular
+4.OI-TVC-43 •• • unrestricted
+Assessingrobustnesstoreversingvariableordering
+5.CCM-TVC-RO-43 sameasCCM-TVC-43buttheorderingofthevariablesisreversed
+6.OI-TVC-RO-43 sameasOI-TVC-43buttheorderingofthevariablesisreversed
+andthenconsideringitseffectsinsmallSVARs—thiscanleadto
+measurement error and omitted variables bias. CCM overcome
+this by developing a SVMVAR framework, finding that both
+macro and financial uncertainty have adverse economiceffects.
+Nonetheless, issues around model size, order-dependence and
+classification require investigation. In this section, we therefore
+measure and analyze the effects of macro and financial uncer-
+tainty using a large dataset and different SVMVAR specifica-
+tions. We show that in smaller SVMVARs order dependence
+issues are less severe. However, when a smaller information set
+isused, bothmacroandfinancialuncertaintyarefoundtohave
+adverse effects. In contrast, when using large SVMVARs order
+dependence issues worsen. Thus. it only becomes clear that
+financialuncertaintydominatesusingourlargeorder-invariant
+SVMVAR.
+4.1. LargeDataset,UnclassifiedVariablesandModels
+In our analysis, we use an updated and extended version of the
+dataset considered in CCM. The sample spans January 1960
+to October 2021, allowing us to capture the coronavirus pan-
+demic.AllvariablesareobtainedfromtheFRED-MDandFRED
+datasets with historical house price data available from Robert
+S h i l l e r .L i k eC C Ma n dL M N ,a l lm o d e l sa r ee s t i m a t e dw i t h
+standardizeddata.Thecompletelistofvariablesandtheirclassi-
+fication, abbreviations and transformations are given in Online
+Appendix B.
+We estimate six SVMVARs as outlined inTable 2.
+4 Model
+1 is order-dependent, includes the same 30 variables as CCM
+a n dc l a s s i fi e st h e mi nt h es a m ew a yw i t h1 8v a r i a b l e st r e a t e da s
+macroeconomic and the remaining 12 as financial. Model 2 is
+almostidenticalbutusesourorderinvariantspecification.Mod-
+els3and4areverylargeincluding43variablesandintroducing
+time-varying classification. The only difference between them
+is that Model 4 is order invariant. As previously emphasized,
+when B
+0 is order dependent, variable ordering matters. For
+Models 1 and 3 which are order dependent, we order macro
+variablesbeforefinancialvariablesasiscommonpracticeinthe
+literature. This implies that the variation in financial variables
+is explained by the volatility of macroeconomic variables with
+the remaining variation explained by the volatility of financial
+v a r i a b l e s .M o d e l s5a n d6t h e r e f o r em i r r o rM o d e l s3a n d4b u t
+the ordering of the variables is reversed to examine whether
+4RecallthatforallsixSVMVARs,wefollowCCM,assumingthatmacrouncer-
+taintyhasacontemporaneousimpactonfinancialuncertaintywhilefinan-
+cialuncertaintyreactstomacrouncertaintywithalag.However,inOnline
+AppendixC4,weconsideranalternativeidentificationschemewherefinan-
+cialuncertaintyaffectsmacrouncertaintycontemporaneouslywhilemacro
+uncertainty affects financial uncertainty with a lag. Using this alternative
+identificationscheme,ouroverarchingfindingsremainunchanged.
+
+JOURNALOFBUSINESS&ECONOMICSTATISTICS 9
+Figure 4. Uncertaintyestimatesfordifferentmodelsizes:posteriormediansofthemacro( e
+1
+2hm,t )andfinancialuncertainty( e
+1
+2hf,t ).GrayshadingindicatesNBERrecession
+periods.
+the results obtained are robust to this change.5 Models 4 and 6
+shouldproducethesameresults;weincludebothjusttoconfirm
+thisempirically.
+Determining the classification of the federal funds rate, the
+S&P 500 and credit spread is challenging. CCM suggest that as
+theinstrumentofmonetarypolicythefederalfundsrateshould
+be treated as a macro variable although studies as recent as
+Redl (2020) include it in the financial block. For the S&P 500
+a n dc r e d i ts p r e a d“ t h ed i s t i n c t i o nb e t w e e nm a c r oa n dfi n a n c e
+is admittedly less clear” (CCM, p. 805) but ultimately CCM
+place them in the financial block. Consequently, in Models 3–
+6 we treat the federal funds rate, credit spread and S&P 500
+as unclassified variables. We also include data on an additional
+13 unclassified variables spanning: money supply, credit, house
+prices,interestratesandexchangerates.
+Overthenextthreesubsections,weconsidertheimportance
+of model size, order-invariance and time-varying classification.
+For brevity, we will generally focus on Models 1–4, however,
+r es ul tsfr o mM odels5a nd6a r ep r esen t edinSection4.3 aswell
+as in Online Appendix C2. All results presented are based on
+producing 15,000 draws discarding the first 5000 as burn-in. It
+takesapproximately10(30)hrtoestimateeach30(43)variable
+5ForModels5and6,thereduced-formerrorsofthecommonlog-volatilities
+are decomposed asϵh
+t = Leh
+t where the structural uncertainty shocks are
+given byeh
+t = (eh
+f,t,eh
+m,t)′.Thus,thefinancialuncertaintyshockisordered
+beforethemacrouncertaintyshock,and Lisanuppertriangularmatrixwith
+LL′ = /Sigma1h.Thisisconsistentwithouridentificationassumptionthatmacro
+uncertaintyhasacontemporaneousimpactonfinancialuncertaintywhile
+financialuncertaintyreactstomacrouncertaintywithalag.
+model.6 Throughout, we report cumulated impulse response
+functions.7
+4.2. TheImportanceofModelSize
+To investigate the role of model size, we begin by contrast-
+ing results from our smaller models, CCM-30 and OI-30, and
+our large order invariant model, OI-TVC-43. Our uncertainty
+estimates are shown inFigure 4.W ec a ns e et h a tt h eb r o a d
+trends observed are similar across our two smaller models and
+OI-TVC-43. This suggests that when estimating macro and
+financial uncertainty omitted variables bias is not as severe as
+the case considered in our simulation study. There is, however,
+evidence to suggest that a larger information set is required to
+capture the key features of certain crisis periods. For example,
+the coronavirus pandemic was a crisis that was not financial
+in nature. Instead, there was considerable disruption to supply,
+demand and productivity (Lin, Londono, and Ma2022). We
+would expect this to manifest as macro rather than financial
+uncertainty.Smaller30variablemodelssuggeststhatmacroand
+financialuncertaintyspikedtoasimilardegreeduringthepan-
+demic. However, OI-TVC-43 provides a more intuitive result:
+macro uncertainty surged during the pandemic dwarfing the
+increaseinfinancialuncertainty.
+We now contrast impulse responses inFigure 5,f oc u s i n go n
+oursmallandlargeorder-invariantspecifications,OI-30andOI-
+6WeuseMATLABonadesktopwithAMDCoreRyzen9@340GHzprocessor.
+7Specifically,usingthestandarddeviat ionsobtainedfromstandardizingour
+data before estimation, we scale the response of each variable. We then
+cumulateresponsestoobtaintheresponseinlevelsorloglevels.
+
+10 S.N.DAVIDSON,C.HOU,ANDG.KOOP
+Figure 5. Impulseresponsesforonestandarddeviationuncertaintyshocks:posterior mediansand70%credibleintervalsofselectedvariablesforOI-30andO I-TVC-43.
+TVC-43.IfwefirstconsiderOI-30,wefindthatbothmacroand
+financialuncertaintyadverselyaffecttheeconomywhichiscon-
+sistentwithCCM’sfindings.Inresponsetoamacrouncertainty
+shock,thereisadeclineineconomicactivity,littlemovementin
+prices and a subsequent monetary policy easing. The response
+of financial indicators is muted apart from the credit spread. A
+financialuncertaintyshockhassimilarconsequencesbutaffects
+financialindicatorssuchasthecreditspreadandexcess returns
+more strongly.
+Our larger model, OI-TVC-43, however, yields different
+results. Macro uncertainty has little effect on the economy
+with most credible intervals spanning zero. In contrast, a
+financial uncertainty shock still has nonzero, adverse effects on
+indicators of economic activity such as earnings, employment,
+unemployment and new orders. The credit spread also reacts
+and monetary policy eases. In Figure 11 (Online Appendix C),
+wealsoplotthedifferencesintheresponsesobtainedfromOI-30
+and OI-TVC-43 and the corresponding 70% credible interval.
+Our results show that for many variables the 70% credible
+in tervalsexcludezeroformosthorizons.Th us,itiseviden ttha t
+the size of the model has a substantial influence on estimation
+results and responses to both macro and financial uncertainty
+shocks.
+Turning to historical decompositions (HDs) and forecast
+error variance decompositions (FEVDs) from OI-TVC-43 (see
+Online Appendix C2, Figures 14 and 15), we have two sets of
+findings.
+8 First,consistentwithCCM,ourFEVDsandHDsboth
+indicate that uncertainty shocks play a small role in explaining
+8SeeOnlineAppendixA6fordetailsofhowtocomputetheHDsandFEVDs.
+
+JOURNALOFBUSINESS&ECONOMICSTATISTICS 11
+Figure 6. Impulseresponsesforonestandarddeviationuncertaintyshocks:po steriormediansand70%credibleintervalsforOI-30andCCM-30.
+fluctuationsineconomicactivity.Asexpected,studiesdeploying
+small-scale VARs including Jurado, Ludvigson, and Ng (2015)
+and LMN tend to detect larger contributions since there are
+fewertotalvariablesinthesystem.
+Second, if we consider the relative importance of macro and
+financial uncertainty, our HDs do not uncover a systematic
+pattern.However,ourFEVDsindicatethatfinancialuncertainty
+plays alarger roleinexplainingvariationinheadlineindicators
+such as industrial production, unemployment, new orders, the
+federalfundsrateandcreditspread.Thisalignswithourimpulse
+responses which suggest financial uncertainty has a more pro-
+nouncedeffect on economicactivity.
+Our results are supported by our simulation study which
+demonstrated that in smaller models with omitted variables
+bias we are more likely to find that impulse responses are large
+when they are in fact near zero. In practice, when using OI-
+30, this results in both macro and financial uncertainty having
+adverseeffects.However,OI-TVC-43islesslikelytosufferfrom
+omittedvariables.Usingthislargermodelweshowthatfinancial
+not macro uncertainty has an adverse impact on the economy.
+This aligns with a growing body of literature including LMN.
+However,LMNfindthatmacrouncertaintyhasapositiveeffect
+onoutputintheshort-runinlinewith“growthoptions”theories.
+This could be induced by omitted variables bias. Inclusion of
+other key variables in their SVAR such as the federal funds rate
+could eliminate this puzzle. Similarly, relative to OI-TVC-43,
+O I - 3 0a sw e lla so th e rs t u d i e su s i n gs m allS V A R sm a yo v e r s ta t e
+theeffectsoffinancialuncertaintyduetoomittedvariablesbias.
+Together, our findings underscore the advantage of using our
+OI-SVMVARwhichcanaccommodatealargedataset.
+
+12 S.N.DAVIDSON,C.HOU,ANDG.KOOP
+Figure 7. Uncertaintyestimatesfororder-dependentmodels:posteriormediansofmacro( e
+1
+2hm,t )andfinancialuncertainty( e
+1
+2hf,t ).GrayshadingindicatesNBERrecession
+periods.
+4.3. TheImportanceofOrderInvariance
+Having revealed the dominant role played by financial uncer-
+tainty in affecting the economy, we now assess the severity of
+order dependence issues in models of different sizes. We first
+contrast results obtained from CCM-30 and its order invari-
+ant counterpart OI-30. We saw inFigure 4that they produce
+s i m i l a rm e a s u r e so fu n c e r t a i n t y .Figure 6also shows that the
+overarchingresultsaresimilarbuttheeffectsoffinancialuncer-
+tainty are more pronounced if using OI-30. Plotting the differ-
+ence in the responses and corresponding 70% credible interval
+(OnlineAppendixC,Figure12)revealsthatsomedifferencesare
+nonzero—see, for instance, industrial production, new orders,
+the stock price and excess returns. Thus, order dependence
+issues are present but less severe when we use relatively smaller
+models.
+Wenextcompareuncertaintyestimatesfromourtwoorder-
+dependent models, CCM-TVC-43 and CCM-30 inFigure 7
+(left panel). In doing so, we indirectly compare OI-TVC-43
+and CCM-TVC-43 since uncertainty estimates produced by
+CCM-30, OI-30 and OI-TVC-43 have similar trends. In our
+s i m u l a t i o ns t u d y ,t h et r u ei m p a c tm a t r i xB
+0 was a full nonzero
+matrix. In our empirical work,B0 m a yb em o r es p a r s el e a d -
+ing to slightly different findings. Nonetheless, when using a
+large order-dependent specification, our financial uncertainty
+measure is smaller in magnitude relative to CCM-30, OI-30,
+andOI-TVC-43.InCCM-TVC-43,macrovariablesareordered
+before financial variables thus variation in financial variables is
+explainedbythevolatilityofbothfinancialandmacrovariables.
+Our findings illustrate that order dependence issues are more
+acuteinCCM-TVC-43thanCCM-30.
+Oursimulationstudydemonstratedthatwhenthetrue B
+0 is
+notlowertriangular,adoptingthisparameterizationcanseverely
+distort impulses. If we considerFigure 8, CCM-TVC-43 incor-
+rectly detects that financial uncertainty does not have adverse
+effects on the economy. Additionally, if we contrast OI-TVC-
+43 and CCM-TVC-43 (Figure 13, Online Appendix C), there
+are nonzero differences in the responses of variables such as
+unemployment, new orders, the federal funds rate and credit
+spreadtofinancialuncertaintyshocks.
+To investigate further, we consider whether results from our
+largermodelsdependonthewayvariablesareordered. Figure7
+(right hand panel) shows that the magnitude of our financial
+uncertainty measure increases if we reverse the ordering of
+variables in CCM-TVC-43 and consider CCM-TVC-RO-43.
+This is because variationin financial variables is now explained
+by the volatility of financial variables but not macro variables.
+Changing the variable ordering, however, simply introduces
+a new form of order dependence and CCM-TVC-RO-43 still
+yieldsdifferentuncertaintyestimatesfromOI-TVC-43.
+Turning toFigure 8, these ordering issues have important
+repercussions. While CCM-TVC-43 detects that financial
+uncertainty does not have adverse effects on the economy, if
+we reverse the variable ordering and consider CCM-TVC-RO-
+43 the results suggest that financial uncertainty has nonzero
+effects on several variables (Figure 16, Online Appendix C).
+In contrast, by adopting our order-invariant specification, we
+obtainthesameresults(subjecttoMCMCapproximationerror)
+even when we reverse the variable ordering (Figure 17, Online
+Appendix C). Thus, an order-invariant approach is required to
+obtain robust results in larger models.
+
+JOURNALOFBUSINESS&ECONOMICSTATISTICS 13
+Figure 8. Impulseresponsesforonestandarddeviationuncertaintyshocks:posterior mediansand70%credibleintervalsofselectedvariablesforCCM-TVC-4 3andCCM-30.
+4.4. TheImportanceofTime-VaryingClassification
+In addition to developing a novel algorithm to estimate large
+OI-SVMVARs, another contribution of our article lies in the
+treatment of unclassified variables. In the OI-TVC-43 we treat
+16 variables as unclassified with the algorithm determining
+whether each of these variables is assigned to the macro block
+orthefinancialblock ateachpointintime. Figure9 reports the
+estimated classification obtained from OI-TVC-43 (see Figure
+18 in Online Appendix C for the posterior probabilities). If the
+posterior probability of the indicator variable associated with
+unclassified variable i at time t is greater than 0.5,p(s
+i,t =
+m|y)> 0.5, then unclassified variablei is classified as a macro
+variableattime t and has a value of one inFigure9.Oth e rwi se ,
+the variable is classified as financial and has a value of zero in
+Figure 9.W ec a ns e et h a tt h ea l g o r i t h mc a ne ff e c t i v e l yd i s c e r n
+between variables which either have constant classification,
+limitedregimeswitchingorconsiderableregimeswitching.
+Ouralgorithmhasdetectedthatsimilarvariablesaregrouped
+in the same block. For example, all interest rate spreads are
+typically classified as financial variables together with the stock
+priceandcreditspread.Thisseemsintuitivesincesuchvariables
+are commonly included in indices of financial conditions (see
+Hatzius et al. 2010). The federal funds rate is also typically
+classified as financial by our algorithm. Interestingly, all these
+variables either have constant classification or regime switching
+confined to a single crisis period. With the stock price, credit
+spread and federal funds rate all typically classified as financial
+variables,ourfindingsdifferfromclassificationschemesselected
+byotherstudiessuchasCCMandLMN.
+Turning to our macro variables, our algorithm again groups
+similar variables together. All three monetary aggregates, busi-
+
+14 S.N.DAVIDSON,C.HOU,ANDG.KOOP
+Figure 9. Estimatedtime-varyingclassificationresultsobtainedfromOI-TVC-43.Av alueofzero(one)indicatesthatavariableisclassifiedasafinancial(ma cro)variable.
+GrayshadingshowsNBERrecessionperiods.
+ness loans, and consumer loans and nonrevolving consumer
+credit are, on average, classified as macro variables. The house
+p riceindexisalsotyp icallyassignedtothemacr oblocko fvari-
+ables. That said, none of these variables have constant classifi-
+cationinsteadexhibitinglimitedtomoderateregimeswitching.
+Exchange rates, whose fluctuations are very difficult to predict
+(Rossi 2013), are the one class of indicator which tend to alter-
+natebetweenthemacroandfinancialblockmorerapidly.
+If we consider the timing of regime switches, we see that
+changes often coincide with crisis periods. For instance, the
+f e d e r a lf u n d sr a t ei sb r i e fl ya s s i g n e dt ot h em a c r ob l o c ka si t
+sharplydeclinesandhitsthezerolowerboundduringthegreat
+recession. Similarly, real house prices are assigned to the finan-
+cialblockduringthreecrisesincludingtheglobalfinancialcrisis
+whichwastriggered,inpart,bythesubprimemortgagecrash.To
+give another example, several variables such as business loans,
+nonrevolving consumer credit and the Moody’s bond yield rel-
+ative to the federal funds rate change classification during the
+dotcomcrashandtheshortrecessionwhichensued.
+5. Conclusion
+T h eS V M V A Rh a se m e r g e da sa na t t r a c t i v em o d e l ,a l l o w i n g
+for joint estimation of macroeconomic and financial uncer-
+tainty and their impact on the economy. However, SVMVARs
+are difficult to estimate and computationally demanding. To
+overcomethesechallenges,existingapproachesmakeanumber
+of assumptions. First, a lower triangular parameterization is
+used for the reduced-form error covariance matrix, improving
+computational efficiency but introducing an order dependence
+issue.Second,alimitisplacedonthenumberofvariableswhich
+c a nb ei n c l u d e di nt h em o d e l .T h i r d ,t h er e s e a r c h e rm u s tu s e
+
+JOURNALOFBUSINESS&ECONOMICSTATISTICS 15
+expert judgment to classify each variable as macroeconomic or
+financial prior to estimation. Each of these assumptions may
+haveanimpactonempiricalresults.
+The models and posterior simulation methods developed in
+this article avoid making such assumptions. We introduce a
+new OI-SVMVAR model which relaxes the lower triangularity
+assumption, allowing for order-invariant inference. As existing
+o r d e r - i n v a r i a n ta l g o r i t h m sc a n n o tb ea p p l i e dt oo u rS V M V A R ,
+wederiveanovelMCMCalgorithm.Havingaccountedfororder
+dependence issues, we adopt the efficient approach developed
+inCHKPforsamplingthecommonSVs.Thus,wecanrobustly
+estimate very large SVMVARs. In our SVMVAR, we also allow
+the classification of some variables to be uncertain. The algo-
+rithm can then decide whether to classify them as macro or
+financialvariablesinatime-varyingfashion.
+We compare our very large OI-SVMVAR with unclassified
+variables with alternative SVMVARs, investigating the impor-
+tance of model size, order-invariance and time-varying classifi-
+cation.WeshowthatsmallerSVMVARscanoverstatetheeffects
+of uncertainty. Using our large SVMVAR, however, it becomes
+clear that financial not macro uncertainty adversely affects the
+economy,aligningwithLMN.Importantly,though,largeorder-
+dependent SVMVARs produce measures of uncertainty which
+depend on the way variables are ordered. In practice, this leads
+toresultswhichimplythatfinancialuncertaintydoesnotimpact
+the economy. Thus, it is critical to use an order-invariant spec-
+ification like the one proposed in this article. We also find that
+when unclassified variables change classification, changes often
+occur during crises. Allowing for time-varying classification
+ensuresvariablesareassignedtotheappropriateblockwhenour
+uncertaintymeasuresandtheirimpactsareestimated.
+SupplementaryMaterials
+This supplement consists of the Technical Appendix, Data Appendix, and
+supplementaryfigures(OnlineAppendix.pdf).
+Acknowledgments
+We thank the editor, associate editor and two anonymous reviewers for
+useful comments which helped us improve our algorithm and article. We
+also thank Ping Wu and participants at the EcoMod 2021 Conference and
+Örebro University 4th Annual Workshop on Financial Econometrics for
+helpfulcomments.
+DisclosureStatement
+No potential conflictofinterest was reported by the author(s).
+Funding
+Chenghan Hou also acknowledges financial support from the National
+NaturalScienceFoundationofChina(72003064).
+References
+Alfaro, I., Bloom, N., and Lin, X. (2024), “The Finance Uncertainty Multi-
+plier,”Journal of Political Economy,132,577–615. [ 1]
+Andrieu,C.,Doucet,A.,andHolenstein,R.(2010),“ParticleMarkovChain
+Monte Carlo Methods,”J o u r n a lo ft h eR o y a lS t a t i s t i c a lS o c i e t y,S e r i e sB ,
+72,269–342. [2,4]
+Angelini, G., Bacchiocchi, E., Caggiano, G., and Fanelli, L. (2019), “Uncer-
+tainty Across Volatility Regimes,”Journal of Applied Econometrics, 34,
+437–455. [2]
+Arias, J. E., Rubio-Ramírez, J. F., and Shin, M. (2023), “Macroeconomic
+Forecasting and Variable Ordering in Multivariate Stochastic Volatility
+Models,”Journal of Econometrics,235,1054–1086. [ 1]
+Bachmann,R.,Elstner,S.,andSims,E.(2013),“UncertaintyandEconomic
+Activity: Evidence from Business Survey Data,”American Economic
+Journal: Macroeconomics,5,217–249. [ 1,2]
+Baker, S. R., Bloom, N., and Davis, S. J. (2016), “Measuring Economic
+PolicyUncertainty,”The Quarterly Journal of Economics,131,1593–1636.
+[1]
+Banbura,M.,Giannone,D.,andReichlin,L.(2010),“LargeBayesianVector
+Autoregressions,”Journal of Applied Econometrics,25,71–92. [ 2]
+Berger,T.,Grabert,S.,andKempa,B.(2016),“GlobalandCountry-Specific
+OutputGrowthUncertaintyandMacroeconomicPerformance,” Oxford
+Bulletin of Economics & Statistics,78,694–716. [ 1]
+Bertsche, D., and Braun, R. (2022), “Identification of Structural Vector
+AutoregressionsbyStochasticVolatility,” Journal of Business & Economic
+Statistics,40,328–341. [ 2,3]
+Bloom, N. (2009), “The Impact of Uncertainty Shocks,”Econometrica, 77,
+623–685. [1,2]
+Bognanni,M.(2018),“AClassofTime-VaryingParameterStructuralVARs
+forInferenceUnderExactorSetIdentification,” FRB of Cleveland Work-
+ing Paper.[ 2]
+Bonciani,D.,andVanRoye,B.(2016),“UncertaintyShocks,BankingFric-
+tions and Economic Activity,”Journal of Economic Dynamics & Control,
+73,200–219. [1]
+Braun, R. (2023), “The Importance of Supply and Demand for Oil Prices:
+Evidence from Non-Gaussianity,”Quantitative Economics, 14, 1163–
+1198. [6]
+Caggiano, G., Castelnuovo, E., Delrio, S., and Kima, R. (2021), “Financial
+Uncertainty and Real Activity: The Good, the Bad, and the Ugly,”Euro-
+pean Economic Review,136,103750. [ 1
+]
+Carriero, A., Clark, T. E., and Marcellino, M. (2020), “Assessing Interna-
+tional Commonality in Macroeconomic Uncertainty and its Effects,”
+Journal of Applied Econometrics,35,73–293. [ 1]
+Carriero, A., Clark, T. E., and Marcellino, M. (2019), “Bayesian Vector
+Autoregressions with Stochastic Volatility and Non-Conjugate Priors,”
+Journal of Econometrics,212,137–154. [ 2]
+Carriero, A., Clark, T. E., and Marcellino, M. (2018), “Measuring Uncer-
+taintyanditsImpactontheEconomy,” Review of Economics & Statistics,
+100,799–815. [1]
+Casarin, R., Foroni, C., Marcellino, M., and Ravazzolo, F. (2018), “Uncer-
+tainty Through the Lenses of a Mixed-Frequency Bayesian Panel
+Markov-Switching Model,”Annals of Applied Statistics, 12, 2559–2586.
+[2]
+Chan, J. C. C. (2022), “Asymmetric Conjugate Priors for Large Bayesian
+VARs,”Quantitative Economics,13,1145–1169. [ 2]
+(2023), “Large Hybrid Time-Varying Parameter VARs,”Journal of
+Business & Economic Statistics,41,890–905. [ 1]
+Chan, J. C. C., Doucet, A., León-González, R., and Strachan, R. W. (2018),
+“Multivariate Stochastic Volatility with Co-heteroscedasticity,” working
+paper. [1]
+Chan,J.C.C.,Matthes,C.,andYu,X.(2023),“LargeStructuralVARswith
+MultipleSignandRankingRestrictions,”workingpaper. [ 3]
+Chan,J.C.C.,Koop,G.,andYu,X.(2024),“LargeOrder-InvariantBayesian
+VARs with Stochastic Volatility,”Journal of Business & Economic Statis-
+tics,42,825–837. [ 2,3,4]
+Chib, S. (1996), “Calculating Posterior Distributions and Modal Estimates
+inMarkovMixtureModels,” Journal of Econometrics,75,79–97. [ 4]
+Christiano, L. J., Motto,R., and Rostagno, M. (2014),“Risk Shocks,”Amer-
+ican Economic Review,104,27–65. [ 1]
+Cross, J. L., Hou, C., Koop, G., and Poon, A. (2023), “Large Stochastic
+VolatilityinMeanVARs,” Journal of Econometrics,236,105469. [ 2]
+Gefang, D., Koop, G., and Poon, A. (2022), “Forecasting Using Variational
+Bayesian Inference in Large Vector Autoregressions with Hierarchical
+Shrinkage,”International Journal of Forecasting,39,346–363. [ 2]
+Gilchrist, S., Sim, J. W., and Zakrajsek, E. (2014), “Uncertainty, Financial
+Frictions,andInvestmentDynamics,”NBERWorkingPaperNo.20038.
+[1]
+
+16 S.N.DAVIDSON,C.HOU,ANDG.KOOP
+Hartwig, B. (2020), “Robust Inference in Time-Varying Structural VAR
+Models: The DC-Cholesky Multivariate Stochastic Volatility Model,”
+DeutscheBundesbankPaperNo.34/2020. [ 2]
+Hatzius,J.,Hooper,P.,Mishkin,F.S.,Schoenholtz,K.L.,andWatson,M.W.
+(2010),“FinancialConditionsIndexes:AFreshLookAftertheFinancial
+Crisis,”NBERWorkingPaperNo.16150. [ 13]
+Hou, C. (2020), “Time-Varying Relationship between Inflation and Infla-
+tion Uncertainty,”Oxford Bulletin of Economics & Statistics, 82, 83–124.
+[1]
+Jacquier, E., Polson, N. G., and Rossi, P. E. (2002), “Bayesian Analysis of
+Stochastic Volatility Models,”Journal of Business & Economic Statistics,
+20,69–87. [2,4]
+Jurado, K., Ludvigson, S. C., and Ng, S. (2015), “Measuring Uncertainty,”
+American Economic Review,105,1177–1216. [ 2,11]
+Kim,S.,Shephard,N.,andChib,S.(1998),“StochasticVolatility:Likelihood
+InferenceandComparisonwithARCHModels,” T h eR e v i e wo fE c o n o m i c
+Studies,65,361–393. [ 2,4]
+Koop,G.,andKorobilis,D.(2013),“LargeTime-VaryingParameterVARs,”
+Journal of Econometrics,65,361–393. [ 2]
+Korobilis, D. (2022), “A New Algorithm for Structural Restrictions in
+Bayesian Vector Autoregressions,”European Economic Review, 148,
+104241. [3]
+Lin,R.,Londono,J.,andMa,S.(2022),“GlobalRealEconomicUncertainty
+and COVID-19,” FEDS Notes. Washington: Board of Governors of the
+FederalReserveSystem [ 9]
+Lindsten,F.,Jordan,M.,andSchon,T.(2014),“ParticleGibbswithAncestor
+Sampling,”Journal of Machine Learning Research,15,2145–2184. [ 2]
+Ludvigson,S.,Ma,S.,andNg,S.(2021),“UncertaintyandBusinessCycles:
+Exogenous Impulse or Endogenous Response?” American Economic
+Journal: Macroeconomics,13,369–410. [ 1,2]
+Lütkepohl, H., and Wo´zniak, T. (2020), “Bayesian Inference for Structural
+Vector Autoregressions Identified by Markov-Switching Heteroskedas-
+ticity,”Journal of Economic Dynamics & Control,113,103862. [ 3]
+Ma,X.,andSamaniego,R.(2019),“DeconstructingUncertainty,” European
+Economic Review,119,22–41. [ 2]
+Mumtaz, H., and Musso, A. (2021), “The Evolving Impact of Global,
+Region-Specific, and Country-Specific Uncertainty,”Journal of Business
+&E c o n o m i cS t a t i s t i c s,39,466–481. [ 1]
+Redl, C. (2020), “Uncertainty Matters: Evidence from Close Elections,”
+Journal of International Economics,124,103296. [ 2,9]
+Rossi,B.(2013),“ExchangeRatePredictability,” Journal of Economic Litera-
+ture,51,1063–1119. [ 14]
+Scotti, C. (2016), “Surprise and Uncertainty Indexes: Real-Time Aggrega-
+tion of Real-Activity Macro-Surprises,”Journal of Monetary Economics,
+82,1–19. [1,2]
+Villani,M.(2009),“Steady-StatePriorsforVectorAutoregressions,” Journal
+of Applied Econometrics,24,630–650. [ 6]
+Waggoner,D.F.,andZha,T.(2003),“AGibbsSamplerforStructuralVector
+Autoregressions,”Journal of Economic Dynamics & Control,28,359–366.
+[6]
+
