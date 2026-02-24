@@ -298,9 +298,53 @@ Detailed review of Taiwan-specific empirical evidence:
 - Document all data sources and transformations meticulously for reproducibility
 - Expected timeline: 18 months from data collection to journal submission
 
+## NSTC Grant Application (Current Priority — Severely Behind Schedule)
+
+**Status**: Actively writing CM03 (研究計畫內容) for NSTC application 115WFA1110048
+**Deadline**: Past due — complete as soon as possible
+**Application type**: 2-year individual project (人文處)
+**Page limit**: 45 pages (including references, figures, tables)
+**Language**: English
+
+### CRITICAL: Read This File First for Any Grant Writing Work
+
+**`NSTC-applicaiton/CM03_production_spec.md`** — The master production specification.
+This file contains:
+- Complete section structure for CM03 (mapped to the 2-year format)
+- Page targets per section
+- Style guidelines (derived from example proposal 113WIA0110259)
+- Content mapping (what's written vs. what needs to be written)
+- Session workflow instructions (how to split tasks across sessions)
+- Quality standards for AI-generated prose
+
+### Key Files for Grant Writing Sessions
+
+| File | Purpose |
+|------|---------|
+| `NSTC-applicaiton/CM03_production_spec.md` | **Master spec — read first** |
+| `research_proposal_v4.tex` | Current draft of Section 1 (Introduction) — ~85% complete |
+| `NSTC-applicaiton/example/113WIA0110259_BASE.PDF` | Target format example |
+| `llm_logs/2025-11-08_discussion.md` | Core methodological decisions |
+
+### Current Writing Progress
+
+| Section | Status |
+|---------|--------|
+| CM02: Abstract (EN + ZH) | ❌ Not started |
+| Section 1: Background | ⚠️ ~85% (v4.tex, needs 2 closing paragraphs) |
+| Year 1 Section 2: Methods | ❌ Not started |
+| Year 1 Section 3: Results | ❌ Not started |
+| Year 2 Section 2: Methods | ❌ Not started |
+| Year 2 Section 3: Results | ❌ Not started |
+| Section 4: Integrated summary | ❌ Not started |
+| References | ❌ Not started |
+
+---
+
 ## Important Reminders for Claude Code Instances
 
-1. **Always read `llm_logs/2025-11-08_discussion.md` first** when starting work—it contains all critical methodological decisions
+1. **Always read `NSTC-applicaiton/CM03_production_spec.md` first** when starting any grant writing work
+2. **Always read `llm_logs/2025-11-08_discussion.md` first** when starting work—it contains all critical methodological decisions
 
 2. **Do NOT suggest model extensions** (e.g., adding third uncertainty factor, imposing block exogeneity)—these were explicitly rejected after thorough analysis
 
