@@ -79,6 +79,26 @@ paper/**/*.vrb
 !paper/**/*.pdf
 !research_proposal.pdf
 
+# Proposal / archived draft LaTeX build artifacts (keep PDFs)
+NSTC-applicaiton/proposal/*.aux
+NSTC-applicaiton/proposal/*.bbl
+NSTC-applicaiton/proposal/*.blg
+NSTC-applicaiton/proposal/*.log
+NSTC-applicaiton/proposal/*.out
+NSTC-applicaiton/proposal/*.synctex.gz
+NSTC-applicaiton/proposal/*.toc
+NSTC-applicaiton/proposal/*.fls
+NSTC-applicaiton/proposal/*.fdb_latexmk
+archive/proposal_drafts/*.aux
+archive/proposal_drafts/*.bbl
+archive/proposal_drafts/*.blg
+archive/proposal_drafts/*.log
+archive/proposal_drafts/*.out
+archive/proposal_drafts/*.synctex.gz
+archive/proposal_drafts/*.toc
+archive/proposal_drafts/*.fls
+archive/proposal_drafts/*.fdb_latexmk
+
 # ============================================
 # Presentation Files (Keep PDFs, ignore source in progress)
 # ============================================
