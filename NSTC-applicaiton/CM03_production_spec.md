@@ -152,45 +152,63 @@ References                                       3-4 頁
 
 ### Year 2 - Section 2: Methods, procedures, and implementation schedule
 
+> **架構說明（2026-02-24 討論後更新）**：Year 2 分為兩個平行主軸：
+> 1. 完成 OI-SVMVAR 的完整實證分析（三步驟）
+> 2. 建立 SOE-DSGE 理論模型，用 Bayesian 估計後進行 IRF Matching 驗證
+
 **(1). Research principles, methods, and the innovation of research methods**
 
-**(1.1) Step 1: Time-Varying Transmission Channel Identification**
+**(1.1) Steps 1–3: Full Three-Step Empirical Analysis (OI-SVMVAR)**
 
 內容：
-- 如何從後驗分佈提取 π_{i,t}（分類概率的時間序列）
-- 繪製圖表：各外部變數的 macro vs. financial 分類隨時間演變
-- 識別關鍵 regime shifts（2008, 2018, 2020, 2022）
+- **Step 1**：Time-varying classification — 從後驗分佈提取 π_{i,t}（各外部變數的 macro vs. financial 分類概率時間序列），識別關鍵 regime shifts（2008, 2018, 2020, 2022）
+- **Step 2**：FEVD — 量化各外部衝擊對台灣 h_{m,t} 和 h_{f,t} 的貢獻，驗證 SOE 假設
+- **Step 3**：IRF — 台灣變數對 h_{m,t}/h_{f,t} 的反應，以及 historical decomposition
+- 穩健性：小型模型（30變數）vs. 大型模型（43變數）比較
 
-**(1.2) Step 2: Forecast Error Variance Decomposition (FEVD)**
-
-內容：
-- FEVD 的計算方法（在 OI-SVMVAR 框架下）
-- 量化各外部衝擊對 h_{m,t} 和 h_{f,t} 的貢獻
-- 驗證 SOE 假設（台灣對美中影響微小）
-
-**(1.3) Step 3: Impulse Response Functions (IRF)**
+**(1.2) A Small Open Economy DSGE Model with Financial Frictions**
 
 內容：
-- IRF Set 1：台灣變數對 h_{m,t} 和 h_{f,t} 的反應
-- IRF Set 2：台灣變數對各外部衝擊的反應（order-invariant identification）
-- Historical decomposition
+- 理論基礎：參照 Alfaro, Bloom, Lin (2024, JPE) 的「金融不確定性乘數」模型架構
+- 模型特徵：異質性廠商 + 財務摩擦（隨機融資楔子，stochastic financing wedge）+ 二階衝擊（second-moment shocks）
+- 兩種外部不確定性衝擊（與 DHK 的 macro/financial factor 對應）：
+  - **國外需求不確定性**（Foreign demand uncertainty）：生產力波動率跳升 → 對應 macro channel（透過 Trade/IS equation 傳導）
+  - **國際融資不確定性**（International financing uncertainty）：借貸利差波動率跳升 → 對應 financial channel（透過 UIP/Financial Accelerator 傳導）
+- **三層防禦邏輯**（用於回應「這兩種不確定性如何認定」的審查質疑）：
+  - 第一層：資料驅動的分類（DHK 的 macro/financial factor loading 自然歸類）
+  - 第二層：理論上 SOE 外部衝擊只能透過 Trade equation 或 UIP/Financial Accelerator 傳導，直接對應兩種不確定性
+  - 第三層：IRF 軌跡匹配作為跨方法終極驗證
+
+**(1.3) Bayesian Estimation and Impulse Response Matching**
+
+內容：
+- 貝氏 MCMC 估計 DSGE 結構參數（以台灣月度總體與金融資料為基礎）
+- 先驗分佈設計：根據台灣 SOE 特性設定（開放度、資本帳管制程度等）
+- **IRF Matching（核心驗證）**：
+  - 將 DSGE 推導的結構性 IRF 與 Year 1 DHK 資料驅動 IRF 並排比較
+  - 若 DSGE 的 IRF 軌跡能包覆或吻合 DHK 的 IRF → 驗證理論機制正確
+  - 若有顯著偏差 → 新的學術發現（現有理論需要修正）
+- 歷史反事實模擬（Counterfactual）：切斷金融管道後的台灣經濟路徑
 
 **(2). Anticipated problems and means of resolution**
 
-**(2.1) Computational Challenges**
+**(2.1) Computational and Estimation Challenges**
 
 內容：
-- MCMC 估計每次約 30 小時的計算需求
-- HPC 資源取得策略（大學 HPC 或雲端運算）
-- 收斂診斷方法（Geweke test, trace plots）
+- OI-SVMVAR 估計：MCMC 每次約 30 小時，需 HPC 資源（大學 HPC 或雲端運算）
+- Bayesian DSGE 估計：MCMC 收斂診斷（Geweke test, trace plots, effective sample size）
+- IRF Matching 的識別挑戰：如何定義「匹配成功」的統計標準（信賴區間覆蓋率）
 
 **(2.2) Works planned for the second year**
 
 內容：
-- 大型模型（43變數）完整估計
-- 三步驟分析：分類概率 → FEVD → IRF
-- 穩健性檢驗（替代樣本、替代規格、小型模型比較）
-- 論文撰寫與投稿
+- 大型模型（43變數）OI-SVMVAR 完整估計
+- 三步驟完整分析：分類概率 → FEVD → IRF（含穩健性檢驗）
+- SOE-DSGE 模型建構與方程式推導
+- Bayesian MCMC 估計（台灣月度資料）
+- IRF Matching：DSGE 結構性 IRF vs. DHK 資料驅動 IRF 比對
+- 歷史反事實模擬
+- 論文撰寫與頂尖期刊投稿
 - 政策簡報（為央行準備）
 
 ---
@@ -199,11 +217,15 @@ References                                       3-4 頁
 
 內容（bullet points）：
 - Full estimation results from 43-variable OI-SVMVAR model
-- Time-varying classification plots for all external variables
-- FEVD tables quantifying external shock contributions to Taiwan's uncertainty
+- Time-varying classification plots for all external variables (macro vs. financial channel probabilities)
+- FEVD tables quantifying U.S., China, and global shock contributions to Taiwan's uncertainty
 - IRF figures showing dynamic responses through macro and financial channels
+- Estimated SOE-DSGE model with posterior parameter distributions
+- Structural IRFs from DSGE model aligned with Alfaro et al. (2024) financial uncertainty multiplier mechanism
+- Impulse Response Matching comparison (DSGE structural IRFs vs. DHK data-driven IRFs)
+- Historical counterfactual simulations (e.g., severing financial channel during 2018–2019 trade war)
 - Robustness checks comparing small vs. large model results
-- Journal submission to top-tier outlet (e.g., Journal of Applied Econometrics, Journal of International Economics)
+- Journal submission to top-tier outlet (e.g., Journal of International Economics, Journal of Applied Econometrics)
 - Policy brief for the Central Bank of China (Taiwan)
 
 ---
@@ -231,6 +253,7 @@ References                                       3-4 頁
 - Caldara et al. - financial vs. macro uncertainty
 - Sin (2015) - Taiwan SVAR
 - Caldara, Iacoviello - GPR index
+- **Alfaro, Bloom, Lin (2024, JPE)** - Finance Uncertainty Multiplier（Year 2 DSGE 理論基礎）
 
 ---
 
