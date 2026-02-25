@@ -306,38 +306,10 @@ Detailed review of Taiwan-specific empirical evidence:
 **Page limit**: 45 pages (including references, figures, tables)
 **Language**: English
 
-### CRITICAL: Read This File First for Any Grant Writing Work
+### CRITICAL: Read These Files First for Any Grant Writing Work
 
-**`NSTC-applicaiton/CM03_production_spec.md`** — The master production specification.
-This file contains:
-- Complete section structure for CM03 (mapped to the 2-year format)
-- Page targets per section
-- Style guidelines (derived from example proposal 113WIA0110259)
-- Content mapping (what's written vs. what needs to be written)
-- Session workflow instructions (how to split tasks across sessions)
-- Quality standards for AI-generated prose
-
-### Key Files for Grant Writing Sessions
-
-| File | Purpose |
-|------|---------|
-| `NSTC-applicaiton/CM03_production_spec.md` | **Master spec — read first** |
-| `research_proposal_v4.tex` | Current draft of Section 1 (Introduction) — ~85% complete |
-| `NSTC-applicaiton/example/113WIA0110259_BASE.PDF` | Target format example |
-| `llm_logs/2025-11-08_discussion.md` | Core methodological decisions |
-
-### Current Writing Progress
-
-| Section | Status |
-|---------|--------|
-| CM02: Abstract (EN + ZH) | ❌ Not started |
-| Section 1: Background | ⚠️ ~85% (v4.tex, needs 2 closing paragraphs) |
-| Year 1 Section 2: Methods | ❌ Not started |
-| Year 1 Section 3: Results | ❌ Not started |
-| Year 2 Section 2: Methods | ❌ Not started |
-| Year 2 Section 3: Results | ❌ Not started |
-| Section 4: Integrated summary | ❌ Not started |
-| References | ❌ Not started |
+1. **`NSTC-applicaiton/PROGRESS.md`** — Current section status, next actions, and open blockers. Start every session here.
+2. **`NSTC-applicaiton/CM03_production_spec.md`** — Permanent format rules, page targets, and quality standards.
 
 ---
 

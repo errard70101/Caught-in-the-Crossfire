@@ -285,33 +285,12 @@ uncertainty shock, time-varying transmission channel, stochastic volatility in m
 | 數學方程式的正確性驗證 | **你（PI）** |
 | 提供每個 section 的核心論點 bullet points | **你（PI）** |
 
-### Session 拆分建議
+### Session 進度管理
 
-由於 context window 限制，建議每個 session 只處理一個 section：
+**→ 請見 `NSTC-applicaiton/PROGRESS.md`**
 
-| Session | 任務 | 預計輸出 |
-|---------|------|---------|
-| Session A | 完成 Section 1（補段落 9-10，修段落 6） | ~7頁 |
-| Session B | Year 1 Section 2 (1.1)-(1.3)：模型規格 | ~6頁 |
-| Session C | Year 1 Section 2 (2.1)-(2.2)：資料與第一年工作 | ~4頁 |
-| Session D | Year 2 Section 2 全部：三步驟分析 | ~8頁 |
-| Session E | Section 3×2 + Section 4 + References | ~6頁 |
-| Session F | CM02 摘要（中英文） | ~1頁 |
-
-### 每個 Session 的啟動指令模板
-
-新 session 開始時，給 AI 的指令：
-
-```
-請閱讀以下文件後開始工作：
-1. NSTC-applicaiton/CM03_production_spec.md（本規格文件）
-2. research_proposal_v4.tex（現有 Section 1 草稿）
-3. llm_logs/2025-11-08_discussion.md（方法論決策）
-
-今天的任務是：[指定 session 任務]
-請依照規格文件的格式要求，先提出每段的論點架構讓我確認，
-再展開成完整段落。
-```
+各 section 的當前狀態、下一步行動、待決事項、以及 AI 執行計畫的連結，
+均統一記錄於 `PROGRESS.md`。每個 writing session 結束後請更新該檔案。
 
 ---
 

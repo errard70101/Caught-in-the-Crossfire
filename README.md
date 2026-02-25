@@ -70,18 +70,32 @@ This allows the model to objectively identify:
 
 ```
 /
+├── NSTC-applicaiton/            # NSTC grant application materials
+│   ├── PROGRESS.md              # ★ Grant writing dashboard (status, next actions, blockers)
+│   ├── CM03_production_spec.md  # Format rules, page targets, quality standards
+│   ├── proposal/                # LaTeX source files
+│   │   ├── main.tex             # Master document (\input all sections)
+│   │   ├── sec1_background.tex  # Section 1: Background ✅
+│   │   ├── y1_sec2_methods.tex  # Y1 Section 2: Methods (in progress)
+│   │   ├── y1_sec3_results.tex  # Y1 Section 3: Results
+│   │   ├── y2_sec2_methods.tex  # Y2 Section 2: Methods
+│   │   ├── y2_sec3_results.tex  # Y2 Section 3: Results
+│   │   ├── sec4_integrated.tex  # Section 4: Integrated summary
+│   │   └── references.bib       # BibTeX references
+│   ├── writing-plans/           # AI execution prompts per section
+│   │   └── 2026-02-25-y1-sec2-methods.md
+│   └── example/                 # Format reference (113WIA0110259)
 ├── llm_logs/                    # Research discussion logs
 │   ├── 2025-11-08_discussion.md # Core methodological decisions
-│   ├── 2025-11-14_*.md          # Research direction clarification
+│   ├── 2025-11-16_svmvar-order-invariance-discussion.md
 │   └── discussion-template.md   # Template for new discussions
 ├── literature/                  # Literature review materials
-│   ├── uncertainty_shock_literature.md        # Global uncertainty literature
-│   └── taiwan_specific_uncertainty_literature.md  # Taiwan-specific studies
+│   ├── uncertainty_shock_literature.md
+│   └── taiwan_specific_uncertainty_literature.md
 ├── references/                  # Reference papers
 │   └── Investigating Economic Uncertain.pdf  # Davidson, Hou, Koop (2025)
 ├── CLAUDE.md                    # Guide for Claude Code instances
-├── README.md                    # This file
-└── research_proposal.tex        # Research proposal (LaTeX)
+└── README.md                    # This file
 ```
 
 ---
@@ -180,8 +194,12 @@ The model will reveal whether these external variables transmit shocks to Taiwan
 
 ## Research Progress
 
+> **Grant writing in progress**: NSTC application 115WFA1110048 is being written
+> to secure funding for Phases 2–5. See **[`NSTC-applicaiton/PROGRESS.md`](NSTC-applicaiton/PROGRESS.md)**
+> for the current grant writing dashboard (section status, next actions, blockers).
+
 ### Phase 0: Literature Review ✓ (Completed)
-- [x] Global uncertainty shock literature (20+ papers)
+- [x] Global uncertainty shock literature (40+ papers)
 - [x] Taiwan-specific studies (10+ papers)
 - [x] Methodological foundations (DHK 2025, Chan-Koop-Yu 2024, etc.)
 - [x] Research gap identification and positioning
@@ -190,33 +208,35 @@ The model will reveal whether these external variables transmit shocks to Taiwan
 - [x] Core research question finalized
 - [x] Methodological framework confirmed (apply DHK 2025, no extensions)
 - [x] Three-step analysis plan established
-- [x] Variable classification strategy determined
+- [x] Variable classification strategy determined (19 macro / 10 financial / 14 unclassified)
 
-### Phase 2: Data Collection (Current Phase)
-- [ ] Assemble Taiwan macro variables (1990-2025, monthly)
+### Phase 2: Data Collection (Pending funding)
+- [ ] Assemble Taiwan macro variables (2000–2025, monthly)
 - [ ] Assemble Taiwan financial variables
 - [ ] Obtain US variables (FRED)
-- [ ] Obtain China variables
-- [ ] Construct/obtain global uncertainty indices
+- [ ] Obtain China variables (NBS, PBoC)
+- [ ] Construct/obtain global uncertainty indices (VIX, GPR, EPU)
 - [ ] Data cleaning and transformation (stationarity, seasonal adjustment)
 
-### Phase 3: Model Implementation (Planned)
-- [ ] Obtain DHK (2025) replication code
-- [ ] Adapt code for Taiwan dataset
-- [ ] Conduct preliminary estimation runs
-- [ ] Diagnostic checks and convergence validation
+### Phase 3: Model Implementation (Pending funding)
+- [ ] Implement DHK (2025) MCMC algorithm
+- [ ] Adapt code for 43-variable Taiwan dataset
+- [ ] Conduct preliminary estimation (30-variable validation run)
+- [ ] Full estimation and convergence diagnostics
 
-### Phase 4: Analysis (Planned)
-- [ ] Step 1: Time-varying classification analysis
+### Phase 4: Analysis (Pending funding)
+- [ ] Step 1: Time-varying classification probabilities for 14 external variables
 - [ ] Step 2: Forecast error variance decomposition
-- [ ] Step 3: Impulse response function analysis
-- [ ] Robustness checks (alternative specifications, sample periods)
+- [ ] Step 3: Impulse response functions + historical decomposition
+- [ ] SOE-DSGE model with financial frictions (Year 2)
+- [ ] IRF matching: DSGE structural IRFs vs. data-driven IRFs
+- [ ] Robustness checks
 
-### Phase 5: Writing and Dissemination (Planned)
+### Phase 5: Writing and Dissemination (Pending funding)
 - [ ] Complete research paper
 - [ ] Policy brief for Central Bank of China (Taiwan)
 - [ ] Conference presentations
-- [ ] Journal submission
+- [ ] Journal submission (target: Journal of International Economics)
 
 ---
 
@@ -311,4 +331,4 @@ This research builds on the groundbreaking methodological innovations by Davidso
 
 ---
 
-*Last Updated: 2025-11-14*
+*Last Updated: 2026-02-25*
