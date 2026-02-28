@@ -208,13 +208,13 @@ Detailed review of Taiwan-specific empirical evidence:
 - [ ] Construct/obtain global indicators (VIX, GPR, US-China relations indices)
 - [ ] Data cleaning: stationarity tests, seasonal adjustment, standardization
 
-### Phase 3: Model Implementation
+### Phase 3: Year 1 Model Implementation
 - [ ] Obtain DHK (2025) replication code (MATLAB/R/Python)
 - [ ] Adapt code for Taiwan dataset
 - [ ] Conduct preliminary estimation runs (~30 hours per run)
 - [ ] Convergence diagnostics and validation
 
-### Phase 4: Analysis (Three-Step Research Design)
+### Phase 4: Year 1 Analysis (Three-Step Research Design)
 - [ ] **Step 1**: Time-varying classification analysis
   - Plot classification probabilities for external variables over time
   - Identify regime shifts (2008, 2012, 2018, 2020, 2022)
@@ -226,7 +226,20 @@ Detailed review of Taiwan-specific empirical evidence:
   - IRFs of Taiwan variables to identified external shocks
 - [ ] Robustness checks (alternative specifications, sample periods)
 
-### Phase 5: Policy Implications and Writing
+### Phase 5: Year 2 — SOE Nonlinear Business Cycle Accounting
+> **Framework shift (2026-02-28)**: Year 2 changed from SOE-DSGE + IRF Matching to SOE Nonlinear BCA.
+> See `llm_logs/2026-02-28_bca-nonlinear-uncertainty-accounting.md` for rationale.
+> Technical details (wedge selection, uncertainty shock introduction) still under active literature review.
+
+- [ ] Literature review: SOE-BCA wedge structures (Lama 2011, Otsu 2010, etc.)
+- [ ] Literature review: introducing stochastic volatility into BCA wedges (Andreasen 2012, Fernández-Villaverde et al. 2011/2015)
+- [ ] Build SOE-BCA model with stochastic volatility in wedges
+- [ ] Implement factor-loading structure: map h_{m,t} and h_{f,t} to wedge volatilities
+- [ ] Solve with third-order perturbation (Dynare feasibility check needed)
+- [ ] Counterfactual accounting exercise: which wedge's second moment drives Taiwan's recessions
+- [ ] Cross-validate with Year 1 classification results
+
+### Phase 6: Policy Implications and Writing
 - [ ] Interpret findings for Central Bank of China (Taiwan) policy
 - [ ] Complete research paper
 - [ ] Policy brief for CBC and government agencies
@@ -246,6 +259,9 @@ Detailed review of Taiwan-specific empirical evidence:
 - **Unclassified Variables**: Variables whose macro/financial nature is determined by the model, not researcher
 - **FEVD**: Forecast Error Variance Decomposition
 - **IRF**: Impulse Response Function
+- **BCA**: Business Cycle Accounting (Chari, Kehoe & McGrattan 2007) — Year 2 theoretical framework
+- **Wedges**: Time-varying distortions in a prototype neoclassical model (efficiency, labor, investment, trade, UIP)
+- **SOE Nonlinear BCA**: Extension of BCA to small open economy with stochastic volatility in wedges (Year 2 core method)
 
 ### Chinese Terms (繁體中文)
 
@@ -286,9 +302,10 @@ Detailed review of Taiwan-specific empirical evidence:
 | **Unclassified Variables** | Domestic ambiguous variables (S&P 500, Fed Funds, exchange rate) | **External shock sources** (US, China, global variables) |
 | **Policy Relevance** | Fed should monitor which uncertainty type | CBC should know which channel to respond to |
 | **Innovation Type** | Methodological (solve order-dependence, large models) | **Application** (use time-varying classification for channel identification) |
-| **Model Extension** | New MCMC algorithm development | No extension—full application of existing framework |
+| **Year 1** | New MCMC algorithm development | No extension—full application of existing framework |
+| **Year 2** | N/A | SOE Nonlinear BCA: map empirical h_{m,t}/h_{f,t} to structural wedges with stochastic volatility |
 
-**Key Distinction**: We use DHK's tool to answer a fundamentally different question that is uniquely relevant for small open economies.
+**Key Distinction**: We use DHK's tool to answer a fundamentally different question that is uniquely relevant for small open economies. Year 2 extends BCA (Chari, Kehoe & McGrattan 2007) to second-moment shocks in a SOE setting—a framework not yet developed in the literature.
 
 ## Development Notes
 
@@ -327,3 +344,5 @@ Detailed review of Taiwan-specific empirical evidence:
 5. **Maintain 2-factor structure**: h_t = (h_macro,t, h_financial,t)' represents Taiwan's domestic uncertainty only
 
 6. **Avoid over-emphasizing geopolitics/semiconductors**—while contextually relevant, these can cause the research to lose focus on the core methodological contribution
+
+7. **Year 2 framework is SOE Nonlinear BCA** (not DSGE + IRF Matching)—changed 2026-02-28. Technical details (wedge selection, uncertainty shock introduction) are still under active literature review. See `llm_logs/2026-02-28_bca-nonlinear-uncertainty-accounting.md` for initial discussion.

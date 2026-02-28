@@ -152,13 +152,9 @@ References                                       3-4 頁
 
 ### Year 2 - Section 2: Methods, procedures, and implementation schedule
 
-> **架構說明（2026-02-28 更新）**：Year 2 分為兩個平行主軸：
+> **架構說明（2026-02-24 討論後更新）**：Year 2 分為兩個平行主軸：
 > 1. 完成 OI-SVMVAR 的完整實證分析（三步驟）
-> 2. 建立 SOE Nonlinear Business Cycle Accounting 框架，將第一年萃取的實證不確定性因子映射到結構楔子
->
-> ⚠️ **注意**：Year 2 的理論框架已從「SOE-DSGE + IRF Matching」轉向「SOE Nonlinear BCA」。
-> 技術細節仍在研究中（見 `llm_logs/2026-02-28_bca-nonlinear-uncertainty-accounting.md`），
-> 標註 `[TBD]` 的部分待文獻研究完成後補充。
+> 2. 建立 SOE-DSGE 理論模型，用 Bayesian 估計後進行 IRF Matching 驗證
 
 **(1). Research principles, methods, and the innovation of research methods**
 
@@ -170,47 +166,29 @@ References                                       3-4 頁
 - **Step 3**：IRF — 台灣變數對 h_{m,t}/h_{f,t} 的反應，以及 historical decomposition
 - 穩健性：小型模型（30變數）vs. 大型模型（43變數）比較
 
-**(1.2) SOE Nonlinear Business Cycle Accounting**
-
-> 理論基礎：Chari, Kehoe & McGrattan (2007, *Econometrica*) 的 Business Cycle Accounting (BCA)
-> 框架延伸至 (a) 小型開放經濟體、(b) 二階動差衝擊（uncertainty shocks）。
-> 文獻空白：目前尚無將 BCA 正式延伸至 second-moment shocks 的通用框架。
+**(1.2) A Small Open Economy DSGE Model with Financial Frictions**
 
 內容：
+- 理論基礎：參照 Alfaro, Bloom, Lin (2024, JPE) 的「金融不確定性乘數」模型架構
+- 模型特徵：異質性廠商 + 財務摩擦（隨機融資楔子，stochastic financing wedge）+ 二階衝擊（second-moment shocks）
+- 兩種外部不確定性衝擊（與 DHK 的 macro/financial factor 對應）：
+  - **國外需求不確定性**（Foreign demand uncertainty）：生產力波動率跳升 → 對應 macro channel（透過 Trade/IS equation 傳導）
+  - **國際融資不確定性**（International financing uncertainty）：借貸利差波動率跳升 → 對應 financial channel（透過 UIP/Financial Accelerator 傳導）
+- **三層防禦邏輯**（用於回應「這兩種不確定性如何認定」的審查質疑）：
+  - 第一層：資料驅動的分類（DHK 的 macro/financial factor loading 自然歸類）
+  - 第二層：理論上 SOE 外部衝擊只能透過 Trade equation 或 UIP/Financial Accelerator 傳導，直接對應兩種不確定性
+  - 第三層：IRF 軌跡匹配作為跨方法終極驗證
 
-- **SOE-BCA 楔子結構** `[TBD — 待確認 SOE 文獻中的標準楔子設定]`
-  - 初步構想（5 個楔子）：效率楔子、勞動楔子、國內投資楔子、貿易楔子（Trade Wedge）、UIP 楔子（Country Premium Wedge）
-  - 需研究：SOE-BCA 文獻（如 Lama 2011, Otsu 2010 等）中的標準做法，確認是否需要調整楔子數量與定義
-
-- **引入 Stochastic Volatility（二階動差衝擊）**
-  - 各楔子的 DGP 從固定變異數 AR(1) 擴展為隨機波動版本
-  - 波動度過程本身服從 AR(1)：σ_{i,t} = (1-ρ_{σ,i})σ̄_i + ρ_{σ,i} σ_{i,t-1} + η_{i,t}
-  - 需使用三階微擾法（third-order perturbation）求解，突破 certainty equivalence `[TBD — 確認 Dynare 支援程度]`
-
-- **Factor-Loading 映射：2 個實證因子 → 多個楔子** `[TBD — 待確認映射結構]`
-  - 核心構想：σ_{i,t} = ... + λ_{i,m} h_{m,t} + λ_{i,f} h_{f,t} + η_{i,t}
-  - h_{m,t} 和 h_{f,t} 為第一年 OI-SVMVAR 萃取的總體/金融不確定性因子
-  - λ_{i,m} 和 λ_{i,f} 為待估載荷係數（資料驅動，非 ad hoc 限制）
-  - 可測試假說：若衝擊走 macro channel → λ_{efficiency,m} 與 λ_{trade,m} 顯著；若走 financial channel → λ_{investment,f} 與 λ_{UIP,f} 顯著
-
-- **Year 1 → Year 2 對接邏輯**
-  - Year 1 OI-SVMVAR：萃取 h_{m,t} 與 h_{f,t}，並透過分類機率識別傳導管道
-  - Year 2 SOE-BCA：以 h_{m,t}、h_{f,t} 作為楔子波動度的 target，實現「資料驅動實證 → 結構識別」的閉環驗證
-  - 執行反事實模擬（Accounting Exercise）：單獨打開/關閉各楔子的 second moment，判斷哪個楔子最能重現第一年 IRF 的衰退軌跡
-
-**(1.3) Estimation and Counterfactual Accounting Exercise**
+**(1.3) Bayesian Estimation and Impulse Response Matching**
 
 內容：
-- **估計方法** `[TBD — 待確認最適估計策略]`
-  - 選項一：Bayesian MCMC 估計結構參數（含 factor loadings）
-  - 選項二：calibration + simulated method of moments
-  - 需確認三階展開下的估計可行性
-- **反事實會計實驗（核心成果）**：
-  - 「單獨打開」某一楔子的 second moment，其餘強制為穩態 → 判斷哪個楔子的不確定性衝擊最能解釋台灣衰退
-  - 歷史事件分析：2008 金融危機、2018-19 貿易戰、2020 COVID
-- **與 Year 1 的交叉驗證**：
-  - Year 1 分類機率顯示外部變數走 financial channel → Year 2 反事實應顯示投資/UIP 楔子的 second moment 主導
-  - 若兩年結果一致 → 強力驗證；若不一致 → 新的學術發現
+- 貝氏 MCMC 估計 DSGE 結構參數（以台灣月度總體與金融資料為基礎）
+- 先驗分佈設計：根據台灣 SOE 特性設定（開放度、資本帳管制程度等）
+- **IRF Matching（核心驗證）**：
+  - 將 DSGE 推導的結構性 IRF 與 Year 1 DHK 資料驅動 IRF 並排比較
+  - 若 DSGE 的 IRF 軌跡能包覆或吻合 DHK 的 IRF → 驗證理論機制正確
+  - 若有顯著偏差 → 新的學術發現（現有理論需要修正）
+- 歷史反事實模擬（Counterfactual）：切斷金融管道後的台灣經濟路徑
 
 **(2). Anticipated problems and means of resolution**
 
@@ -218,18 +196,18 @@ References                                       3-4 頁
 
 內容：
 - OI-SVMVAR 估計：MCMC 每次約 30 小時，需 HPC 資源（大學 HPC 或雲端運算）
-- SOE-BCA 三階微擾法：確認 Dynare 是否支援三階展開的 Bayesian estimation `[TBD]`
-- Factor-Loading 識別：2 個因子映射到多個楔子的統計識別條件 `[TBD]`
+- Bayesian DSGE 估計：MCMC 收斂診斷（Geweke test, trace plots, effective sample size）
+- IRF Matching 的識別挑戰：如何定義「匹配成功」的統計標準（信賴區間覆蓋率）
 
 **(2.2) Works planned for the second year**
 
 內容：
 - 大型模型（43變數）OI-SVMVAR 完整估計
 - 三步驟完整分析：分類概率 → FEVD → IRF（含穩健性檢驗）
-- SOE-BCA 模型建構：確定楔子結構、引入 stochastic volatility、推導均衡條件
-- 三階微擾法求解與估計
-- Factor-Loading 估計：將 h_{m,t}、h_{f,t} 映射到各楔子波動度
-- 反事實會計實驗：識別驅動台灣衰退的關鍵楔子 second moment
+- SOE-DSGE 模型建構與方程式推導
+- Bayesian MCMC 估計（台灣月度資料）
+- IRF Matching：DSGE 結構性 IRF vs. DHK 資料驅動 IRF 比對
+- 歷史反事實模擬
 - 論文撰寫與頂尖期刊投稿
 - 政策簡報（為央行準備）
 
@@ -242,9 +220,9 @@ References                                       3-4 頁
 - Time-varying classification plots for all external variables (macro vs. financial channel probabilities)
 - FEVD tables quantifying U.S., China, and global shock contributions to Taiwan's uncertainty
 - IRF figures showing dynamic responses through macro and financial channels
-- SOE Nonlinear BCA model with estimated wedge structures and factor loadings
-- Counterfactual accounting results: which wedge's second-moment shock best explains Taiwan's recessions
-- Cross-validation between Year 1 classification probabilities and Year 2 accounting exercise results
+- Estimated SOE-DSGE model with posterior parameter distributions
+- Structural IRFs from DSGE model aligned with Alfaro et al. (2024) financial uncertainty multiplier mechanism
+- Impulse Response Matching comparison (DSGE structural IRFs vs. DHK data-driven IRFs)
 - Historical counterfactual simulations (e.g., severing financial channel during 2018–2019 trade war)
 - Robustness checks comparing small vs. large model results
 - Journal submission to top-tier outlet (e.g., Journal of International Economics, Journal of Applied Econometrics)
@@ -275,10 +253,7 @@ References                                       3-4 頁
 - Caldara et al. - financial vs. macro uncertainty
 - Sin (2015) - Taiwan SVAR
 - Caldara, Iacoviello - GPR index
-- **Chari, Kehoe & McGrattan (2007, Econometrica)** - BCA 原始框架（Year 2 理論基礎）
-- Fernández-Villaverde et al. (2011, AER; 2015, REStud) - DSGE with Stochastic Volatility
-- Andreasen (2012, Review of Economic Dynamics) - Third-order perturbation 標準做法
-- `[TBD]` SOE-BCA 文獻（Lama 2011, Otsu 2010 等——待確認）
+- **Alfaro, Bloom, Lin (2024, JPE)** - Finance Uncertainty Multiplier（Year 2 DSGE 理論基礎）
 
 ---
 
@@ -332,5 +307,5 @@ AI 產出的文字必須符合以下標準（以 v4.tex 為參照）：
 
 ---
 
-*最後更新：2026-02-28*
-*下一步：完成 SOE-BCA 文獻研究（wedge 選擇、uncertainty shock 引入方式），然後補充 Year 2 的 [TBD] 細節*
+*最後更新：2026-02-24*
+*下一步：確認年期（1年or2年），然後開始 Session A（完成 Section 1）*
