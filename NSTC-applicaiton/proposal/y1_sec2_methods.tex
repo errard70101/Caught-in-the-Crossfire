@@ -1,10 +1,71 @@
 % Year 1 Section 2: Methods, procedures, and implementation schedule
 % Sessions B + C per CM03_production_spec.md
+
+\noindent\textbf{(1) Research principles, methods, and the innovation of research methods}
+
+\bigskip
+
+\noindent\textbf{(1.1) The OI-SVMVAR Framework}
+
+\medskip
+
+To address the identification challenges outlined in Section~1, this project employs the \textbf{order-invariant stochastic volatility in mean vector autoregression} (OI-SVMVAR) framework developed by \citet{davidson2025investigating}. We select this framework because it uniquely resolves the three methodological obstacles that confront any attempt to trace external uncertainty shocks through a small open economy: it accommodates a large information set, eliminating the omitted variable bias that confounds small-scale models; its order-invariant identification ensures that results do not depend on arbitrary variable ordering; and its time-varying classification mechanism allows the data---rather than the researcher---to determine whether a given external shock transmits through macroeconomic or financial channels. The model consists of five coupled components, estimated jointly in a single Bayesian step, which we now present in turn.
+
+To capture the direct impact of uncertainty on real economic activity and financial conditions, the observation equation embeds the latent uncertainty factors in the conditional mean of a VAR:
 %
-% (1) Research principles, methods, and the innovation of research methods
-%   (1.1) The OI-SVMVAR Framework
-%   (1.2) Variable Classification and the Key Innovation
-%   (1.3) Order-Invariance and Why It Matters for Taiwan
+\begin{equation}
+\mathbf{y}_t = \mathbf{c} + \sum_{l=1}^{p} \mathbf{A}_l\, \mathbf{y}_{t-l} + \boldsymbol{\Gamma}\, \mathbf{h}_t + \boldsymbol{\varepsilon}_t,
+\label{eq:var}
+\end{equation}
+%
+where $\mathbf{y}_t$ is the $N \times 1$ vector of observables (in our application, $N = 43$ variables spanning Taiwan's domestic economy, U.S.\ and Chinese indicators, and global risk measures); $\mathbf{c}$ is an $N \times 1$ intercept vector; $\mathbf{A}_l$ are $N \times N$ coefficient matrices at lag $l = 1, \ldots, p$; $\boldsymbol{\varepsilon}_t$ is the $N \times 1$ reduced-form disturbance vector; and $\mathbf{h}_t = (h_{m,t},\, h_{f,t})'$ is a $2 \times 1$ vector containing the two latent common log-volatility factors that represent Taiwan's \textbf{macroeconomic uncertainty} ($h_{m,t}$) and \textbf{financial uncertainty} ($h_{f,t}$), respectively. The $N \times 2$ matrix $\boldsymbol{\Gamma}$ captures the \textbf{stochastic volatility in mean} effect: because $\boldsymbol{\Gamma}\, \mathbf{h}_t$ enters the conditional mean of $\mathbf{y}_t$, elevated uncertainty directly shifts the expected path of all observables---output, employment, asset prices, and credit conditions alike. This is what distinguishes the SVMVAR from a standard stochastic volatility model, in which volatility appears only in the error covariance and thus cannot feed back into the levels of economic variables. The inclusion of $\boldsymbol{\Gamma}\, \mathbf{h}_t$ allows us to test the prediction---central to real-options and precautionary-savings theories \citep{bloom2009impact, bloom2014fluctuations}---that heightened uncertainty depresses investment, consumption, and hiring not merely by increasing dispersion but by shifting the conditional mean of economic outcomes.
+
+To ensure that identification does not depend on the arbitrary ordering of variables within $\mathbf{y}_t$, the contemporaneous relationship between reduced-form and structural disturbances is specified as
+%
+\begin{equation}
+\mathbf{B}_0\, \boldsymbol{\varepsilon}_t = \boldsymbol{\Sigma}_t^{1/2}\, \mathbf{u}_t, \qquad \mathbf{u}_t \sim \mathcal{N}(\mathbf{0},\, \mathbf{I}_N),
+\label{eq:contemp}
+\end{equation}
+%
+where $\mathbf{B}_0$ is an $N \times N$ contemporaneous impact matrix and $\boldsymbol{\Sigma}_t = \mathrm{diag}(\sigma_{1,t}^2, \ldots, \sigma_{N,t}^2)$ is the diagonal matrix of time-varying, variable-specific conditional variances. The structural disturbances $\mathbf{u}_t$ are homoskedastic by construction; all time variation in volatility is absorbed by $\boldsymbol{\Sigma}_t$. Crucially, $\mathbf{B}_0$ is left as a full, unrestricted nonsingular matrix---subject only to the normalisation that its diagonal elements equal one---rather than being constrained to a lower triangular form. This unrestricted specification is what delivers \textbf{order invariance}: because no zero restrictions are imposed on the off-diagonal elements of $\mathbf{B}_0$, the estimation results are identical regardless of how variables are ordered in $\mathbf{y}_t$. The implications of this design choice---and why it is indispensable for a 43-variable system that mixes domestic and external series---are discussed in detail in subsection~(1.3).
+
+The structural heart of the model lies in the specification linking each variable's log-volatility to the common uncertainty factors. Following \citet{davidson2025investigating}, the $N$ variables in $\mathbf{y}_t$ are partitioned into three blocks---$n_m$ macroeconomic variables, $n_f$ financial variables, and $n_u$ unclassified variables, with $n_m + n_f + n_u = N$---and the log conditional variance of variable $i$ is decomposed into a \textbf{variable-specific idiosyncratic component} $\eta_{i,t}$ and a loading on the relevant common factor:
+%
+\begin{equation}
+\log \sigma_{i,t}^2 =
+\begin{cases}
+\eta_{i,t}^{m} + h_{m,t} & \text{if variable } i \text{ is macroeconomic,} \quad i = 1, \ldots, n_m, \\[4pt]
+\eta_{i,t}^{f} + h_{f,t} & \text{if variable } i \text{ is financial,} \quad i = 1, \ldots, n_f, \\[4pt]
+\eta_{i,t}^{u} + h_{s_{i,t},\,t} \quad & \text{if variable } i \text{ is unclassified,} \quad i = 1, \ldots, n_u.
+\end{cases}
+\label{eq:variance}
+\end{equation}
+%
+The idiosyncratic terms $\eta_{i,t}^{k}$ ($k \in \{m, f, u\}$) capture variable-specific volatility movements that are orthogonal to the common factors, ensuring that the log-volatilities of variables within the same block are not forced into perfect collinearity. Each $\eta_{i,t}^{k}$ follows a stationary AR(1) process, so that idiosyncratic volatility shocks are mean-reverting while the common factors $h_{m,t}$ and $h_{f,t}$ can exhibit the persistent swings characteristic of aggregate uncertainty episodes. Variables pre-classified as macroeconomic load exclusively on $h_{m,t}$, so that their common volatility component rises and falls only with aggregate real-economy uncertainty. Variables pre-classified as financial load exclusively on $h_{f,t}$. For unclassified variables, however, the common factor is selected by a discrete latent state indicator $s_{i,t} \in \{m, f\}$: when $s_{i,t} = m$, the variable's common volatility component is $h_{m,t}$; when $s_{i,t} = f$, it is $h_{f,t}$. This discrete switching mechanism---rather than a continuous blend of both factors---means that at each point in time the model assigns each unclassified variable entirely to one block, and the \textit{posterior probability} of that assignment becomes the object of inferential interest. As we explain in subsection~(1.2), this is the mechanism through which we identify whether a given external uncertainty source transmits to Taiwan through the macroeconomic channel or the financial channel.
+
+The two common log-volatility factors evolve according to independent driftless random walks:
+%
+\begin{equation}
+h_{k,t} = h_{k,t-1} + \zeta_{k,t}, \qquad \zeta_{k,t} \sim \mathcal{N}(0,\, \sigma_{\zeta,k}^2), \qquad k \in \{m, f\},
+\label{eq:logvol}
+\end{equation}
+%
+where the innovation variance $\sigma_{\zeta,k}^2$ controls the degree of time variation in factor $k$. The random-walk specification permits persistent, unbounded movements in the log-volatility factors, consistent with the empirical evidence that uncertainty exhibits prolonged episodes of elevation---such as the 2008--2009 global financial crisis or the 2018--2019 U.S.--China trade war---followed by gradual mean reversion \citep{bloom2014fluctuations}. Moreover, the random walk nests the constant-volatility case as a limiting special case when $\sigma_{\zeta,k}^2 \to 0$, so that the degree of time variation is estimated from the data rather than imposed by assumption. Because $h_{m,t}$ and $h_{f,t}$ are defined in logs, the implied level of uncertainty $\exp(\tfrac{1}{2} h_{k,t})$ is guaranteed to be positive at all times.
+
+The final component governs the time-varying classification of unclassified variables, which is the mechanism that transforms the statistical model into an economic identification device. For each unclassified variable $i$, the latent state indicator $s_{i,t} \in \{\text{macro},\, \text{financial}\}$ in Equation~\eqref{eq:variance} follows a first-order two-state \textbf{Markov chain} with transition probabilities $q_{mm}^{(i)} = P(s_{i,t} = m \mid s_{i,t-1} = m)$ and $q_{ff}^{(i)} = P(s_{i,t} = f \mid s_{i,t-1} = f)$. The posterior classification probability
+%
+\begin{equation}
+\pi_{i,t} = P(s_{i,t} = \text{macro} \mid \mathcal{F}_t)
+\label{eq:pi}
+\end{equation}
+%
+is the probability---conditional on the full information set $\mathcal{F}_t$---that unclassified variable $i$ belongs to the macroeconomic block at time $t$, updated recursively using the \citet{hamilton1989new} filter. This specification implies that a variable may be classified as macroeconomic during one episode and as financial during another, with the timing and persistence of regime switches determined entirely by the data. The transition probabilities $q_{mm}^{(i)}$ and $q_{ff}^{(i)}$ are estimated jointly with all other model parameters within the Bayesian MCMC framework, so that the persistence of each variable's classification is itself a model output rather than a researcher-imposed restriction. In our application, the time path of $\pi_{i,t}$ for each external variable constitutes the primary object of interest: it reveals, at each point in the sample, whether the uncertainty associated with a given external driver transmits to Taiwan predominantly through the macroeconomic channel ($\pi_{i,t} \approx 1$) or through the financial channel ($\pi_{i,t} \approx 0$).
+
+The full model---comprising Equations~\eqref{eq:var}--\eqref{eq:pi}---is estimated jointly in a single-step Bayesian Markov chain Monte Carlo (MCMC) procedure developed by \citet{davidson2025investigating}. The algorithm builds on the computationally efficient precision-based sampler of \citet{cross2023large}, which exploits band and sparse matrix structures to draw the common log-volatilities in a single block, making estimation of very large SVMVARs feasible without resorting to dimensionality reduction techniques that would obscure the specific structural shocks we aim to identify. \citet{davidson2025investigating} extend this approach with a novel parameter transformation for sampling the unrestricted $\mathbf{B}_0$ and with the Markov-switching classification mechanism described above. We do not derive the prior distributions or the posterior sampling steps here; the complete Bayesian implementation is detailed in the online appendix of \citet{davidson2025investigating}. All subsequent analysis in this project---time-varying classification probabilities, forecast error variance decompositions, and impulse response functions---is conducted on draws from the joint posterior distribution, ensuring that parameter uncertainty and classification uncertainty are fully propagated through to the final inferential objects.
+
+% Placeholder for remaining subsections
+% (1.2) Variable Classification and the Key Innovation
+% (1.3) Order-Invariance and Why It Matters for Taiwan
 %
 % (2) Anticipated problems and means of resolution
 %   (2.1) Data Assembly and Preprocessing
