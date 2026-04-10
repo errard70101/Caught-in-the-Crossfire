@@ -9,3 +9,76 @@
 % (2) Anticipated problems and means of resolution
 %   (2.1) Computational and Estimation Challenges
 %   (2.2) Works planned for the second year
+
+\subsection*{The SOE Monetary BCA Prototype Model with Dual Nominal Wedges}
+
+To operationalize our nonlinear uncertainty accounting framework while remaining agnostic about the precise nature of liquidity frictions, we construct a prototype Small Open Economy (SOE) model featuring Money-in-the-Utility (MIU). The economy is perturbed by eight time-varying structural wedges, which identically absorb all micro-founded real and nominal frictions. 
+
+Let $C_t$, $L_t$, $K_t$, $I_t$, $Y_t$, $NX_t$, $\pi_t$, $R_t$, $e_t$, and $m_t$ denote consumption, labor, capital, investment, output, net exports, inflation, the domestic nominal interest rate, the real exchange rate, and real money balances, respectively. Household preferences are given by $\mathbb{E}_0 \sum \beta^t U(C_t, L_t, m_t)$.
+
+The equilibrium is characterized by the following system of distorted first-order conditions and constraints:
+
+\begin{enumerate}
+    \item \textbf{Production (Efficiency Wedge, $z_t$):} 
+    Captures aggregate productivity and supply-chain disruptions.
+    \begin{equation}
+        Y_t = z_t F(K_t, L_t)
+    \end{equation}
+
+    \item \textbf{Intratemporal Choice (Labor Wedge, $\tau_{l,t}$):} 
+    Captures wage rigidities, labor market search frictions, and labor taxes.
+    \begin{equation}
+        -\frac{U_{L,t}}{U_{C,t}} = (1 - \tau_{l,t}) MP_{L,t}
+    \end{equation}
+
+    \item \textbf{Intertemporal Domestic Capital (Investment Wedge, $\tau_{x,t}$):} 
+    Captures domestic financial frictions, collateral constraints, and capital adjustment costs.
+    \begin{equation}
+        U_{C,t} (1 + \tau_{x,t}) = \beta \mathbb{E}_t \left[ U_{C,t+1} \left( MP_{K,t+1} + (1-\delta)(1+\tau_{x,t+1}) \right) \right]
+    \end{equation}
+
+    \item \textbf{Cross-border Asset Pricing (UIP Wedge, $\tau_{uip,t}$):} 
+    Captures country risk premiums and international capital market frictions. $R^*_t$ is the exogenous foreign interest rate.
+    \begin{equation}
+        U_{C,t} = \beta \mathbb{E}_t \left[ U_{C,t+1} \frac{R^*_t (1 + \tau_{uip,t}) e_{t+1}}{\pi_{t+1} e_t} \right]
+    \end{equation}
+
+    \item \textbf{Pricing and Inflation (Price-Markup Wedge, $\tau_{p,t}$):} 
+    Captures nominal rigidities and monopolistic distortions, expressed via the aggregate markup over marginal cost ($MC_t$).
+    \begin{equation}
+        P_t = (1 + \tau_{p,t}) MC_t \quad \implies \quad \pi_t = f(\mathbb{E}_t[\pi_{t+1}], MC_t, \tau_{p,t})
+    \end{equation}
+
+    \item \textbf{Money Demand (Asset Market Wedge, $\tau_{m,t}$):} 
+    Captures exogenous shifts in domestic liquidity preference and transaction frictions.
+    \begin{equation}
+        \frac{U_{m,t}}{U_{C,t}} (1 + \tau_{m,t}) = \frac{R_t - 1}{R_t}
+    \end{equation}
+
+    \item \textbf{Monetary Policy (Taylor Rule Wedge, $\tau_{R,t}$):} 
+    Captures discretionary policy interventions and interest rate smoothing by the central bank.
+    \begin{equation}
+        \log R_t = \rho_r \log R_{t-1} + (1-\rho_r)\left( \phi_\pi \log \pi_t + \phi_y \log \tilde{Y}_t + \phi_e \log \Delta e_t \right) + \tau_{R,t}
+    \end{equation}
+
+    \item \textbf{Resource Constraint (Trade Wedge, $\tau_{nx,t}$):} 
+    Captures exogenous foreign demand shocks and net export fluctuations.
+    \begin{equation}
+        Y_t = C_t + I_t + \tau_{nx,t}
+    \end{equation}
+\end{enumerate}
+
+\subsubsection*{Nonlinear Uncertainty Mapping and Exact Identification}
+
+Departing from the standard linear BCA literature, we formulate the data-generating process of the structural wedges to feature stochastic volatility. Let $\bm{s}_t = [\log z_t, \tau_{l,t}, \tau_{x,t}, \tau_{uip,t}, \tau_{p,t}, \tau_{m,t}, \tau_{R,t}, \tau_{nx,t}]'$ be the vector of the eight structural wedges. The system evolves according to a VAR(1) process with time-varying volatility innovations:
+\begin{equation}
+    \bm{s}_t = \mathbf{P}_0 + \mathbf{P} \bm{s}_{t-1} + \bm{\Sigma}_t \bm{\varepsilon}_t, \quad \bm{\varepsilon}_t \sim \mathcal{N}(\mathbf{0}, \mathbf{I})
+\end{equation}
+where $\bm{\Sigma}_t = \text{diag}(\exp(\sigma_{1,t}), \dots, \exp(\sigma_{8,t}))$. Crucially, we map the empirically extracted macroeconomic uncertainty ($h_{m,t}$) and financial uncertainty ($h_{f,t}$) from Year 1 to the volatility process of each structural wedge $i \in \{1, \dots, 8\}$ via a flexible factor-loading structure:
+\begin{equation}
+    \sigma_{i,t} = (1-\rho_{\sigma,i})\bar{\sigma}_i + \rho_{\sigma,i} \sigma_{i,t-1} + \lambda_{i,m} h_{m,t} + \lambda_{i,f} h_{f,t} + \eta_{i,t}
+\end{equation}
+
+
+
+To resolve the identification overlap inherent in dual nominal wedges, we must perfectly match this 8-wedge system with 8 distinct macroeconomic observables. Alongside standard real variables (output, hours, investment, net exports) and open-economy indicators (real effective exchange rate, core inflation), we simultaneously observe both the \textbf{interbank overnight call rate} (identifying the Taylor rule wedge) and the \textbf{M2 monetary aggregate growth rate} (identifying the asset market wedge). This exact-identification strategy ensures the Bayesian state-space inversion, solved via third-order perturbation, can rigorously disentangle endogenous policy reactions from household liquidity hoarding during periods of heightened uncertainty.
