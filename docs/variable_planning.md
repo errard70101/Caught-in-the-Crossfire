@@ -364,4 +364,83 @@
 
 ---
 
-*Generated: 2026-04-09 | Decisions confirmed: 2026-04-09*
+## 資料下載進度（2026-04-10 更新）
+
+### 已完成的下載腳本
+
+| 腳本 | 來源 | 變數數 | 狀態 |
+|------|------|--------|------|
+| `fetch_fred.py` | FRED (CSV endpoint) | 5 | ✅ 完成 |
+| `fetch_csv_sources.py` | PolicyUncertainty, Iacoviello | 4 | ✅ 完成 |
+| `fetch_yahoo.py` | Yahoo Finance (TAIEX) | 4 | ✅ 完成 |
+| `fetch_cbc.py` | CBC 統計資料庫 API | 8 | ✅ 完成 |
+| `fetch_stat_gov.py` | eng.stat.gov.tw | 19 | ✅ 完成 |
+| `fetch_bis.py` | BIS SDMX API | 1 | ✅ 完成 |
+| `fetch_china.py` | OECD SDMX + FRED | 1+ | ⚠️ 部分 |
+
+### 下載狀態：逐變數對照
+
+#### ✅ 已下載（38 個檔案）
+
+**Taiwan Macro (19 series from stat.gov.tw)**:
+- `tw_ipi`, `tw_mfg_prod`, `tw_export_orders`, `tw_retail_growth`, `tw_exports`, `tw_imports`
+- `tw_cpi_index`, `tw_cpi_yoy`, `tw_core_cpi_yoy`, `tw_cpi_sa_mom`
+- `tw_unemployment`, `tw_unemployment_sa`, `tw_employed`, `tw_payrolls`
+- `tw_regular_wages`, `tw_total_wages`, `tw_working_hours`
+- `tw_leading_index`, `tw_coincident_idx`
+
+**Taiwan Financial (8 series from CBC + Yahoo + FRED)**:
+- `tw_overnight`, `tw_policy_rate`, `tw_10y_bond` (CBC)
+- `tw_monetary` (M1B + M2, CBC), `tw_bank_loans`, `tw_consumer_loans` (CBC)
+- `taiex` (Yahoo Finance: returns, vol, level, turnover)
+- `tw_twdusd` (FRED: DEXTAUS)
+
+**US (5 series from FRED + CSV)**:
+- `us_ffr`, `us_ipi`, `us_credit_spread` (FRED)
+- `us_epu`, `us_tpu` (PolicyUncertainty.com)
+
+**China (1 series from OECD)**:
+- `cn_cpi_yoy` (OECD SDMX)
+
+**Global (4 series from various)**:
+- `gl_vix` (FRED), `gl_gpr` (Iacoviello), `gl_gepu` (PolicyUncertainty)
+- `tw_reer` (BIS)
+
+#### ⚠️ 尚未下載（需解決的變數）
+
+| 變數 | 問題 | 建議解法 |
+|------|------|---------|
+| `cn_ipi` 中國工業增加值 | FRED timeout、NBS API 403 | FRED 恢復時重試 (CHNCPIALLMINMEI) 或手動下載 |
+| `cn_ppi` 中國 PPI | 無公開 API 可用 | NBS 網站手動下載或 CEIC |
+| `cn_m2` 中國 M2 | FRED 版本僅到 2013 | FRED 恢復時重試 (MYAGM2TWM052N) 或 PBoC |
+| `tw_wpi` 躉售物價指數 | DGBAS API 間歇性 403 | DGBAS 恢復時用 funid A030201010 |
+| `tw_import_prices` 進口物價 | DGBAS API 間歇性 403 | DGBAS 恢復時用 funid A030305010 |
+| `tw_export_prices` 出口物價 | DGBAS API 間歇性 403 | DGBAS 恢復時用 funid A030403010 |
+| `tw_mfg_emp` 製造業就業 | stat.gov.tw 只有總就業 | 需 DGBAS 分業資料 |
+| `tw_svc_emp` 服務業就業 | stat.gov.tw 只有總就業 | 需 DGBAS 分業資料 |
+| `tw_house_prices` 房價指數 | Sinyi 網站無 API | 手動下載、季→月插值 |
+| `tw_foreign_inv` 外資買賣超 | TWSE 需爬蟲 | 另建 fetch_twse.py |
+| `tw_margin_buy` 融資餘額 | TWSE 需爬蟲 | 另建 fetch_twse.py |
+| `tw_short_sell` 融券餘額 | TWSE 需爬蟲 | 另建 fetch_twse.py |
+| `tw_business_cycle` 景氣信號 | stat.gov.tw 有 leading index 但非景氣信號分數 | NDC 網站確認 |
+
+### 技術備註
+
+**stat.gov.tw API 機制** (新發現):
+- 資料嵌入在 `ContentPlaceHolder1_hidChartData` 隱藏欄位中
+- 每個 sid (t.1~t.12) 包含多個序列，以 JSON array 格式
+- 無需認證，直接 GET 請求即可取得
+- sid 對照: t.2=物價, t.3=勞動, t.4=薪資工時, t.5=生產零售, t.8=貿易, t.11=景氣
+
+**CBC API (cpx.cbc.gov.tw)**:
+- 4 步驟 session-based 流程: Range → GetJsonRangeData → SetJsonFromArray → GetJsonFromArray
+- 回傳 double-encoded JSON, 需 `json.loads(r.json())`
+- 多維交叉表需用 `itertools.product()` 建構欄名
+
+**BIS REER**: `stats.bis.org/api/v1/data/WS_EER/M.R.B.TW?format=csv` (注意是 stats.bis.org 非 data.bis.org)
+
+**DGBAS nstatdb**: JSON API 間歇性可用 (sys=220)，HTML 頁面持續 403。可用時用已知 funid 下載 WPI 等物價序列。
+
+---
+
+*Generated: 2026-04-09 | Decisions confirmed: 2026-04-09 | Download status updated: 2026-04-10*
