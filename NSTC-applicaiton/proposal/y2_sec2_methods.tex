@@ -3,82 +3,105 @@
 %
 % (1) Research principles, methods, and the innovation of research methods
 %   (1.1) Steps 1-3: Full Three-Step Empirical Analysis (OI-SVMVAR)
-%   (1.2) A Small Open Economy DSGE Model with Financial Frictions
-%   (1.3) Bayesian Estimation and Impulse Response Matching
+%   (1.2) Conditional Structural Modeling: A Competing Hypotheses Framework
+%   (1.3) From Identification to Discrimination
 %
 % (2) Anticipated problems and means of resolution
 %   (2.1) Computational and Estimation Challenges
 %   (2.2) Works planned for the second year
 
-\subsection*{The SOE Monetary BCA Prototype Model with Dual Nominal Wedges}
+\noindent\textbf{(1) Research principles, methods, and the innovation of research methods}
 
-To operationalize our nonlinear uncertainty accounting framework while remaining agnostic about the precise nature of liquidity frictions, we construct a prototype Small Open Economy (SOE) model featuring Money-in-the-Utility (MIU). The economy is perturbed by eight time-varying structural wedges, which identically absorb all micro-founded real and nominal frictions. 
+\bigskip
 
-Let $C_t$, $L_t$, $K_t$, $I_t$, $Y_t$, $NX_t$, $\pi_t$, $R_t$, $e_t$, and $m_t$ denote consumption, labor, capital, investment, output, net exports, inflation, the domestic nominal interest rate, the real exchange rate, and real money balances, respectively. Household preferences are given by $\mathbb{E}_0 \sum \beta^t U(C_t, L_t, m_t)$.
+\noindent\textbf{(1.1) Steps 1--3: Full Three-Step Empirical Analysis (OI-SVMVAR)}
 
-The equilibrium is characterized by the following system of distorted first-order conditions and constraints:
+\medskip
 
-\begin{enumerate}
-    \item \textbf{Production (Efficiency Wedge, $z_t$):} 
-    Captures aggregate productivity and supply-chain disruptions.
-    \begin{equation}
-        Y_t = z_t F(K_t, L_t)
-    \end{equation}
+The second year completes the three-step empirical analysis initiated in Year~1. Having obtained converged posterior draws from the 43-variable OI-SVMVAR, we conduct the following analyses, all computed over the joint posterior distribution so that parameter and classification uncertainty are fully propagated.
 
-    \item \textbf{Intratemporal Choice (Labor Wedge, $\tau_{l,t}$):} 
-    Captures wage rigidities, labor market search frictions, and labor taxes.
-    \begin{equation}
-        -\frac{U_{L,t}}{U_{C,t}} = (1 - \tau_{l,t}) MP_{L,t}
-    \end{equation}
+\textit{Step~1: Time-varying classification.} For each unclassified external variable $i$, we extract the posterior time path of the classification probability $\pi_{i,t} = P(s_{i,t} = \text{macro} \mid \mathcal{F}_t)$ defined in Equation~\eqref{eq:pi}. Plotting $\pi_{i,t}$ across the sample period reveals \emph{when} a given external shock source---such as U.S.\ monetary policy uncertainty, China's industrial production volatility, or the VIX---transmits to Taiwan through the macroeconomic channel ($\pi_{i,t} \approx 1$) versus the financial channel ($\pi_{i,t} \approx 0$). We pay particular attention to regime shifts around five landmark episodes: the 2008--2009 global financial crisis, the 2012 China--Japan territorial dispute, the 2018--2019 U.S.--China trade war, the 2020 COVID-19 pandemic, and the 2022 Pelosi visit to Taiwan.
 
-    \item \textbf{Intertemporal Domestic Capital (Investment Wedge, $\tau_{x,t}$):} 
-    Captures domestic financial frictions, collateral constraints, and capital adjustment costs.
-    \begin{equation}
-        U_{C,t} (1 + \tau_{x,t}) = \beta \mathbb{E}_t \left[ U_{C,t+1} \left( MP_{K,t+1} + (1-\delta)(1+\tau_{x,t+1}) \right) \right]
-    \end{equation}
+\textit{Step~2: Forecast error variance decomposition (FEVD).} We decompose the forecast error variance of Taiwan's macroeconomic uncertainty ($h_{m,t}$) and financial uncertainty ($h_{f,t}$) into contributions from each variable in the system. This quantifies the \emph{relative importance} of each external shock source. The FEVD also serves as an ex post validation of the small open economy assumption: if Taiwan's domestic variables explain a negligible share of the variance of U.S.\ and Chinese indicators, the assumption that external variables are approximately exogenous is supported without having imposed it through zero restrictions on $\mathbf{B}_0$.
 
-    \item \textbf{Cross-border Asset Pricing (UIP Wedge, $\tau_{uip,t}$):} 
-    Captures country risk premiums and international capital market frictions. $R^*_t$ is the exogenous foreign interest rate.
-    \begin{equation}
-        U_{C,t} = \beta \mathbb{E}_t \left[ U_{C,t+1} \frac{R^*_t (1 + \tau_{uip,t}) e_{t+1}}{\pi_{t+1} e_t} \right]
-    \end{equation}
+\textit{Step~3: Impulse response functions (IRF).} We compute generalized impulse response functions of Taiwan's domestic variables to one-standard-deviation innovations in $h_{m,t}$ and $h_{f,t}$, as well as to identified shocks in the key external variables. This step reveals the \emph{economic consequences} of uncertainty transmitted through each channel. The shape, magnitude, and persistence of these IRFs constitute the empirical targets that discipline the structural modeling in the second component of Year~2.
 
-    \item \textbf{Pricing and Inflation (Price-Markup Wedge, $\tau_{p,t}$):} 
-    Captures nominal rigidities and monopolistic distortions, expressed via the aggregate markup over marginal cost ($MC_t$).
-    \begin{equation}
-        P_t = (1 + \tau_{p,t}) MC_t \quad \implies \quad \pi_t = f(\mathbb{E}_t[\pi_{t+1}], MC_t, \tau_{p,t})
-    \end{equation}
+\bigskip
 
-    \item \textbf{Money Demand (Asset Market Wedge, $\tau_{m,t}$):} 
-    Captures exogenous shifts in domestic liquidity preference and transaction frictions.
-    \begin{equation}
-        \frac{U_{m,t}}{U_{C,t}} (1 + \tau_{m,t}) = \frac{R_t - 1}{R_t}
-    \end{equation}
+\noindent\textbf{(1.2) Conditional Structural Modeling: A Competing Hypotheses Framework}
 
-    \item \textbf{Monetary Policy (Taylor Rule Wedge, $\tau_{R,t}$):} 
-    Captures discretionary policy interventions and interest rate smoothing by the central bank.
-    \begin{equation}
-        \log R_t = \rho_r \log R_{t-1} + (1-\rho_r)\left( \phi_\pi \log \pi_t + \phi_y \log \tilde{Y}_t + \phi_e \log \Delta e_t \right) + \tau_{R,t}
-    \end{equation}
+\medskip
 
-    \item \textbf{Resource Constraint (Trade Wedge, $\tau_{nx,t}$):} 
-    Captures exogenous foreign demand shocks and net export fluctuations.
-    \begin{equation}
-        Y_t = C_t + I_t + \tau_{nx,t}
-    \end{equation}
-\end{enumerate}
+A central challenge in writing a multi-year proposal with an ``empirics-first, theory-second'' design is that the structural model in Year~2 must be specified before the Year~1 results are known. We resolve this tension by adopting a \textbf{competing hypotheses framework} with \textbf{conditional extension rules}: rather than committing ex ante to a single, heavily parameterized model, we pre-specify a parsimonious baseline and a set of theoretically motivated candidate mechanisms, each linked to a distinct empirical signature that the Year~1 OI-SVMVAR can either confirm or reject. This approach, standard in top-tier empirical macroeconomics \citep{fernandez-villaverde2020uncertainty}, ensures that the Year~2 model is disciplined by the data rather than designed to accommodate any conceivable pattern.
 
-\subsubsection*{Nonlinear Uncertainty Mapping and Exact Identification}
+\textit{Baseline model.} The starting point is a standard small open economy (SOE) New Keynesian model with Rotemberg (1982) quadratic price adjustment costs, habit persistence in consumption, and a Taylor-type monetary policy rule. We adopt Rotemberg pricing rather than the more common Calvo (1983) specification because \citet{oh2020propagation} demonstrates that the two frameworks---while equivalent for first-moment shocks---generate qualitatively opposite predictions for uncertainty shocks: the Calvo model produces counterfactual inflation increases through precautionary pricing, whereas the Rotemberg model correctly predicts the deflationary response observed in VAR evidence. The baseline model is augmented with exogenous stochastic volatility in the productivity process, following \citet{fernandez-villaverde2011risk}, and solved via third-order perturbation in Dynare, which is the minimum approximation order at which uncertainty shocks enter the policy functions \citep{fernandez-villaverde2020uncertainty}.
 
-Departing from the standard linear BCA literature, we formulate the data-generating process of the structural wedges to feature stochastic volatility. Let $\bm{s}_t = [\log z_t, \tau_{l,t}, \tau_{x,t}, \tau_{uip,t}, \tau_{p,t}, \tau_{m,t}, \tau_{R,t}, \tau_{nx,t}]'$ be the vector of the eight structural wedges. The system evolves according to a VAR(1) process with time-varying volatility innovations:
-\begin{equation}
-    \bm{s}_t = \mathbf{P}_0 + \mathbf{P} \bm{s}_{t-1} + \bm{\Sigma}_t \bm{\varepsilon}_t, \quad \bm{\varepsilon}_t \sim \mathcal{N}(\mathbf{0}, \mathbf{I})
-\end{equation}
-where $\bm{\Sigma}_t = \text{diag}(\exp(\sigma_{1,t}), \dots, \exp(\sigma_{8,t}))$. Crucially, we map the empirically extracted macroeconomic uncertainty ($h_{m,t}$) and financial uncertainty ($h_{f,t}$) from Year 1 to the volatility process of each structural wedge $i \in \{1, \dots, 8\}$ via a flexible factor-loading structure:
-\begin{equation}
-    \sigma_{i,t} = (1-\rho_{\sigma,i})\bar{\sigma}_i + \rho_{\sigma,i} \sigma_{i,t-1} + \lambda_{i,m} h_{m,t} + \lambda_{i,f} h_{f,t} + \eta_{i,t}
-\end{equation}
+\textit{Competing hypotheses.} The international literature on uncertainty transmission has identified four primary channels through which external uncertainty shocks propagate to the real economy. Each channel implies a distinct structural mechanism and, crucially, a distinct empirical signature in the Year~1 IRFs. We now describe each hypothesis, its theoretical foundation, the Year~1 trigger that would activate it, and the corresponding model extension.
 
+\medskip
 
+\noindent\textit{Hypothesis~1: The real ``wait-and-see'' channel.} \citet{bloom2009impact} shows that when future uncertainty is high, firms facing irreversible investment decisions optimally postpone capital expenditure and hiring until the uncertainty dissipates. This channel operates through the real side of the economy and does not require any financial market imperfection. \citet{carriere-swallow2013impact} extend this argument to 40 countries and find that developed economies with deep financial markets exhibit the classic Bloom (2009) pattern: a sharp but transient investment drop followed by a rapid overshoot recovery.
 
-To resolve the identification overlap inherent in dual nominal wedges, we must perfectly match this 8-wedge system with 8 distinct macroeconomic observables. Alongside standard real variables (output, hours, investment, net exports) and open-economy indicators (real effective exchange rate, core inflation), we simultaneously observe both the \textbf{interbank overnight call rate} (identifying the Taylor rule wedge) and the \textbf{M2 monetary aggregate growth rate} (identifying the asset market wedge). This exact-identification strategy ensures the Bayesian state-space inversion, solved via third-order perturbation, can rigorously disentangle endogenous policy reactions from household liquidity hoarding during periods of heightened uncertainty.
+\emph{Year~1 trigger:} The OI-SVMVAR IRFs show that Taiwan's private investment and durable goods consumption decline sharply following an external uncertainty shock, but corporate credit spreads and bank lending rates do not respond significantly. The classification probabilities $\pi_{i,t}$ for external variables remain persistently near unity (macroeconomic classification).
+
+\emph{Conditional model extension:} We introduce non-convex capital adjustment costs that generate an inaction region (\`a la \citet{bloom2009impact}), combined with search-and-matching frictions in the labor market. Financial frictions are \textbf{excluded} from the model. The testable prediction is that shutting down the investment adjustment cost eliminates the contractionary effect of uncertainty shocks.
+
+\medskip
+
+\noindent\textit{Hypothesis~2: The financial accelerator channel.} \citet{christiano2014risk} and \citet{gilchrist2014uncertainty} argue that uncertainty shocks widen the information asymmetry between borrowers and lenders, causing risk premia to spike and credit supply to contract. In the Bernanke--Gertler--Gilchrist (BGG) framework, the external finance premium rises endogenously with uncertainty, amplifying the initial shock through a financial accelerator mechanism. For small open economies, \citet{carriere-swallow2013impact} provide cross-country evidence that financial market depth is a key determinant of the transmission amplitude, and estimate that the credit channel accounts for up to one-half of the excess investment decline in emerging economies.
+
+\emph{Year~1 trigger:} Credit spreads widen significantly and equity prices decline \emph{before} real activity contracts. The time-varying classification probabilities shift external variables toward the financial block ($\pi_{i,t} \approx 0$). The FEVD assigns a substantial share of $h_{f,t}$ variance to external shock sources.
+
+\emph{Conditional model extension:} We augment the baseline with a BGG-type financial accelerator in which entrepreneurs face a costly state verification problem. The key parameter is the elasticity of the external finance premium with respect to leverage. Pure real rigidities (non-convex adjustment costs) are \textbf{excluded}. The testable prediction is that the model replicates the leading response of credit spreads observed in the VAR.
+
+\medskip
+
+\noindent\textit{Hypothesis~3: The balance sheet and aggregate risk concentration channel.} \citet{ditella2017uncertainty} provides a distinct financial mechanism: uncertainty shocks---specifically, increases in idiosyncratic risk---endogenously concentrate aggregate risk on the balance sheets of leveraged financial intermediaries. Unlike the BGG framework, this channel survives even under complete financial contracts, because uncertainty alters intermediaries' optimal risk-taking behavior through an income effect. The quantitative implications are substantial: when intermediaries' balance sheets deteriorate, asset prices fall, risk premia rise, and investment contracts through an amplification loop that is absent under standard TFP shocks.
+
+\emph{Year~1 trigger:} Financial sector variables (bank equity, financial institution CDS spreads) react more strongly than non-financial corporate credit spreads. Foreign portfolio outflows are a leading indicator of the domestic downturn. The classification probabilities for VIX and U.S.\ credit spreads shift decisively toward the financial block.
+
+\emph{Conditional model extension:} We introduce a banking sector with leveraged intermediaries who must retain equity (skin-in-the-game constraint). The key departure from Hypothesis~2 is that the friction operates on the \emph{intermediary's} balance sheet rather than the \emph{borrower's}. The testable prediction is that the model generates a strong co-movement between intermediary leverage and asset price declines that is absent in the BGG specification.
+
+\medskip
+
+\noindent\textit{Hypothesis~4: The exchange rate and imported inflation channel.} This hypothesis is specific to small open economies. When external uncertainty spikes, global capital flows toward safe-haven currencies (primarily the U.S.\ dollar), causing the SOE currency to depreciate sharply. The depreciation raises import prices, generating inflationary pressure precisely when the domestic economy is contracting---a ``stagflation'' pattern that forces the central bank into a policy dilemma. \citet{mumtaz2015international} provide empirical support using a nonlinear SOE DSGE model estimated on U.S.--U.K.\ data, finding that U.S.\ supply-type volatility shocks transmit internationally and generate exactly this negative co-movement between output and inflation in the recipient economy.
+
+\emph{Year~1 trigger:} The New Taiwan dollar depreciates significantly, and domestic CPI rises (or fails to decline) despite falling output---a pattern inconsistent with a pure demand shock. The classification probabilities for the Federal Funds Rate and U.S.\ EPU oscillate between macro and financial blocks, reflecting the dual nature of the exchange rate channel.
+
+\emph{Conditional model extension:} We extend the baseline with incomplete exchange rate pass-through to import prices, a UIP risk premium shock, and producer currency pricing for Taiwan's exports. The monetary policy rule is augmented with an exchange rate stabilization motive, following the empirical evidence on CBC intervention behavior. The testable prediction is that the model generates the stagflationary pattern---simultaneous output contraction and CPI increase---that would be absent in a closed-economy specification.
+
+\bigskip
+
+\noindent\textbf{(1.3) From Identification to Discrimination: The Year~1--Year~2 Bridge}
+
+\medskip
+
+The value of the competing hypotheses framework lies not in its ability to match any given set of IRFs---a sufficiently parameterized model can always achieve high fit---but in its ability to \textbf{discriminate} between mechanisms by exploiting qualitative differences in their predictions. We now formalize the decision protocol that links the Year~1 empirical output to the Year~2 model selection.
+
+The four hypotheses generate distinct, falsifiable predictions along three diagnostic dimensions that the Year~1 OI-SVMVAR directly estimates: (i) the \emph{relative timing} of financial versus real variable responses in the IRFs; (ii) the \emph{sign} of the inflation response (deflationary under Hypotheses~1--3 versus stagflationary under Hypothesis~4); and (iii) the \emph{time-varying classification} pattern of external variables (persistently macroeconomic under Hypothesis~1, persistently financial under Hypotheses~2--3, and time-varying under Hypothesis~4).
+
+We emphasize that empirical reality may not correspond neatly to a single hypothesis. The Year~1 results may reveal that different external shock sources operate through different channels, or that the dominant channel shifts across historical episodes. In such cases, we will construct a model that nests the two most empirically relevant mechanisms and test whether the data can discriminate between them using posterior model comparison (marginal likelihood). This ``horse race'' approach, advocated by \citet{fernandez-villaverde2020uncertainty}, is strictly preferable to building a kitchen-sink model that includes all four mechanisms simultaneously, because it maintains the parsimony needed for sharp identification.
+
+To ground this discriminatory exercise in the existing literature, we note that \citet{born2021uncertainty} provide a cautionary benchmark: they show that the New Keynesian markup channel---often invoked as the primary propagation mechanism for uncertainty shocks---is largely inconsistent with the data for price markups and generates quantitatively small output effects. This finding reinforces our commitment to letting the Year~1 evidence, rather than theoretical priors, determine the model structure. We will explicitly test whether the markup channel contributes to uncertainty propagation in the selected specification, and report the results regardless of their sign.
+
+The structural model, once selected and estimated, will be used for two purposes. First, \textbf{counterfactual simulations}: we shut down individual transmission channels (e.g., setting the financial accelerator elasticity to zero) and quantify how much of the empirical IRF each channel explains. Second, \textbf{optimal policy analysis}: conditional on the identified dominant channel, we evaluate whether the Central Bank of China (Taiwan) should prioritize interest rate stabilization, exchange rate intervention, or macroprudential measures when facing external uncertainty shocks.
+
+\bigskip
+
+\noindent\textbf{(2) Anticipated problems and means of resolution}
+
+\bigskip
+
+\noindent\textbf{(2.1) Computational and Estimation Challenges}
+
+\medskip
+
+The Year~2 research program faces three computational challenges. First, the full 43-variable OI-SVMVAR requires approximately 30 hours per MCMC run on a modern multi-core workstation; we will secure access to the university's high-performance computing cluster and run multiple chains in parallel to ensure convergence. Second, the nonlinear SOE DSGE model must be solved via third-order perturbation, which is computationally feasible in current versions of Dynare (version~6+) but requires careful pruning of explosive higher-order terms \citep{fernandez-villaverde2020uncertainty}. Third, Bayesian estimation of the DSGE model conditional on the Year~1 uncertainty factors requires a two-step procedure: the posterior means of $h_{m,t}$ and $h_{f,t}$ from the OI-SVMVAR serve as observable inputs to the DSGE likelihood, following the approach of \citet{mumtaz2015international} who use a similar empirical-then-structural estimation strategy.
+
+\bigskip
+
+\noindent\textbf{(2.2) Works planned for the second year}
+
+\medskip
+
+The second-year work plan proceeds in four phases. In the first quarter (months~13--15), we complete the full 43-variable OI-SVMVAR estimation and conduct the three-step empirical analysis (classification probabilities, FEVD, and IRFs), including robustness checks comparing the small-scale (30-variable) and large-scale (43-variable) specifications. In the second quarter (months~16--18), we evaluate the Year~1 IRFs against the four diagnostic criteria outlined in subsection~(1.3), select the one or two most empirically supported hypotheses, and construct the corresponding SOE DSGE model. In the third quarter (months~19--21), we estimate the structural model via Bayesian methods, conduct counterfactual simulations, and perform the optimal policy analysis. In the final quarter (months~22--24), we complete the research paper, prepare a policy brief for the Central Bank of China (Taiwan), and submit to a top-tier international journal.
