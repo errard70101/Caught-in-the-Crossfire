@@ -80,18 +80,36 @@ This question is fundamentally different from DHK (2025)'s question of "which un
 
 ```
 /
+├── code/
+│   └── data_processing/         # Automated data download pipeline
+│       ├── config.py            # Shared constants (paths, sample period, FRED IDs)
+│       ├── fetch_fred.py        # US macro from FRED (FFR, IPI, credit spread, VIX, TWD/USD)
+│       ├── fetch_csv_sources.py # US EPU, Global EPU, GPR, Trade Policy Uncertainty
+│       ├── fetch_yahoo.py       # TAIEX (returns, vol, level, turnover) via yfinance
+│       ├── fetch_cbc.py         # CBC Statistics DB API (interest rates, M1B, M2, loans)
+│       ├── fetch_stat_gov.py    # Taiwan macro from eng.stat.gov.tw (19 series)
+│       ├── fetch_bis.py         # Taiwan REER from BIS SDMX API
+│       ├── fetch_china.py       # China CPI from OECD SDMX + FRED attempts
+│       └── fetch_dgbas.py       # DGBAS nstatdb API (WPI, price indices)
+├── data/
+│   └── raw/                     # Downloaded raw data (git-ignored CSVs)
+│       ├── taiwan_macro/        # 20 files (CPI, IPI, employment, wages, trade, etc.)
+│       ├── taiwan_financial/    # 8 files (interest rates, monetary, TAIEX, TWD/USD)
+│       ├── us/                  # 5 files (FFR, IPI, credit spread, EPU, TPU)
+│       ├── china/               # 2 files (CPI YoY, M2—partial)
+│       └── global/              # 4 files (VIX, GPR, GEPU, REER)
+├── docs/
+│   └── variable_planning.md     # 47-variable list, decisions, download status
 ├── llm_logs/                    # Research discussion logs
 │   ├── 2025-11-08_discussion.md # CRITICAL: Core methodological decisions
-│   ├── 2025-11-14_research_direction_clarification.md # Research direction summary
-│   └── discussion-template.md   # Template for logging new discussions
-├── literature/                  # Literature review materials
-│   ├── uncertainty_shock_literature.md        # Global uncertainty literature (40+ papers)
-│   └── taiwan_specific_uncertainty_literature.md  # Taiwan-specific studies
-├── references/                  # Reference papers
-│   └── Investigating Economic Uncertain.pdf  # Davidson, Hou, Koop (2025)
-├── CLAUDE.md                    # This file - guide for Claude Code instances
-├── README.md                    # Project overview and documentation
-└── research_proposal.tex        # Research proposal (LaTeX)
+│   ├── 2025-11-14_research_direction_clarification.md
+│   └── discussion-template.md
+├── literature/                  # Literature review (40+ papers)
+├── references/                  # Reference papers (PDFs)
+├── NSTC-applicaiton/            # NSTC grant application (LaTeX)
+├── CLAUDE.md                    # This file
+├── GEMINI.md                    # Gemini CLI context
+└── README.md                    # Project overview
 ```
 
 ## Working with LLM Discussion Logs
@@ -200,13 +218,21 @@ Detailed review of Taiwan-specific empirical evidence:
 - [x] Three-step analysis plan established
 - [x] Variable classification strategy determined
 
-### Phase 2: Data Collection (Current Phase)
-- [ ] Assemble Taiwan macro variables (IPI, CPI, employment, exports, wages, etc.) - 1990-2025, monthly
-- [ ] Assemble Taiwan financial variables (TAIEX, interest rates, credit spreads, foreign investment, etc.)
-- [ ] Obtain US variables from FRED (FFR, IPI, BAA-AAA spread, EPU)
-- [ ] Obtain China variables (IPI, PPI, TSF)
-- [ ] Construct/obtain global indicators (VIX, GPR, US-China relations indices)
+### Phase 2: Data Collection (In Progress — 2026-04)
+- [x] Variable planning finalized: 47 variables, 2001M1–2025M12 (300 months) — see `docs/variable_planning.md`
+- [x] Automated download pipeline built: 9 Python scripts in `code/data_processing/`
+- [x] Taiwan macro variables downloaded (19 series from eng.stat.gov.tw)
+- [x] Taiwan financial variables downloaded (8 series from CBC API + Yahoo + FRED)
+- [x] US variables downloaded (5 series from FRED + PolicyUncertainty.com)
+- [x] Global indicators downloaded (VIX, GPR, GEPU, REER)
+- [x] China CPI YoY downloaded (OECD SDMX)
+- [x] WPI downloaded from DGBAS (ends 2022-12, needs PPI splice)
+- [ ] China IPI, PPI, M2 (FRED timeout / NBS 403 — retry when available)
+- [ ] TWSE data: foreign investment flows, margin buying/short selling
+- [ ] Sinyi housing price index (manual download, quarterly → monthly interpolation)
+- [ ] Sector employment breakdown (manufacturing vs. services)
 - [ ] Data cleaning: stationarity tests, seasonal adjustment, standardization
+- [ ] `build_dataset.py`: merge all raw files into unified monthly panel
 
 ### Phase 3: Year 1 Model Implementation
 - [ ] Obtain DHK (2025) replication code (MATLAB/R/Python)

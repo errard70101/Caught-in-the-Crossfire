@@ -9,11 +9,14 @@ This repository contains academic research materials for a study titled **"Caugh
 *Note: The primary language for research context and discussions is Traditional Chinese (繁體中文), while code, technical documentation, and LaTeX proposals are generally in English.*
 
 ## Directory Overview
+- `code/data_processing/`: **Automated data download pipeline** — 9 Python scripts downloading from FRED, CBC, stat.gov.tw, OECD, BIS, Yahoo Finance, PolicyUncertainty.com. See `docs/variable_planning.md` for full variable-to-script mapping.
+- `data/raw/`: Downloaded CSV files organized by category (`taiwan_macro/`, `taiwan_financial/`, `us/`, `china/`, `global/`). Git-ignored; re-download by running scripts.
+- `docs/variable_planning.md`: **Master variable list** — 47 variables, 6 confirmed design decisions, download status tracker.
 - `llm_logs/`: Records AI collaboration sessions, core methodological decisions, and discussions.
 - `NSTC-applicaiton/`: Grant application materials for the National Science and Technology Council (NSTC), written in LaTeX.
 - `literature/`: Comprehensive literature review materials on uncertainty shocks and Taiwan-specific studies.
 - `references/`: Key reference papers (PDF format).
-- `data/`, `code/`, `results/`, `figures/`, `tables/`: Standard research pipeline directories for raw/cleaned data, processing scripts, and analysis outputs.
+- `results/`, `figures/`, `tables/`: Standard research pipeline directories for analysis outputs.
 
 ## Information Architecture
 
@@ -43,3 +46,14 @@ This repository contains academic research materials for a study titled **"Caugh
 - **Do NOT impose block exogeneity restrictions**: Rely strictly on the data-driven, order-invariant classification.
 - **External Variables = Unclassified**: All external shock sources (U.S., China, global) must be placed in the "unclassified" category to identify their transmission channels.
 - **Focus on the "Which" not the "How Much"**: The core question is *which transmission channel* external shocks use, rather than purely tracking the magnitude of the impact.
+
+### 4. Data Pipeline (Phase 2 — In Progress as of 2026-04)
+- **Sample**: 2001M1–2025M12 (300 months), 47 variables (17 macro + 8 financial + 22 unclassified)
+- **Scripts**: 9 Python scripts in `code/data_processing/` — each script is self-contained, downloads to `data/raw/<category>/`
+- **Status**: ~35 of 47 variables downloaded. Gaps: China IPI/PPI/M2 (FRED/NBS intermittent), TWSE flows, Sinyi housing prices, sector employment.
+- **Key API discoveries**:
+  - **eng.stat.gov.tw**: Data embedded in hidden form field `ContentPlaceHolder1_hidChartData` (JSON)
+  - **cpx.cbc.gov.tw**: 4-step session-based API with double-encoded JSON responses
+  - **DGBAS nstatdb**: Intermittent availability (403); column-major data layout `orgdata[col][row]`
+  - **BIS REER**: `stats.bis.org` (not `data.bis.org`)
+- **Design decisions**: See `docs/variable_planning.md` § "已確認的決定" for 6 confirmed choices (PMI dropped, credit spread dropped, M2 replaces TSF, etc.)

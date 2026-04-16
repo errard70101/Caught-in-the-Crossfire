@@ -70,6 +70,26 @@ This allows the model to objectively identify:
 
 ```
 /
+├── code/
+│   └── data_processing/         # Automated data download pipeline (9 scripts)
+│       ├── config.py            # Shared constants (paths, sample period, FRED IDs)
+│       ├── fetch_fred.py        # US macro from FRED (FFR, IPI, credit spread, VIX, TWD/USD)
+│       ├── fetch_csv_sources.py # US EPU, Global EPU, GPR, Trade Policy Uncertainty
+│       ├── fetch_yahoo.py       # TAIEX (returns, vol, level, turnover) via yfinance
+│       ├── fetch_cbc.py         # CBC Statistics DB API (interest rates, M1B, M2, loans)
+│       ├── fetch_stat_gov.py    # Taiwan macro from eng.stat.gov.tw (19 series)
+│       ├── fetch_bis.py         # Taiwan REER from BIS SDMX API
+│       ├── fetch_china.py       # China CPI from OECD SDMX + FRED attempts
+│       └── fetch_dgbas.py       # DGBAS nstatdb API (WPI, price indices)
+├── data/
+│   └── raw/                     # Downloaded raw data (git-ignored CSVs)
+│       ├── taiwan_macro/        # 20 files (CPI, IPI, employment, wages, trade, etc.)
+│       ├── taiwan_financial/    # 8 files (interest rates, monetary, TAIEX, TWD/USD)
+│       ├── us/                  # 5 files (FFR, IPI, credit spread, EPU, TPU)
+│       ├── china/               # 2 files (CPI YoY, M2—partial)
+│       └── global/              # 4 files (VIX, GPR, GEPU, REER)
+├── docs/
+│   └── variable_planning.md     # 47-variable master list, decisions, download status
 ├── NSTC-applicaiton/            # NSTC grant application materials
 │   ├── PROGRESS.md              # ★ Grant writing dashboard (status, next actions, blockers)
 │   ├── CM03_production_spec.md  # Format rules, page targets, quality standards
@@ -83,7 +103,6 @@ This allows the model to objectively identify:
 │   │   ├── sec4_integrated.tex  # Section 4: Integrated summary
 │   │   └── references.bib       # BibTeX references
 │   ├── writing-plans/           # AI execution prompts per section
-│   │   └── 2026-02-25-y1-sec2-methods.md
 │   └── example/                 # Format reference (113WIA0110259)
 ├── llm_logs/                    # Research discussion logs
 │   ├── 2025-11-08_discussion.md # Core methodological decisions
@@ -92,9 +111,9 @@ This allows the model to objectively identify:
 ├── literature/                  # Literature review materials
 │   ├── uncertainty_shock_literature.md
 │   └── taiwan_specific_uncertainty_literature.md
-├── references/                  # Reference papers
-│   └── Investigating Economic Uncertain.pdf  # Davidson, Hou, Koop (2025)
+├── references/                  # Reference papers (PDFs)
 ├── CLAUDE.md                    # Guide for Claude Code instances
+├── GEMINI.md                    # Guide for Gemini CLI instances
 └── README.md                    # This file
 ```
 
@@ -169,9 +188,11 @@ The model will reveal whether these external variables transmit shocks to Taiwan
 - **US-China**: Trade policy uncertainty, bilateral relations indicators
 
 ### Data Sources
-- Taiwan: DGBAS (Directorate-General of Budget, Accounting and Statistics), CBC (Central Bank of China)
-- US: Federal Reserve Economic Data (FRED)
-- Global: Baker-Bloom-Davis EPU, Caldara-Iacoviello GPR, VIX (CBOE)
+- **Taiwan Macro**: eng.stat.gov.tw (hidden form fields), DGBAS nstatdb API
+- **Taiwan Financial**: CBC Statistics Database (cpx.cbc.gov.tw API), Yahoo Finance
+- **US**: Federal Reserve Economic Data (FRED), PolicyUncertainty.com
+- **China**: OECD SDMX API, FRED (partial)
+- **Global**: Baker-Bloom-Davis EPU, Caldara-Iacoviello GPR, VIX (FRED), BIS (REER)
 
 ---
 
@@ -210,13 +231,13 @@ The model will reveal whether these external variables transmit shocks to Taiwan
 - [x] Three-step analysis plan established
 - [x] Variable classification strategy determined (19 macro / 10 financial / 14 unclassified)
 
-### Phase 2: Data Collection (Pending funding)
-- [ ] Assemble Taiwan macro variables (2000–2025, monthly)
-- [ ] Assemble Taiwan financial variables
-- [ ] Obtain US variables (FRED)
-- [ ] Obtain China variables (NBS, PBoC)
-- [ ] Construct/obtain global uncertainty indices (VIX, GPR, EPU)
+### Phase 2: Data Collection (In Progress)
+- [x] Variable planning: 47 variables, 2001M1–2025M12 (300 months) — see [`docs/variable_planning.md`](docs/variable_planning.md)
+- [x] Automated download pipeline: 9 Python scripts in `code/data_processing/`
+- [x] 39 raw data files downloaded (covering ~35 of 47 variables)
+- [ ] Remaining: China IPI/PPI/M2, TWSE flows, housing prices, sector employment
 - [ ] Data cleaning and transformation (stationarity, seasonal adjustment)
+- [ ] Build unified monthly panel dataset
 
 ### Phase 3: Model Implementation (Pending funding)
 - [ ] Implement DHK (2025) MCMC algorithm
@@ -225,12 +246,14 @@ The model will reveal whether these external variables transmit shocks to Taiwan
 - [ ] Full estimation and convergence diagnostics
 
 ### Phase 4: Analysis (Pending funding)
-- [ ] Step 1: Time-varying classification probabilities for 14 external variables
+- [ ] Step 1: Time-varying classification probabilities for external variables
 - [ ] Step 2: Forecast error variance decomposition
 - [ ] Step 3: Impulse response functions + historical decomposition
-- [ ] SOE-DSGE model with financial frictions (Year 2)
-- [ ] IRF matching: DSGE structural IRFs vs. data-driven IRFs
 - [ ] Robustness checks
+
+### Phase 5: Year 2 — SOE Nonlinear Business Cycle Accounting (Pending funding)
+- [ ] SOE-BCA model with stochastic volatility in wedges
+- [ ] Counterfactual accounting exercise
 
 ### Phase 5: Writing and Dissemination (Pending funding)
 - [ ] Complete research paper
@@ -331,4 +354,4 @@ This research builds on the groundbreaking methodological innovations by Davidso
 
 ---
 
-*Last Updated: 2026-02-25*
+*Last Updated: 2026-04-16*
