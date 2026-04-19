@@ -152,86 +152,52 @@ References                                       3-4 頁
 
 ### Year 2 - Section 2: Methods, procedures, and implementation schedule
 
-> **架構說明（2026-02-28 更新）**：Year 2 分為兩個平行主軸：
-> 1. 完成 OI-SVMVAR 的完整實證分析（三步驟）
-> 2. 建立 SOE Nonlinear Business Cycle Accounting 框架，將第一年萃取的實證不確定性因子映射到結構楔子
->
-> ⚠️ **注意**：Year 2 的理論框架已從「SOE-DSGE + IRF Matching」轉向「SOE Nonlinear BCA」。
-> 技術細節仍在研究中（見 `llm_logs/2026-02-28_bca-nonlinear-uncertainty-accounting.md`），
-> 標註 `[TBD]` 的部分待文獻研究完成後補充。
+> **架構說明（2026-04-11 更新）**：Year 2 已完成撰寫（`proposal/y2_sec2_methods.tex`）。
+> 核心框架為 **Conditional Structural Modeling: A Competing Hypotheses Framework**。
+> ⚠️ **注意**：先前的「SOE Nonlinear BCA」框架因考量弱識別與機制顆粒度不足，已歸檔作為歷史參考（保留於 `llm_logs/2026-02-28_bca-nonlinear-uncertainty-accounting.md`）。
 
 **(1). Research principles, methods, and the innovation of research methods**
 
 **(1.1) Steps 1–3: Full Three-Step Empirical Analysis (OI-SVMVAR)**
 
 內容：
-- **Step 1**：Time-varying classification — 從後驗分佈提取 π_{i,t}（各外部變數的 macro vs. financial 分類概率時間序列），識別關鍵 regime shifts（2008, 2018, 2020, 2022）
-- **Step 2**：FEVD — 量化各外部衝擊對台灣 h_{m,t} 和 h_{f,t} 的貢獻，驗證 SOE 假設
-- **Step 3**：IRF — 台灣變數對 h_{m,t}/h_{f,t} 的反應，以及 historical decomposition
-- 穩健性：小型模型（30變數）vs. 大型模型（43變數）比較
+- **Step 1**：Time-varying classification — 從後驗分佈提取 π_{i,t}，識別關鍵 regime shifts。
+- **Step 2**：FEVD — 量化各外部衝擊對台灣 h_{m,t} 和 h_{f,t} 的貢獻，驗證 SOE 假設。
+- **Step 3**：IRF — 台灣變數對不確定性衝擊的反應，這些 IRF 將作為第二年結構模型的 empirical targets。
 
-**(1.2) SOE Nonlinear Business Cycle Accounting**
-
-> 理論基礎：Chari, Kehoe & McGrattan (2007, *Econometrica*) 的 Business Cycle Accounting (BCA)
-> 框架延伸至 (a) 小型開放經濟體、(b) 二階動差衝擊（uncertainty shocks）。
-> 文獻空白：目前尚無將 BCA 正式延伸至 second-moment shocks 的通用框架。
+**(1.2) Conditional Structural Modeling: A Competing Hypotheses Framework**
 
 內容：
+- **Baseline model**：標準 SOE New Keynesian 模型，採用 Rotemberg 定價（避免 Calvo 的通膨預期反常），並透過三階微擾法（third-order perturbation）引入隨機波動。
+- **競爭假說（四個可能傳導管道）**：
+  1. **The real "wait-and-see" channel (Bloom 2009)**：不含金融摩擦。Trigger: 投資降但利差不動。
+  2. **The financial accelerator channel (BGG)**：借款方代理問題。Trigger: 企業利差擴大、金融分類機率高。
+  3. **The balance sheet / aggregate risk concentration channel (Di Tella 2017)**：中介機構風險與槓桿限制。Trigger: 金融業受創甚於一般企業、資金外流。
+  4. **The exchange rate / imported inflation channel (Mumtaz & Theodoridis 2015)**：不完全匯率傳遞與 UIP。Trigger: 台幣貶值且出現停滯性通膨。
 
-- **SOE-BCA 楔子結構** `[TBD — 待確認 SOE 文獻中的標準楔子設定]`
-  - 初步構想（5 個楔子）：效率楔子、勞動楔子、國內投資楔子、貿易楔子（Trade Wedge）、UIP 楔子（Country Premium Wedge）
-  - 需研究：SOE-BCA 文獻（如 Lama 2011, Otsu 2010 等）中的標準做法，確認是否需要調整楔子數量與定義
-
-- **引入 Stochastic Volatility（二階動差衝擊）**
-  - 各楔子的 DGP 從固定變異數 AR(1) 擴展為隨機波動版本
-  - 波動度過程本身服從 AR(1)：σ_{i,t} = (1-ρ_{σ,i})σ̄_i + ρ_{σ,i} σ_{i,t-1} + η_{i,t}
-  - 需使用三階微擾法（third-order perturbation）求解，突破 certainty equivalence `[TBD — 確認 Dynare 支援程度]`
-
-- **Factor-Loading 映射：2 個實證因子 → 多個楔子** `[TBD — 待確認映射結構]`
-  - 核心構想：σ_{i,t} = ... + λ_{i,m} h_{m,t} + λ_{i,f} h_{f,t} + η_{i,t}
-  - h_{m,t} 和 h_{f,t} 為第一年 OI-SVMVAR 萃取的總體/金融不確定性因子
-  - λ_{i,m} 和 λ_{i,f} 為待估載荷係數（資料驅動，非 ad hoc 限制）
-  - 可測試假說：若衝擊走 macro channel → λ_{efficiency,m} 與 λ_{trade,m} 顯著；若走 financial channel → λ_{investment,f} 與 λ_{UIP,f} 顯著
-
-- **Year 1 → Year 2 對接邏輯**
-  - Year 1 OI-SVMVAR：萃取 h_{m,t} 與 h_{f,t}，並透過分類機率識別傳導管道
-  - Year 2 SOE-BCA：以 h_{m,t}、h_{f,t} 作為楔子波動度的 target，實現「資料驅動實證 → 結構識別」的閉環驗證
-  - 執行反事實模擬（Accounting Exercise）：單獨打開/關閉各楔子的 second moment，判斷哪個楔子最能重現第一年 IRF 的衰退軌跡
-
-**(1.3) Estimation and Counterfactual Accounting Exercise**
+**(1.3) From Identification to Discrimination: The Year 1–Year 2 Bridge**
 
 內容：
-- **估計方法** `[TBD — 待確認最適估計策略]`
-  - 選項一：Bayesian MCMC 估計結構參數（含 factor loadings）
-  - 選項二：calibration + simulated method of moments
-  - 需確認三階展開下的估計可行性
-- **反事實會計實驗（核心成果）**：
-  - 「單獨打開」某一楔子的 second moment，其餘強制為穩態 → 判斷哪個楔子的不確定性衝擊最能解釋台灣衰退
-  - 歷史事件分析：2008 金融危機、2018-19 貿易戰、2020 COVID
-- **與 Year 1 的交叉驗證**：
-  - Year 1 分類機率顯示外部變數走 financial channel → Year 2 反事實應顯示投資/UIP 楔子的 second moment 主導
-  - 若兩年結果一致 → 強力驗證；若不一致 → 新的學術發現
+- 決策協議（Decision protocol）：透過 IRF 反應的時間差、通膨的正負號、以及外部變數的分類機率，來判定觸發哪一個/哪兩個假說。
+- 對既有文獻的修正：引用 Born & Pfeifer (2021) 說明 markup channel 的實證不足。
+- 反事實模擬與最適政策分析（如央行該採利率、匯率干預還是總體審慎措施）。
 
 **(2). Anticipated problems and means of resolution**
 
 **(2.1) Computational and Estimation Challenges**
 
 內容：
-- OI-SVMVAR 估計：MCMC 每次約 30 小時，需 HPC 資源（大學 HPC 或雲端運算）
-- SOE-BCA 三階微擾法：確認 Dynare 是否支援三階展開的 Bayesian estimation `[TBD]`
-- Factor-Loading 識別：2 個因子映射到多個楔子的統計識別條件 `[TBD]`
+- OI-SVMVAR 的 MCMC 高計算需求（需 HPC）。
+- Dynare 三階微擾法的 pruning 挑戰。
+- 兩階段估計（two-step procedure）：從 OI-SVMVAR 取得 h_{m,t} / h_{f,t} 作為 DSGE 的 observable inputs。
 
 **(2.2) Works planned for the second year**
 
 內容：
-- 大型模型（43變數）OI-SVMVAR 完整估計
-- 三步驟完整分析：分類概率 → FEVD → IRF（含穩健性檢驗）
-- SOE-BCA 模型建構：確定楔子結構、引入 stochastic volatility、推導均衡條件
-- 三階微擾法求解與估計
-- Factor-Loading 估計：將 h_{m,t}、h_{f,t} 映射到各楔子波動度
-- 反事實會計實驗：識別驅動台灣衰退的關鍵楔子 second moment
-- 論文撰寫與頂尖期刊投稿
-- 政策簡報（為央行準備）
+- Q1：完成 43 變數 OI-SVMVAR 完整實證與診斷。
+- Q2：基於 Year 1 結果與四項判定準則，選擇對應的結構模型並建構。
+- Q3：貝式估計、反事實模擬與最適政策分析。
+- Q4：撰寫學術論文投稿、準備央行政策簡報。
 
 ---
 
@@ -242,11 +208,11 @@ References                                       3-4 頁
 - Time-varying classification plots for all external variables (macro vs. financial channel probabilities)
 - FEVD tables quantifying U.S., China, and global shock contributions to Taiwan's uncertainty
 - IRF figures showing dynamic responses through macro and financial channels
-- SOE Nonlinear BCA model with estimated wedge structures and factor loadings
-- Counterfactual accounting results: which wedge's second-moment shock best explains Taiwan's recessions
-- Cross-validation between Year 1 classification probabilities and Year 2 accounting exercise results
-- Historical counterfactual simulations (e.g., severing financial channel during 2018–2019 trade war)
-- Robustness checks comparing small vs. large model results
+- Model selection based on Competing Hypotheses framework and empirical triggers
+- Bayesian estimation of the selected SOE DSGE model via third-order perturbation
+- Counterfactual simulations isolating specific transmission channels (e.g., severing financial accelerator during 2018–2019 trade war)
+- Optimal policy analysis evaluating Central Bank of China (Taiwan) interventions
+- Robustness checks comparing small vs. large empirical model results
 - Journal submission to top-tier outlet (e.g., Journal of International Economics, Journal of Applied Econometrics)
 - Policy brief for the Central Bank of China (Taiwan)
 
@@ -329,6 +295,12 @@ AI 產出的文字必須符合以下標準（以 v4.tex 為參照）：
 4. **不使用 bullet points 在 Section 1, 2, 4**（只有 Section 3 用 bullets）
 5. **不重複解釋同樣的概念**（每個方法論要點只在第一次出現時完整解釋）
 6. **引用格式正確**（`\citet{}` 用於主詞位置，`\citep{}` 用於括號內）
+
+---
+
+*最後更新：2026-04-17*
+*下一步：確認 14th unclassified variable，然後開始撰寫 Year 1 Section 2 (y1_sec2_methods.tex)*
+內）
 
 ---
 
