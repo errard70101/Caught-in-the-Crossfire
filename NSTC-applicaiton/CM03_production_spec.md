@@ -120,8 +120,8 @@ References                                       3-4 頁
 **(2.1) Data Assembly and Preprocessing**
 
 內容：
-- 40+ 變數的月度資料（台灣、美國、中國、全球）
-- 資料來源（DGBAS, CBC, FRED, NBS, PolicyUncertainty.com）
+- 45 變數的月度資料（台灣、美國、中國、全球）
+- 資料來源（DGBAS, CBC, FRED, NBS, PolicyUncertainty.com, Poilly & Tripier 2025）
 - 樣本期間：目標 2000-2025（25年, 300月）
 - 資料轉換：YoY growth rates, seasonal adjustment, stationarity tests
 
@@ -131,7 +131,7 @@ References                                       3-4 頁
 - 完成全部資料收集與清理
 - 取得 DHK (2025) replication code
 - 適配代碼至台灣資料集
-- 執行初步估計（小型模型30變數 + 大型模型43變數）
+- 執行初步估計（小型模型30變數 + 大型模型45變數）
 - 收斂診斷與初步結果驗證
 
 ---
@@ -194,7 +194,7 @@ References                                       3-4 頁
 **(2.2) Works planned for the second year**
 
 內容：
-- Q1：完成 43 變數 OI-SVMVAR 完整實證與診斷。
+- Q1：完成 45 變數 OI-SVMVAR 完整實證與診斷。
 - Q2：基於 Year 1 結果與四項判定準則，選擇對應的結構模型並建構。
 - Q3：貝式估計、反事實模擬與最適政策分析。
 - Q4：撰寫學術論文投稿、準備央行政策簡報。

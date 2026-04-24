@@ -31,12 +31,11 @@
 
 ## Immediate Next Actions
 
-1. **[PI decision needed]** Confirm the 14th unclassified variable (see Blockers below)
-2. Run Chunks A–D from `writing-plans/2026-02-25-y1-sec2-methods.md` (can be parallelized across AI sessions)
-3. Assemble the four AI outputs into `proposal/y1_sec2_methods.tex`
-4. Write `proposal/y1_sec3_results.tex` (~1 page, bullet points — fast)
-5. Write `proposal/y2_sec3_results.tex` (~1 page, bullet points — based on Y2 Sec 2 Competing Hypotheses framework)
-6. Write `proposal/sec4_integrated.tex` (~1-2 pages)
+1. Run Chunks B, C, and D from `writing-plans/2026-02-25-y1-sec2-methods.md` (can be parallelized across AI sessions)
+2. Assemble the four AI outputs into `proposal/y1_sec2_methods.tex`
+3. Write `proposal/y1_sec3_results.tex` (~1 page, bullet points — fast)
+4. Write `proposal/y2_sec3_results.tex` (~1 page, bullet points — based on Y2 Sec 2 Competing Hypotheses framework)
+5. Write `proposal/sec4_integrated.tex` (~1-2 pages)
 
 ---
 
@@ -44,7 +43,7 @@
 
 | # | Decision | Options | Notes |
 |---|----------|---------|-------|
-| 1 | **14th unclassified variable** | (a) China EPU index (PolicyUncertainty.com) OR (b) Taiwan Strait Tension index | Needed before running Chunk B and D prompts |
+| 1 | **~~14th unclassified variable~~** | Resolved | Added China EPU, Taiwan Strait Tension, and U.S. Regional TPU (Poilly & Tripier 2025). Total variables: 45. |
 | 2 | **DHK log-volatility form** | (a) Random walk `h_{k,t} = h_{k,t-1} + ζ` OR (b) AR(1) with mean reversion | Verify against DHK (2025) paper before running Chunk A |
 | 3 | **Computational resource** | (a) University HPC cluster OR (b) Cloud computing | Affects wording in Y1 Sec 2 (2.2) Activity 2 |
 | 4 | **red-text sentence in Sec 1** | Remove or keep the `\textcolor{red}{...}` sentence on monthly data frequency | `sec1_background.tex` line 3, currently marked as unresolved |

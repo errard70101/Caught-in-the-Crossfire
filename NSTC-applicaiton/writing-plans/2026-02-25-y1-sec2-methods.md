@@ -188,7 +188,7 @@ Markov-switching probability \pi_{i,t}. Reference those equations by label in
 this subsection; do not re-state their mathematical content.
 
 DATASET:
-The model contains N = 43 variables in three classes:
+The model contains N = 45 variables in three classes:
 
   MACROECONOMIC VARIABLES (19) — Taiwan domestic real sector:
   Industrial Production Index (IPI), Manufacturing Production Index,
@@ -208,26 +208,27 @@ The model contains N = 43 variables in three classes:
   NTD/USD Exchange Rate (nominal monthly average),
   NTD/USD Exchange Rate Monthly Realized Volatility.
 
-  UNCLASSIFIED VARIABLES (14) — ALL external drivers:
-    U.S. block (4):
+  UNCLASSIFIED VARIABLES (16) — ALL external drivers:
+    U.S. block (5):
       U.S. Federal Funds Rate (effective)
       U.S. Industrial Production Index (YoY)
       U.S. BAA–AAA Credit Spread
       U.S. Economic Policy Uncertainty index (Baker, Bloom, and Davis 2016)
-    China block (3):
+      U.S. Regional Trade Policy Uncertainty (Poilly and Tripier 2025)
+    China block (4):
       China Industrial Production Index (YoY)
       China Producer Price Index (YoY)
       China Total Social Financing (YoY)
-    Global indicators (3):
+      China Economic Policy Uncertainty index (Baker, Bloom, and Davis 2016)
+    Global indicators (4):
       VIX (CBOE Volatility Index, monthly average)
       Global Geopolitical Risk index (Caldara and Iacoviello 2022)
       Global Economic Policy Uncertainty index
-    U.S.–China relations block (4):
+      Taiwan Strait Geopolitical Risk (Caldara and Iacoviello 2022)
+    U.S.–China relations block (3):
       U.S.–China Trade Policy Uncertainty index
       U.S.–China Bilateral Trade Volume (YoY growth)
       U.S.–China Bilateral Geopolitical Risk index (Caldara and Iacoviello 2022)
-      [14th variable — PI to finalize before submission; candidate: China EPU
-       or Taiwan Strait Tension index]
 
 CONTENT STRUCTURE (write in this exact order):
 
@@ -237,9 +238,9 @@ in Equation (eq:variance) imposes a clean mapping: macroeconomic variables load
 exclusively on h_{m,t}, financial variables exclusively on h_{f,t}, and
 unclassified variables on a time-varying mixture of both, governed by \pi_{i,t}
 from Equation (eq:pi). State the variable counts: 19 macro, 10 financial,
-14 unclassified, totaling N = 43.
+16 unclassified, totaling N = 45.
 
-[Optional: include a compact LaTeX table here showing all 43 variables organized
+[Optional: include a compact LaTeX table here showing all 45 variables organized
 in three columns. Use \small font size and minimal padding. This is preferred
 but not required if it disrupts the prose flow.]
 
@@ -263,7 +264,7 @@ suppressed export demand, contracted industrial production, reduced investment
 activity. When \pi_{i,t} \to 0, the same shock instead propagates via financial
 channels: capital outflow pressure, exchange rate depreciation, credit tightening,
 and heightened financial volatility. Time-series plots of \pi_{i,t} for each of
-the 14 external variables therefore constitute a direct, data-driven narrative
+the 16 external variables therefore constitute a direct, data-driven narrative
 of how transmission mechanisms have evolved — particularly across key episodes:
 the 2008 Global Financial Crisis, the 2015 China slowdown, the 2018–2019
 U.S.–China trade war, the 2020 COVID shock, and the 2022 Federal Reserve
@@ -281,7 +282,7 @@ economies: through which channel do external shocks enter the domestic economy?
 In our application, Taiwan's two domestic uncertainty factors, h_{m,t} and
 h_{f,t}, are anchored by 19 clearly classified macroeconomic variables and 10
 clearly classified financial variables respectively, ensuring that the factors
-retain a well-defined economic interpretation. The 14 external drivers then load
+retain a well-defined economic interpretation. The 16 external drivers then load
 onto these anchored factors in proportions determined entirely by the data,
 yielding a direct reading of the operative transmission mechanism at each point
 in time. This reorientation transforms a classification tool into a
@@ -300,7 +301,7 @@ Heading: \noindent\textbf{(1.2) Variable Classification and the Key Innovation}
 ```
 
 ### Verification checklist
-- [ ] All 14 unclassified variables named explicitly (with note on 14th pending PI confirmation)
+- [ ] All 16 unclassified variables named explicitly
 - [ ] `\pi_{i,t}` correctly interpreted as a time-varying transmission-channel probability
 - [ ] Key episodes (2008, 2015, 2018–19, 2020, 2022) mentioned as illustration
 - [ ] Contrast with DHK (2025) original application is precise (domestic ambiguous vs. external drivers)
@@ -462,7 +463,7 @@ SECTION (2.1): DATA ASSEMBLY AND PREPROCESSING
 ===========================================================================
 
 DATASET SPECIFICATIONS:
-- 43 variables, monthly frequency, 2000:M1 through 2025:M6 (≈306 months)
+- 45 variables, monthly frequency, 2000:M1 through 2025:M6 (≈306 months)
 - Three variable classes:
 
 MACROECONOMIC VARIABLES (19) — Sources: DGBAS and CBC
@@ -498,22 +499,23 @@ FINANCIAL VARIABLES (10) — Sources: CBC, TWSE, TEJ
   NTD/USD exchange rate, nominal monthly average — CBC
   NTD/USD exchange rate monthly realized volatility — CBC
 
-UNCLASSIFIED VARIABLES (14) — Sources: FRED, PolicyUncertainty.com, NBS, PBoC
+UNCLASSIFIED VARIABLES (16) — Sources: FRED, PolicyUncertainty.com, NBS, PBoC, Poilly and Tripier (2025), Caldara and Iacoviello (2022)
   U.S. Federal Funds Rate, effective — FRED
   U.S. Industrial Production Index, year-on-year — FRED
   U.S. BAA–AAA Credit Spread — FRED
   U.S. Economic Policy Uncertainty index — PolicyUncertainty.com
+  U.S. Regional Trade Policy Uncertainty — Poilly and Tripier (2025) via FRED/Author replication
   China Industrial Production Index, year-on-year — NBS
   China Producer Price Index, year-on-year — NBS
   China Total Social Financing, year-on-year — PBoC / WIND
+  China Economic Policy Uncertainty index — PolicyUncertainty.com
   VIX, CBOE Volatility Index, monthly average — FRED
   Global Geopolitical Risk index — Caldara and Iacoviello (2022)
   Global Economic Policy Uncertainty index — PolicyUncertainty.com
+  Taiwan Strait Geopolitical Risk — Caldara and Iacoviello (2022)
   U.S.–China Trade Policy Uncertainty index — PolicyUncertainty.com
   U.S.–China Bilateral Trade Volume, year-on-year growth — U.S. Census Bureau
   U.S.–China Bilateral Geopolitical Risk index — Caldara and Iacoviello (2022)
-  [14th variable — PI to finalize: candidate is China EPU or Taiwan Strait
-   Tension index. Insert source when confirmed.]
 
 SAMPLE PERIOD RATIONALE (must appear in prose):
 The sample begins in 2000:M1 for two reasons. First, Taiwan acceded to the WTO
@@ -526,7 +528,7 @@ linkages across the region; excluding the crisis period ensures that estimated
 model parameters reflect the post-crisis integration structure that characterizes
 the sample of primary interest. The resulting sample of approximately 306
 observations provides sufficient degrees of freedom for Bayesian MCMC estimation
-of the 43-variable model to achieve reliable posterior convergence, consistent
+of the 45-variable model to achieve reliable posterior convergence, consistent
 with the simulation evidence in \citet{davidson2025investigating}.
 
 DATA TRANSFORMATIONS (must all appear in prose or a compact table):
@@ -555,7 +557,7 @@ Do NOT use bullet points — integrate the activities into narrative paragraphs.
 The month ranges are approximate guides; do not present them as a rigid Gantt chart.
 
 ACTIVITY 1 — Data assembly and verification (Months 1–4):
-All 43 variables are collected from the sources listed in Section (2.1),
+All 45 variables are collected from the sources listed in Section (2.1),
 harmonized to a common monthly frequency, and assembled into a balanced panel
 spanning 2000:M1 to 2025:M6. Missing observations (which may arise for China
 series in early months) are addressed using interpolation or by trimming the
@@ -566,7 +568,7 @@ documentation, is recorded in a replication log to ensure full reproducibility.
 
 ACTIVITY 2 — MCMC implementation and adaptation (Months 3–7):
 The order-invariant SVMVAR estimation algorithm of \citet{davidson2025investigating}
-is implemented and adapted to the 43-variable Taiwan dataset. The algorithm
+is implemented and adapted to the 45-variable Taiwan dataset. The algorithm
 proceeds as a Gibbs sampler, cycling through the following blocks: VAR
 coefficient matrices A_l; the contemporaneous impact matrix B_0 (via the
 Q-matrix reparameterization); the uncertainty factor loadings \alpha_{i,m}
@@ -582,14 +584,14 @@ A preliminary estimation is conducted on a reduced 30-variable model — retaini
 the core Taiwan domestic variables and a subset of the most important external
 variables — to validate the MCMC implementation and benchmark against the
 published results of \citet{davidson2025investigating} for the U.S. economy.
-Upon successful validation, the full 43-variable model is estimated. Each MCMC
+Upon successful validation, the full 45-variable model is estimated. Each MCMC
 run requires approximately 30 hours at 50,000 post-burn-in draws, based on
 \citet{davidson2025investigating}'s reported computational requirements for a
 model of comparable scale.
 
 ACTIVITY 4 — Preliminary three-step analysis (Months 9–12):
 Posterior draws from the full model are used to extract time-series of the
-classification probabilities \pi_{i,t} for all 14 external variables. Preliminary
+classification probabilities \pi_{i,t} for all 16 external variables. Preliminary
 plots of these trajectories are produced for the key episodes identified in
 Section 1 (2008, 2015, 2018–2019, 2020, 2022). A preliminary forecast error
 variance decomposition is computed to assess the relative contributions of U.S.,
@@ -621,12 +623,12 @@ OUTPUT FORMAT: Pure LaTeX \input{} fragment (no preamble).
 ```
 
 ### Verification checklist
-- [ ] All 43 variables listed with data sources
+- [ ] All 45 variables listed with data sources
 - [ ] Sample period rationale present: WTO accession + 1997 crisis exclusion + 306-month convergence argument
 - [ ] All 7 data transformation steps explicitly described (YoY, first diff, X-13, ADF/KPSS, standardization)
 - [ ] Four Year 1 activities written as prose paragraphs (no bullets)
 - [ ] Computational cost stated: ~30 hours per run, 50,000 draws, citing DHK (2025)
-- [ ] 14th unclassified variable flagged as "[PI to finalize]"
+- [ ] 16 unclassified variables listed
 - [ ] References: \citet{chan2009efficient} for precision sampler, \citet{geweke1992} for convergence test
 - [ ] Approximately 3 compiled pages
 
