@@ -1,0 +1,91 @@
+\section{Generic Algebra for a Second-Order Accounting Wedge}
+
+This appendix records the generic algebra behind the wedge construction. Let an
+equilibrium condition be written as
+\begin{equation}
+    \E_t
+    \left[
+        F(z_t,z_{t+1})
+    \right]
+    =
+    0,
+    \label{eq:generic_equilibrium_condition}
+\end{equation}
+where \(z_t\) stacks the relevant endogenous and exogenous variables. Let
+\(\bar{z}\) be the deterministic steady state and define
+\(\tilde{z}_t=z_t-\bar{z}\). A second-order expansion gives
+\begin{equation}
+    0
+    \approx
+    F(\bar{z},\bar{z})
+    +
+    F_0 \tilde{z}_t
+    +
+    F_1 \E_t \tilde{z}_{t+1}
+    +
+    \frac{1}{2}
+    \E_t
+    \left[
+        \tilde{z}_{t+1}'
+        H_1
+        \tilde{z}_{t+1}
+    \right]
+    +
+    \text{terms involving } \tilde{z}_t^2.
+    \label{eq:generic_second_order_expansion}
+\end{equation}
+At the deterministic steady state, \(F(\bar{z},\bar{z})=0\). The conditional
+quadratic term can be decomposed as
+\begin{equation}
+    \E_t
+    \left[
+        \tilde{z}_{t+1}'
+        H_1
+        \tilde{z}_{t+1}
+    \right]
+    =
+    (\E_t\tilde{z}_{t+1})'
+    H_1
+    (\E_t\tilde{z}_{t+1})
+    +
+    \tr(H_1\Omega_t),
+    \label{eq:mean_variance_decomposition}
+\end{equation}
+where
+\begin{equation}
+    \Omega_t
+    =
+    \Var_t(\tilde{z}_{t+1}).
+    \label{eq:omega_covariance}
+\end{equation}
+
+For an accounting exercise focused on uncertainty, collect all terms involving
+\(\Omega_t\) into a wedge:
+\begin{equation}
+    \omega^F_t
+    \equiv
+    -A_F^{-1}
+    \left[
+        \frac{1}{2}\tr(H_1\Omega_t)
+    \right],
+    \label{eq:generic_wedge}
+\end{equation}
+where \(A_F\) is the coefficient on the endogenous variable being isolated. This
+is the general form behind Equations \eqref{eq:demand_wedge_definition} and
+\eqref{eq:price_wedge_definition}.
+
+In the TFP-volatility-only case, the relevant element of \(\Omega_t\) is
+\(\exp(2\sigma_{a,t})\). If the rest of the covariance matrix is fixed or
+endogenously proportional to this variance state, then the wedge has the local
+representation
+\begin{equation}
+    \omega^F_t
+    \approx
+    \lambda_F
+    \left[
+        \exp(2\sigma_{a,t})-\exp(2\bar{\sigma}_a)
+    \right].
+    \label{eq:generic_rank_one_wedge}
+\end{equation}
+This is the algebraic source of the rank-one restriction in Equation
+\eqref{eq:rank_one_wedge_restriction}.

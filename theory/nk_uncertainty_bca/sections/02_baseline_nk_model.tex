@@ -1,0 +1,67 @@
+\section{Baseline Three-Equation NK Model}
+
+Let \(x_t\) denote the output gap, \(\pi_t\) inflation, \(i_t\) the nominal
+policy rate, and \(r^n_t\) the natural real rate. The standard first-order
+three-equation New Keynesian system is
+\begin{align}
+    x_t
+    &=
+    \E_t x_{t+1}
+    -
+    \frac{1}{\gamma}
+    \left(
+        i_t - \E_t \pi_{t+1} - r^n_t
+    \right),
+    \label{eq:baseline_is}
+    \\
+    \pi_t
+    &=
+    \beta \E_t \pi_{t+1}
+    +
+    \kappa x_t,
+    \label{eq:baseline_nkpc}
+    \\
+    i_t
+    &=
+    \rho_i i_{t-1}
+    +
+    (1-\rho_i)
+    \left(
+        \phi_\pi \pi_t + \phi_x x_t
+    \right)
+    +
+    \varepsilon^i_t.
+    \label{eq:baseline_taylor}
+\end{align}
+The parameters satisfy \(\gamma>0\), \(0<\beta<1\), \(\kappa>0\), and
+\(0\leq \rho_i<1\). In the baseline accounting exercise, monetary policy is not
+a primitive uncertainty source, so \(\varepsilon^i_t\) is set to zero unless the
+policy rule is used as a residual measurement equation.
+
+Productivity enters the reduced-form NK system through the natural allocation.
+For example, in a flexible-price economy with log productivity \(a_t\), natural
+output and the natural real rate can be summarized as
+\begin{align}
+    y^n_t &= \chi_a a_t,
+    \label{eq:natural_output}
+    \\
+    r^{n,1}_t
+    &=
+    \rho
+    +
+    \gamma \E_t \Delta y^n_{t+1},
+    \label{eq:first_order_natural_rate}
+\end{align}
+where \(\rho=-\log\beta\), \(\chi_a\) is the elasticity of natural output with
+respect to productivity, and \(r^{n,1}_t\) is the first-order natural real rate.
+Second-order risk corrections will modify this object. The notation
+\(r^{n,1}_t\) is used to keep the first-order natural rate conceptually separate
+from the risk-adjusted natural rate.
+
+\begin{remark}
+Equations \eqref{eq:baseline_is}--\eqref{eq:baseline_taylor} are already
+log-linear. Therefore, uncertainty effects do not arise by simply changing the
+variance of \(a_t\) inside these equations. The risk terms must come from a
+second-order expansion of the nonlinear household and firm conditions that
+generate the reduced-form NK system.
+\end{remark}

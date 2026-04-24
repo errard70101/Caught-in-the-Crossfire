@@ -1,0 +1,93 @@
+\section{BCA-Style Accounting Logic}
+
+The accounting exercise follows the spirit of Business Cycle Accounting. The
+goal is not to claim that a wedge is itself a deep friction. The goal is to
+measure which equilibrium condition must be distorted in order for the simple
+model to reproduce the observed dynamics.
+
+\subsection{Step 1: Infer Wedges}
+
+Given observed or model-implied series for
+\(\{x_t,\pi_t,i_t,r^{n,1}_t\}\) and expectations
+\(\{\E_t x_{t+1},\E_t \pi_{t+1}\}\), infer the wedges as residuals:
+\begin{align}
+    \widehat{\omega}^x_t
+    &=
+    x_t
+    -
+    \E_t x_{t+1}
+    +
+    \frac{1}{\gamma}
+    \left(
+        i_t-\E_t\pi_{t+1}-r^{n,1}_t
+    \right),
+    \label{eq:infer_x_wedge}
+    \\
+    \widehat{\omega}^\pi_t
+    &=
+    \pi_t
+    -
+    \beta \E_t\pi_{t+1}
+    -
+    \kappa x_t,
+    \label{eq:infer_pi_wedge}
+    \\
+    \widehat{\omega}^i_t
+    &=
+    i_t
+    -
+    \rho_i i_{t-1}
+    -
+    (1-\rho_i)(\phi_\pi\pi_t+\phi_x x_t).
+    \label{eq:infer_i_wedge}
+\end{align}
+
+\subsection{Step 2: Test the Single-Uncertainty-Source Restriction}
+
+Estimate or inspect the relation
+\begin{equation}
+    \widehat{\bs{\omega}}_t
+    =
+    \bs{\lambda} q_t
+    +
+    \bs{u}_t.
+    \label{eq:estimate_wedge_loadings}
+\end{equation}
+The single-source TFP uncertainty hypothesis implies that most systematic
+variation in the wedge vector should be explained by the scalar variance state
+\(q_t\). In this minimal model, a large and systematic \(\widehat{\omega}^i_t\)
+would be evidence against the clean baseline, because monetary policy is not a
+primitive uncertainty source.
+
+\subsection{Step 3: Counterfactual Wedge Experiments}
+
+Once the wedges are inferred, run counterfactual paths by opening one wedge at a
+time:
+\begin{enumerate}[label=(\alph*)]
+    \item Demand-risk counterfactual: set
+    \(\omega^x_t=\widehat{\omega}^x_t\) and
+    \(\omega^\pi_t=\omega^i_t=0\).
+    \item Markup-risk counterfactual: set
+    \(\omega^\pi_t=\widehat{\omega}^\pi_t\) and
+    \(\omega^x_t=\omega^i_t=0\).
+    \item Policy-residual counterfactual: set
+    \(\omega^i_t=\widehat{\omega}^i_t\) and
+    \(\omega^x_t=\omega^\pi_t=0\).
+\end{enumerate}
+The contribution of each wedge is evaluated by how closely the counterfactual
+paths reproduce the observed paths of \(x_t\), \(\pi_t\), and \(i_t\).
+
+\subsection{Connection to the Later SOE Nonlinear BCA}
+
+The later small-open-economy framework will contain more wedges: efficiency,
+labor, investment, trade, and UIP wedges. This note is a stripped-down
+laboratory. Its value is to establish the logic:
+\[
+    \text{second-moment primitive}
+    \rightarrow
+    \text{equation-specific risk wedge}
+    \rightarrow
+    \text{counterfactual accounting}.
+\]
+Once this logic is clear, the same structure can be expanded to multiple
+external uncertainty factors and multiple small-open-economy wedges.

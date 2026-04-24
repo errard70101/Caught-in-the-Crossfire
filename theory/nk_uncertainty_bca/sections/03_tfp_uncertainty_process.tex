@@ -1,0 +1,64 @@
+\section{TFP Level and TFP Uncertainty}
+
+Let \(a_t\) be log TFP. The level innovation to TFP has stochastic volatility:
+\begin{align}
+    a_{t+1}
+    &=
+    \rho_a a_t
+    +
+    \exp(\sigma_{a,t})\varepsilon_{a,t+1},
+    \qquad
+    \varepsilon_{a,t+1}\sim N(0,1),
+    \label{eq:tfp_level}
+    \\
+    \sigma_{a,t+1}
+    &=
+    (1-\rho_\sigma)\bar{\sigma}_a
+    +
+    \rho_\sigma \sigma_{a,t}
+    +
+    \sigma_\eta \eta_{\sigma,t+1},
+    \qquad
+    \eta_{\sigma,t+1}\sim N(0,1).
+    \label{eq:tfp_vol}
+\end{align}
+The primitive first-moment shock is \(\varepsilon_{a,t+1}\). The primitive
+uncertainty shock is \(\eta_{\sigma,t+1}\), which moves the conditional
+volatility state \(\sigma_{a,t+1}\).
+
+Conditional on information at date \(t\),
+\begin{equation}
+    \Var_t(a_{t+1})
+    =
+    \exp(2\sigma_{a,t}).
+    \label{eq:conditional_tfp_variance}
+\end{equation}
+Because \(a_t\) is predetermined at date \(t\),
+\begin{equation}
+    \Var_t(\Delta a_{t+1})
+    =
+    \Var_t(a_{t+1})
+    =
+    \exp(2\sigma_{a,t}).
+    \label{eq:conditional_tfp_growth_variance}
+\end{equation}
+Around the steady volatility level \(\bar{\sigma}_a\), the variance term can be
+approximated by
+\begin{equation}
+    \exp(2\sigma_{a,t})-\exp(2\bar{\sigma}_a)
+    \approx
+    2\exp(2\bar{\sigma}_a)(\sigma_{a,t}-\bar{\sigma}_a).
+    \label{eq:variance_linearization}
+\end{equation}
+Thus, even if the model is written in terms of variance wedges, the volatility
+state can be used as the accounting state after local linearization.
+
+Define the centered variance state
+\begin{equation}
+    q_t
+    \equiv
+    \exp(2\sigma_{a,t})-\exp(2\bar{\sigma}_a).
+    \label{eq:variance_state}
+\end{equation}
+Under the single-uncertainty-source restriction, all uncertainty wedges should
+be functions of \(q_t\), up to approximation error and endogenous amplification.

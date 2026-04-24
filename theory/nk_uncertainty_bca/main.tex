@@ -1,0 +1,47 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath, amssymb, amsthm, bm, mathtools}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{xcolor}
+
+\input{macros}
+
+\title{A Minimal New Keynesian Accounting Note for TFP Uncertainty Wedges}
+\author{Caught in the Crossfire Research Notes}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+This note develops a deliberately small New Keynesian accounting framework for
+thinking about uncertainty shocks. The model has three reduced-form equilibrium
+conditions: an IS equation, a New Keynesian Phillips curve, and a monetary policy
+rule. The only primitive source of second-moment variation is stochastic
+volatility in total factor productivity. The purpose is not to build the final
+small-open-economy model. Instead, the purpose is to check whether a volatility
+shock to productivity can be represented as a small set of wedges, in the spirit
+of Business Cycle Accounting, after a second-order expansion of the underlying
+nonlinear equilibrium conditions.
+\end{abstract}
+
+\tableofcontents
+
+\clearpage
+
+\input{sections/01_motivation}
+\input{sections/02_baseline_nk_model}
+\input{sections/03_tfp_uncertainty_process}
+\input{sections/04_second_order_expansion}
+\input{sections/05_wedge_representation}
+\input{sections/06_accounting_logic}
+\input{sections/07_open_questions}
+
+\appendix
+\input{appendix/A_algebra_details}
+
+\end{document}

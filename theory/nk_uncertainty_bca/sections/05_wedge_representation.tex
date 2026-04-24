@@ -1,0 +1,106 @@
+\section{Wedge Representation}
+
+Collect the three accounting wedges as
+\begin{equation}
+    \bs{\omega}_t
+    =
+    \begin{bmatrix}
+        \omega^x_t \\
+        \omega^\pi_t \\
+        \omega^i_t
+    \end{bmatrix}.
+    \label{eq:wedge_vector}
+\end{equation}
+The wedge-augmented NK system is
+\begin{align}
+    x_t
+    &=
+    \E_t x_{t+1}
+    -
+    \frac{1}{\gamma}
+    \left(
+        i_t-\E_t\pi_{t+1}-r^{n,1}_t
+    \right)
+    +
+    \omega^x_t,
+    \label{eq:wedge_system_is}
+    \\
+    \pi_t
+    &=
+    \beta \E_t \pi_{t+1}
+    +
+    \kappa x_t
+    +
+    \omega^\pi_t,
+    \label{eq:wedge_system_nkpc}
+    \\
+    i_t
+    &=
+    \rho_i i_{t-1}
+    +
+    (1-\rho_i)
+    \left(
+        \phi_\pi \pi_t+\phi_x x_t
+    \right)
+    +
+    \omega^i_t.
+    \label{eq:wedge_system_policy}
+\end{align}
+
+Because TFP uncertainty is the only primitive source of volatility, the first
+restricted accounting representation is
+\begin{equation}
+    \bs{\omega}_t
+    =
+    \bs{\lambda} q_t
+    +
+    \bs{u}_t,
+    \qquad
+    \bs{\lambda}
+    =
+    \begin{bmatrix}
+        \lambda_x \\
+        \lambda_\pi \\
+        \lambda_i
+    \end{bmatrix},
+    \label{eq:rank_one_wedge_restriction}
+\end{equation}
+where \(q_t\) is defined in Equation \eqref{eq:variance_state} and
+\(\bs{u}_t\) is approximation error or residual model misspecification.
+
+The baseline theoretical restrictions are:
+\begin{align}
+    \lambda_x &< 0
+    && \text{if precautionary saving dominates,}
+    \label{eq:lambda_x_prediction}
+    \\
+    \lambda_\pi &\ \text{ambiguous}
+    && \text{until the price-setting microfoundation is fixed,}
+    \label{eq:lambda_pi_prediction}
+    \\
+    \lambda_i &= 0
+    && \text{under a linear Taylor rule with no policy uncertainty.}
+    \label{eq:lambda_i_prediction}
+\end{align}
+
+This representation is useful because it provides a sharp diagnostic. If a
+single TFP uncertainty shock is the correct primitive force, then the three
+wedges should be highly collinear and mostly driven by \(q_t\). If the inferred
+wedges are not well described by Equation \eqref{eq:rank_one_wedge_restriction},
+then either the simplified NK model is missing propagation mechanisms or more
+than one primitive uncertainty source is needed.
+
+\begin{table}[htbp]
+\centering
+\caption{Interpretation of NK Uncertainty Wedges}
+\label{tab:wedge_interpretation}
+\begin{tabular}{lll}
+\toprule
+Wedge & Equation & Interpretation \\
+\midrule
+\(\omega^x_t\) & IS curve & Precautionary saving, risk-adjusted real rate, demand risk \\
+\(\omega^\pi_t\) & NKPC & Markup risk, price-setting curvature, marginal-cost risk \\
+\(\omega^i_t\) & Taylor rule & Policy residual; zero in the baseline theory \\
+\bottomrule
+\end{tabular}
+\end{table}

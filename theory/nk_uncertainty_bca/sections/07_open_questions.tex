@@ -1,0 +1,36 @@
+\section{Open Questions}
+
+This version leaves several questions intentionally open.
+
+\begin{enumerate}[label=\textbf{Q\arabic*.}]
+    \item \textbf{Second order or third order?}
+    The second-order expansion identifies risk correction terms in equilibrium
+    equations. However, a fully solved stochastic-volatility DSGE model usually
+    requires third-order perturbation for volatility shocks to affect decision
+    rules as independent state variables. The next step is to decide whether the
+    paper needs a full third-order solution or only an accounting
+    representation.
+
+    \item \textbf{Where should wedges be defined?}
+    This note defines wedges in the reduced-form IS curve, NKPC, and Taylor
+    rule. A deeper BCA exercise could instead define wedges at the level of
+    household Euler equations, firm pricing FOCs, and resource constraints.
+
+    \item \textbf{Which pricing model pins down \(\lambda_\pi\)?}
+    The sign of the price-setting wedge depends on the nonlinear pricing
+    environment. Calvo and Rotemberg pricing can imply different uncertainty
+    transmission mechanisms, so the markup wedge should not be interpreted
+    before choosing the pricing microfoundation.
+
+    \item \textbf{Should natural-rate risk be absorbed into \(\omega^x_t\)?}
+    One can define a risk-adjusted natural rate and keep the IS wedge smaller,
+    or define the natural rate at first order and place all risk corrections in
+    \(\omega^x_t\). The latter is cleaner for accounting; the former may be
+    cleaner for structural interpretation.
+
+    \item \textbf{How will this connect to the empirical uncertainty factors?}
+    This note has one volatility state \(q_t\). The larger research project has
+    empirical macro and financial uncertainty factors. The future SOE version
+    will need a factor-loading structure that maps those empirical factors into
+    multiple structural wedge volatilities.
+\end{enumerate}
