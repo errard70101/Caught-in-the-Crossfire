@@ -2,13 +2,50 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Produce a preliminary set of simulated Business Cycle Accounting (BCA) results by driving the FVGQ (2020, *Review of Economic Dynamics*) DSGE model, adapted to Dynare 6.2 native pruning, through a three-phase simulation pipeline and a four-wedge CKM (2007) extraction — delivering a scholar-discussion memo within ~5 working days.
+**Goal:** Produce a preliminary set of simulated Business Cycle Accounting (BCA) results by driving the FVGQ (2020, *Review of Economic Dynamics*) DSGE model, adapted to Dynare 6.2 native pruning, through a three-phase simulation pipeline and a four-wedge CKM (2007) extraction — delivering discussion-ready output, CKM-style measured-wedge figures, and a scholar-discussion memo.
 
 **Architecture:** A new isolated subfolder `code/bca_uncertainty_simulation/fvgq2020_preliminary/` with its own `.mod` file, MATLAB driver, CKM estimator, local-projection helper, and plotting module. Mirrors the existing §7 scaffold's file layout and `simult_`-based `(solve → warm-up → Experiment 1 → Experiment 2)` pipeline 1:1 so review can proceed by analogy. The existing scaffold and `theory/nk_uncertainty_bca/sections/07_simulation_based_bca.tex` are not modified.
 
 **Tech Stack:** MATLAB R2024b/R2025b · Dynare 6.2-arm64 (native `pruning` + `simult_` for order=3) · No external pruning toolbox.
 
 **Spec:** [`docs/superpowers/specs/2026-04-24-fvgq2020-preliminary-simulated-bca-design.md`](../specs/2026-04-24-fvgq2020-preliminary-simulated-bca-design.md)
+
+## 2026-04-24 Reporting Amendments
+
+The implementation backbone below remains valid, but the reporting layer is
+amended as follows:
+
+1. **Experiment 2 shock scaling:** use **2 standard deviations** for the
+   uncertainty innovations in GIRF construction.
+2. **CKM-style measured wedges:** do not report raw `tau_l` and `tau_x` in the
+   headline time-series figures. Use:
+   - efficiency wedge: `A = exp(log_A)`
+   - labor wedge: `1 - tau_l`
+   - investment wedge: `1 / (1 + tau_x)`
+3. **Base-period normalization:** report measured-wedge time-series as indices
+   normalized to **100 in the base period** (default: first plotted observation).
+4. **Explicit units for response plots:** LP plots should use **transformed**
+   CKM-style wedge objects:
+   - `log_efficiency_wedge = log(A) = log_A`
+   - `log_labor_wedge = log(1 - tau_l)`
+   - `log_investment_wedge = log(1 / (1 + tau_x))`
+   These should be scaled by 100 and labeled as approximate percent deviation.
+   GIRF main plots should also use the transformed wedge objects at the
+   pair-difference level. The raw `G_share` / `G/Y` object may remain as a
+   diagnostic panel because it has no CKM-style log transform analogue.
+5. **Monte Carlo LP bands:** the fixed-point LP figures should no longer rely on
+   single-sample HAC intervals. Instead, simulate **B = 10000** repeated
+   samples of length **T = 400** periods, re-estimate LP each time, and report:
+   - center line: median across repetitions
+   - interval: empirical 2.5%–97.5% band across repetitions
+   The legacy HAC LP output may still be saved for reference and for
+   fixed-vs-likelihood comparison plots. Main exported LP figures
+   (`bca_lp_macro.png`, `bca_lp_fin.png`) may point to the likelihood version
+   when the fixed-point responses are too dispersed, while fixed-point Monte
+   Carlo figures remain available under explicit `_fixed` filenames.
+6. **Likelihood parity:** when likelihood-smoothed wedges are available, produce
+   the same transformed reporting objects and comparison figures for fixed-point
+   and likelihood outputs.
 
 ---
 
@@ -25,10 +62,11 @@
 | `code/bca_uncertainty_simulation/fvgq2020_preliminary/matlab/run_fvgq2020_simulation.m` | Create | Three-phase driver (solve + warm-up + Exp1 + Exp2) |
 | `code/bca_uncertainty_simulation/fvgq2020_preliminary/matlab/estimate_ckm_wedges.m` | Create | Four-wedge CKM estimator |
 | `code/bca_uncertainty_simulation/fvgq2020_preliminary/matlab/local_projection.m` | Create | Experiment 1 LP estimator |
-| `code/bca_uncertainty_simulation/fvgq2020_preliminary/matlab/run_bca_analysis.m` | Create | Apply CKM + LP + GIRF to simulation outputs |
-| `code/bca_uncertainty_simulation/fvgq2020_preliminary/matlab/plot_bca_responses.m` | Create | LP and GIRF figures |
+| `code/bca_uncertainty_simulation/fvgq2020_preliminary/matlab/monte_carlo_lp_bands.m` | Create | Repeated-simulation LP helper for median + Monte Carlo 95% bands |
+| `code/bca_uncertainty_simulation/fvgq2020_preliminary/matlab/run_bca_analysis.m` | Create | Apply CKM + LP + Monte Carlo LP + GIRF to simulation outputs and save transformed reporting series |
+| `code/bca_uncertainty_simulation/fvgq2020_preliminary/matlab/plot_bca_responses.m` | Create | LP/GIRF figures with explicit units plus CKM-style measured-wedge plots |
 | `code/bca_uncertainty_simulation/fvgq2020_preliminary/matlab/sanity_checks.m` | Create | Resource identity + SSS convergence assertions |
-| `code/bca_uncertainty_simulation/fvgq2020_preliminary/output/*` | Generated | CSV/MAT/PNG outputs (gitignored) |
+| `code/bca_uncertainty_simulation/fvgq2020_preliminary/output/*` | Generated | CSV/MAT/PNG outputs (gitignored), including transformed measured-wedge reporting files |
 | `llm_logs/2026-04-XX_fvgq2020_preliminary_results.md` | Create (last task) | Scholar-discussion memo |
 
 **Non-goals (from spec §2):** no modification of `code/bca_uncertainty_simulation/{dynare,matlab}/*` or `theory/nk_uncertainty_bca/sections/07_simulation_based_bca.tex`, no change to FVGQ's economic structure or parameter values, no Taiwan data, no working-capital friction.
@@ -1260,7 +1298,8 @@ Co-Authored-By: Claude Opus 4.7 <noreply@anthropic.com>"
 % Steps:
 %   A. Load Experiment 1 sample; run CKM; run LP on (uA, ue).
 %   B. Load Experiment 2 paths; run CKM on each path pair; compute GIRF.
-%   C. Save wedges_exp1.csv, lp_results.mat, wedges_girf.mat.
+%   C. Save wedges_exp1.csv, lp_results.mat, wedges_girf.mat, and transformed
+%      CKM-style reporting series for fixed-point / likelihood outputs.
 
 clear;
 clc;
@@ -1441,10 +1480,14 @@ Co-Authored-By: Claude Opus 4.7 <noreply@anthropic.com>"
 % plot_bca_responses.m
 %
 % Consumes output/lp_results.mat and output/wedges_girf.mat; produces:
-%   bca_lp_fin.png    -- LP response of each wedge to ue (financial SV)
-%   bca_lp_macro.png  -- LP response of each wedge to uA (TFP SV)
-%   bca_girf_fin.png  -- GIRF of each wedge to ue with 5-95% band
-%   bca_girf_macro.png-- GIRF of each wedge to uA with 5-95% band
+%   bca_lp_fin.png              -- main LP figure to ue (financial SV), currently likelihood
+%   bca_lp_macro.png            -- main LP figure to uA (TFP SV), currently likelihood
+%   bca_lp_fin_fixed.png        -- fixed-point Monte Carlo LP to ue
+%   bca_lp_macro_fixed.png      -- fixed-point Monte Carlo LP to uA
+%   bca_girf_fin.png            -- GIRF of each wedge to ue with 5-95% band
+%   bca_girf_macro.png          -- GIRF of each wedge to uA with 5-95% band
+%   bca_measured_wedges_*.png   -- CKM-style transformed wedge overlays (index, base=100)
+%   bca_wedges_exp1_compare.png -- transformed fixed-vs-likelihood comparison panel
 
 clear;
 clc;
@@ -1529,7 +1572,8 @@ Expected: `Wrote LP and GIRF figures to .../output`
 ls -la code/bca_uncertainty_simulation/fvgq2020_preliminary/output/*.png
 ```
 
-Expected: four PNGs — `bca_lp_fin.png`, `bca_lp_macro.png`, `bca_girf_fin.png`, `bca_girf_macro.png`, each >20KB.
+Expected: LP/GIRF PNGs plus CKM-style measured-wedge figures, with response
+axes labeled in explicit units and measured-wedge charts normalized to base=100.
 
 - [ ] **Step 10.4: Commit**
 
@@ -1538,8 +1582,9 @@ git add code/bca_uncertainty_simulation/fvgq2020_preliminary/matlab/plot_bca_res
 git commit -m "feat(bca-sim): LP and GIRF plotting for FVGQ preliminary
 
 2x2 subplot grids per shock type (fin, macro) showing the response of each
-of the four CKM wedges. LP plots show point estimates with 95% Newey-West
-CIs; GIRF plots show cross-pair mean with 5-95% bands across N=1,000 pairs.
+of the four CKM wedges. Primary fixed-point LP plots show Monte Carlo median
+responses with empirical 95% bands from B=10000 repeated samples of length
+T=400; GIRF plots show cross-pair mean with 5-95% bands across N=1,000 pairs.
 
 Co-Authored-By: Claude Opus 4.7 <noreply@anthropic.com>"
 ```
@@ -1752,7 +1797,8 @@ the §7 representative-agent LWZ+CGK hybrid.
 | τ_x | <value> [<lo>, <hi>] | <value> [<lo>, <hi>] |
 
 Figures:
-- `.../output/bca_lp_fin.png`, `.../output/bca_lp_macro.png`
+- `.../output/bca_lp_fin.png`, `.../output/bca_lp_macro.png` (main LP figures; likelihood)
+- `.../output/bca_lp_fin_fixed.png`, `.../output/bca_lp_macro_fixed.png`
 - `.../output/bca_girf_fin.png`, `.../output/bca_girf_macro.png`
 
 ## Three questions for scholars
