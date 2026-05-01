@@ -1,0 +1,51 @@
+% Year 3 Section 2: Methods, procedures, and implementation schedule
+%
+% (1) Research principles, methods, and the innovation of research methods
+%   (1.1) Empirical Validation via Business Cycle Accounting 
+%   (1.2) Targeted Wedge-Level IRF Matching
+%
+% (2) Anticipated problems and means of resolution
+%   (2.1) MCMC Uncertainty Propagation and Generated Regressor Bias
+%   (2.2) Works planned for the third year
+
+\noindent\textbf{(1) Research principles, methods, and the innovation of research methods}
+
+\bigskip
+
+\noindent\textbf{(1.1) Empirical Validation via Business Cycle Accounting}
+
+\medskip
+
+The third year of the project is dedicated to empirical validation, comparing the theoretical wedge signatures derived in Year~2 against Taiwan's actual macroeconomic data. We construct a first-order Business Cycle Accounting (BCA) prototype for a small open economy using Taiwan's aggregate data (e.g., consumption, investment, labor hours, and output). Using standard BCA techniques, we extract the historical time series of the four fundamental empirical wedges: the efficiency wedge, the labor wedge, the investment wedge, and the government/net-export wedge. This procedure strips away general equilibrium dynamics, condensing all complex macroeconomic movements into these four distinct ``accounting'' components.
+
+\bigskip
+
+\noindent\textbf{(1.2) Targeted Wedge-Level IRF Matching}
+
+\medskip
+
+To determine which structural mechanism dominates in Taiwan, we project the empirical uncertainty factors---specifically, the macroeconomic uncertainty ($h_{m,t}$) and financial uncertainty ($h_{f,t}$) extracted from the SVMVAR in Year~1---onto the empirical wedges extracted in the first step of Year~3. We execute this using local projections (LP) to compute the empirical impulse responses of the individual wedges to uncertainty shocks at horizon $h=0$ and subsequent periods.
+
+This transforms the standard practice of matching variable-level IRFs into a rigorous \textbf{targeted wedge-level IRF matching} exercise. Instead of comparing the ambiguous overall decline in investment, we compare the specific response of the investment wedge and the labor wedge. For example, if the empirical local projection reveals that financial uncertainty ($h_{f,t}$) significantly raises the investment wedge on impact ($\hat\tau_{x,0} > 0$), we statistically accept Hypothesis~0 (the collateral/risk premium channel). Conversely, if the shock predominantly deteriorates the labor wedge ($\hat\Lambda_{\ell,0} < 0$), we accept Hypothesis~1 (the working capital channel). 
+
+\bigskip
+
+\noindent\textbf{(2) Anticipated problems and means of resolution}
+
+\bigskip
+
+\noindent\textbf{(2.1) MCMC Uncertainty Propagation and Generated Regressor Bias}
+
+\medskip
+
+A common econometric flaw in ``two-step'' estimation strategies---where unobserved factors extracted in step one are used as regressors in step two---is generated regressor bias, which occurs when the first-stage estimation uncertainty is ignored. 
+
+To resolve this, we implement full \textbf{MCMC Uncertainty Propagation}. In our BCA validation step, we will not rely on a single posterior mean path for the uncertainty factors. Instead, we will pass the entire Markov Chain Monte Carlo (MCMC) posterior distribution (e.g., 10,000 retained draws) of the stochastic volatility paths ($h_{m,t}$, $h_{f,t}$) from the Year~1 OI-SVMVAR into the Year~3 wedge local projections. The final confidence intervals for the wedge IRFs will be computed by integrating over the first-stage posterior distribution. This rigorous econometric design ensures that our conclusions regarding the dominant transmission channel are not artifacts of point-estimate approximations, but are robust to the full estimation uncertainty of the underlying shocks.
+
+\bigskip
+
+\noindent\textbf{(2.2) Works planned for the third year}
+
+\medskip
+
+The final year of the project proceeds in three phases. In the first phase, we estimate the baseline BCA prototype for Taiwan and successfully extract the full history of the empirical wedges. In the second phase, we execute the MCMC-integrated local projections of the Year~1 SV factors onto the empirical wedges, generating the empirical wedge-level IRFs. In the third phase, we conduct the formal hypothesis testing by comparing the empirical wedge IRFs against the theoretical signatures derived in Year~2 to conclusively identify the dominant transmission channel for external uncertainty to Taiwan. Finally, based on the verified structural mechanism, we will formulate targeted policy recommendations for the Central Bank of Taiwan (e.g., credit market stabilization versus broad demand stimulus) and finalize the manuscript for journal submission.

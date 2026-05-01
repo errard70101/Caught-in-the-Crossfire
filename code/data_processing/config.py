@@ -36,7 +36,7 @@ FRED_SERIES = {
     "tw_twdusd": "DEXTAUS",
 }
 
-# China variables — NOT available on FRED with current data.
-# cn_ipi, cn_ppi, cn_m2 require manual download from NBS/CEIC.
-# Placeholder for future automation.
-CHINA_MANUAL_VARS = ["cn_ipi", "cn_ppi", "cn_m2"]
+# China variables are fetched in fetch_china.py from Trading Economics chart
+# data backed by NBS/PBoC sources. Keep this list for any future manual-only
+# China variables, but the current baseline China block is automated.
+CHINA_MANUAL_VARS = []

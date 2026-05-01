@@ -9,7 +9,7 @@ This repository contains academic research materials for a study titled **"Caugh
 *Note: The primary language for research context and discussions is Traditional Chinese (繁體中文), while code, technical documentation, and LaTeX proposals are generally in English.*
 
 ## Directory Overview
-- `code/data_processing/`: **Automated data download pipeline** — 9 Python scripts downloading from FRED, CBC, stat.gov.tw, OECD, BIS, Yahoo Finance, PolicyUncertainty.com. See `docs/variable_planning.md` for full variable-to-script mapping.
+- `code/data_processing/`: **Automated data download pipeline** — Python scripts downloading from FRED, CBC, stat.gov.tw, OECD, BIS, TWSE, PolicyUncertainty.com. See `docs/variable_planning.md` for full variable-to-script mapping.
 - `data/raw/`: Downloaded CSV files organized by category (`taiwan_macro/`, `taiwan_financial/`, `us/`, `china/`, `global/`). Git-ignored; re-download by running scripts.
 - `docs/variable_planning.md`: **Master variable list** — 47 variables, 6 confirmed design decisions, download status tracker.
 - `llm_logs/`: Records AI collaboration sessions, core methodological decisions, and discussions.

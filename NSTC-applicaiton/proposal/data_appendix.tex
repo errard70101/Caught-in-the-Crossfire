@@ -1,0 +1,107 @@
+% Data Appendix: working draft
+% This file is not yet included in main.tex. It is intended as a reproducible
+% data-construction appendix for the OI-SVMVAR empirical dataset.
+
+\section*{Data Appendix: Monthly Dataset Construction}
+
+\noindent This appendix documents the construction of the monthly dataset used for the first-year OI-SVMVAR analysis. The current working dataset is a balanced monthly panel spanning 2003M1--2025M12, with a longer 2001M1--2025M12 robustness window available for variables that do not depend on the TWSE total-return index. Variables are grouped into three model blocks: macroeconomic variables, financial variables, and unclassified variables. The first two blocks anchor the interpretation of Taiwan's domestic macroeconomic and financial uncertainty factors, while the unclassified block contains external shock sources and Taiwan-domestic variables whose transmission channel may vary over time.
+
+\subsection*{A. Source Groups}
+
+\begin{center}
+\small
+\setlength{\tabcolsep}{5pt}
+\renewcommand{\arraystretch}{1.1}
+\begin{longtable}{p{3.2cm} p{5.2cm} p{6.2cm}}
+\hline
+\textbf{Source group} & \textbf{Main variables} & \textbf{Notes} \\
+\hline
+\endfirsthead
+\hline
+\textbf{Source group} & \textbf{Main variables} & \textbf{Notes} \\
+\hline
+\endhead
+\hline
+\endfoot
+DGBAS and stat.gov.tw & Industrial production, manufacturing production, retail and food-service sales, CPI, core CPI, import and export price indices, unemployment, sectoral employment, wages & Downloaded through automated scripts from embedded stat.gov.tw chart data and DGBAS nstatdb API endpoints. \\
+CBC & Overnight interbank rate, discount rate, 10-year government bond yield, M1B, M2, bank loans, consumer loans & Downloaded from the CBC statistics database API. \\
+TWSE & TAIEX total-return returns and volatility, TAIEX price-index level, turnover & TAIEX return and volatility use the TWSE total-return index as the baseline. The price index is retained for log level and robustness checks. \\
+FRED & U.S. Federal Funds Rate, U.S. industrial production, U.S. credit spread, VIX, NTD/USD exchange rate & Downloaded through FRED CSV endpoints. \\
+PolicyUncertainty.com and GPR & U.S. EPU, Global EPU, U.S. trade-policy uncertainty, global geopolitical risk & Downloaded from public CSV or spreadsheet sources and converted to monthly series. \\
+BIS & Taiwan real effective exchange rate & Downloaded through the BIS SDMX API. \\
+China sources & China industrial production, PPI, and M2 & These remain the most difficult data block. Coverage and source choice are still under review. \\
+\end{longtable}
+\end{center}
+
+\subsection*{B. Transformation Rules}
+
+\noindent The transformation protocol follows the goal of producing a stationary monthly panel while preserving economically interpretable units. Real-activity and price-level variables are transformed into year-on-year percentage changes. Interest-rate levels are differenced when they display near-unit-root behavior, while spreads are retained in levels. Equity returns are monthly log returns; realized volatility is computed from daily returns within each month. Log levels are retained only for variables whose level is economically meaningful in the OI-SVMVAR classification exercise, such as the TAIEX price-index level and exchange-rate indices. All transformed variables will be standardized to zero mean and unit variance before estimation.
+
+\begin{center}
+\small
+\setlength{\tabcolsep}{5pt}
+\renewcommand{\arraystretch}{1.1}
+\begin{longtable}{p{4.2cm} p{5.2cm} p{5.8cm}}
+\hline
+\textbf{Variable type} & \textbf{Baseline transformation} & \textbf{Rationale} \\
+\hline
+\endfirsthead
+\hline
+\textbf{Variable type} & \textbf{Baseline transformation} & \textbf{Rationale} \\
+\hline
+\endhead
+\hline
+\endfoot
+Production, sales, employment, wages, money, loans & Year-on-year percentage change & Removes deterministic seasonality and captures business-cycle growth. \\
+Price indices & Year-on-year percentage change & Interpretable as inflation or upstream price pressure. \\
+Interest rates & First difference or level, depending on stationarity & Avoids persistent nonstationarity while preserving spread information. \\
+Spreads & Level & Spreads are already relative prices and are typically mean-reverting. \\
+Equity returns & Monthly log return & Matches asset-pricing convention and avoids price-level nonstationarity. \\
+Realized volatility & Monthly standard deviation of daily log returns & Captures within-month financial-market uncertainty. \\
+Exchange-rate and equity levels & Log level when used as unclassified variables & Allows the model to classify asset-price levels as macroeconomic or financial across regimes. \\
+\end{longtable}
+\end{center}
+
+\subsection*{C. WPI/PPI-Spliced Upstream Price Pressure}
+
+\noindent Taiwan's legacy wholesale price index (WPI) provides a long historical measure of upstream price pressure but is discontinued after 2022M12. The newer producer price index (PPI) begins in 2021M1 and is available through the present. Because the two series overlap during 2021M1--2022M12, we construct an auxiliary spliced upstream price index for robustness analysis. This constructed series is not treated as the official WPI; it is labeled \texttt{tw\_upstream\_prices} to reflect its hybrid nature.
+
+\noindent Let $W_t$ denote the WPI level and $P_t$ denote the PPI level. Over the overlap window $\mathcal{T}_o = \{2021\mathrm{M}1,\ldots,2022\mathrm{M}12\}$, we compute the average level ratio
+\begin{equation}
+\lambda = \frac{1}{|\mathcal{T}_o|}\sum_{t \in \mathcal{T}_o} \frac{W_t}{P_t}.
+\end{equation}
+The spliced upstream price index is then
+\begin{equation}
+U_t =
+\begin{cases}
+W_t, & t \leq 2022\mathrm{M}12,\\
+\lambda P_t, & t \geq 2023\mathrm{M}1.
+\end{cases}
+\end{equation}
+The model-facing transformation is the year-on-year percentage change of $U_t$.
+
+\begin{center}
+\small
+\setlength{\tabcolsep}{6pt}
+\renewcommand{\arraystretch}{1.1}
+\begin{tabular}{l r}
+\hline
+\textbf{Diagnostic} & \textbf{Value} \\
+\hline
+Overlap window & 2021M1--2022M12 \\
+Overlap months & 24 \\
+Mean WPI/PPI level ratio $\lambda$ & 1.040632 \\
+Endpoint WPI/PPI ratio at 2022M12 & 1.041575 \\
+Correlation of WPI and PPI year-on-year changes, 2022 & 0.973 \\
+Correlation of WPI and PPI month-on-month changes, overlap window & 0.972 \\
+Mean absolute gap in year-on-year changes, 2022 & 1.90 percentage points \\
+Mean absolute gap in month-on-month changes, overlap window & 0.30 percentage points \\
+\hline
+\end{tabular}
+\end{center}
+
+\noindent These diagnostics suggest that WPI and PPI move very similarly over the available overlap. The level ratio is also stable: the average ratio over the full overlap is 1.040632, compared with 1.041575 at the final WPI observation in 2022M12. The spliced series is therefore suitable as a robustness proxy for upstream price pressure. It should not, however, be reported as an official WPI continuation, since the statistical concepts and weights of WPI and PPI are not identical.
+
+\subsection*{D. Reproducibility}
+
+\noindent The raw-data pipeline is stored in \path{code/data_processing}. The WPI/PPI spliced series is generated by \path{build_upstream_prices.py}. The script writes two files: \path{data/raw/taiwan_macro/tw_upstream_prices_raw.csv}, containing the spliced index and year-on-year transformation, and \path{data/raw/taiwan_macro/tw_upstream_prices_splice_diagnostics.csv}, containing the overlap diagnostics reported above. The variable-level coverage audit is generated by \path{build_raw_data_inventory.py} and saved as \path{data/raw/raw_data_inventory.csv}.

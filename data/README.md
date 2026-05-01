@@ -14,6 +14,7 @@ data/
 ├── data_dictionary.xlsx         # [將來建立] 變數定義與來源
 │
 ├── raw/                        # 原始資料（不做任何處理）
+│   ├── raw_data_inventory.csv   # planned model variables × raw-data coverage/status
 │   ├── taiwan_macro/           # 台灣總體經濟變數（~19個）
 │   ├── taiwan_financial/       # 台灣金融變數（~10個）
 │   ├── taiwan_policy/          # 台灣政策與信用變數（~8個）

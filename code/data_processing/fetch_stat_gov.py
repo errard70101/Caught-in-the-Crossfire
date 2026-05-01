@@ -26,9 +26,11 @@ MACRO_DIR = os.path.join(RAW_DIR, "taiwan_macro")
 STAT_GOV_SERIES = [
     # Prices (sid=t.2)
     ("t.2", 0, "tw_cpi_index",      "CPI (base year=2021)"),
+    ("t.2", 1, "tw_ppi_index",      "PPI (base year=2021)"),
     ("t.2", 2, "tw_cpi_yoy",        "CPI Change Rate (yoy, %)"),
     ("t.2", 3, "tw_core_cpi_yoy",   "Core CPI Change Rate (yoy, %)"),
     ("t.2", 4, "tw_cpi_sa_mom",     "SA CPI MoM (%)"),
+    ("t.2", 6, "tw_ppi_yoy",        "PPI Change Rate (yoy, %)"),
 
     # Labor (sid=t.3)
     ("t.3", 0, "tw_unemployment",    "Unemployment Rate (%)"),
@@ -45,6 +47,7 @@ STAT_GOV_SERIES = [
     ("t.5", 0, "tw_ipi",            "Industrial Production Index"),
     ("t.5", 2, "tw_mfg_prod",       "Manufacturing Production Index"),
     ("t.5", 4, "tw_retail_growth",   "Retail Trade Growth Rate (yoy, %)"),
+    ("t.5", 5, "tw_food_svc",        "Food and Beverage Services Sales Growth Rate (yoy, %)"),
     ("t.5", 6, "tw_export_orders",   "Value of Export Orders (USD mn)"),
 
     # Trade (sid=t.8, monthly)
@@ -54,6 +57,7 @@ STAT_GOV_SERIES = [
     # Business Cycle (sid=t.11)
     ("t.11", 0, "tw_leading_index",  "Trend-adjusted Leading Index"),
     ("t.11", 1, "tw_coincident_idx", "Trend-adjusted Coincident Index"),
+    ("t.11", 2, "tw_business_cycle", "Business Monitoring Indicator (total score)"),
 ]
 
 

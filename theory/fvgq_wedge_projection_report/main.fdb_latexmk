@@ -1,5 +1,5 @@
 # Fdb version 4
-["pdflatex"] 1777599967.18082 "main.tex" "main.pdf" "main" 1777599967.74747 0
+["pdflatex"] 1777603961.94214 "main.tex" "main.pdf" "main" 1777603962.53648 0
   "/usr/local/texlive/2026/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc" 1136849721 2900 1537cc8184ad1792082cd229ecc269f4 ""
   "/usr/local/texlive/2026/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/local/texlive/2026/texmf-dist/fonts/tfm/jknappen/ec/tcrm1095.tfm" 1136768653 1536 02c06700a42be0f5a28664c7273f82e7 ""
@@ -38,6 +38,7 @@
   "/usr/local/texlive/2026/texmf-dist/fonts/tfm/public/cm/cmsy8.tfm" 1136768653 1120 8b7d695260f3cff42e636090a8002094 ""
   "/usr/local/texlive/2026/texmf-dist/fonts/tfm/public/cm/cmti10.tfm" 1136768653 1480 aa8e34af0eb6a2941b776984cf1dfdc4 ""
   "/usr/local/texlive/2026/texmf-dist/fonts/tfm/public/cm/cmtt10.tfm" 1136768653 768 1321e9409b4137d6fb428ac9dc956269 ""
+  "/usr/local/texlive/2026/texmf-dist/fonts/tfm/public/cm/cmtt8.tfm" 1136768653 768 d7b9a2629a0c353102ad947dc9221d49 ""
   "/usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb" 1248133631 34811 78b52f49e893bcba91bd7581cdc144c0 ""
   "/usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb" 1248133631 32080 340ef9bf63678554ee606688e7b5339d ""
   "/usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmbxti10.pfb" 1248133631 36554 b67dc2cfa451409e100b3fcf5f506509 ""
@@ -126,10 +127,10 @@
   "/usr/local/texlive/2026/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1774666483 5573038 b99aad5e4898a9034e953632f940512b ""
   "/usr/local/texlive/2026/texmf-var/web2c/pdftex/pdflatex.fmt" 1774666471 3636775 e098f286febf4961e32200189b07fb13 ""
   "/usr/local/texlive/2026/texmf.cnf" 1774209515 577 648cd9f92f9c0eac486f4c71c85cfbbe ""
-  "main.aux" 1777599967.67798 3614 9cd0d54e2c9d1d7cf82061030956ec99 "pdflatex"
-  "main.out" 1777599967.6786 5298 8073ae34ce5b10d1f115d23ed82ebb72 "pdflatex"
-  "main.tex" 1777599963.86479 28461 2d7f0779021bd880efc08cc05ccbdfd8 ""
-  "main.toc" 1777599967.67881 2385 733864a40de331207fc0ae87d32a8524 "pdflatex"
+  "main.aux" 1777603962.46857 3896 bf806ca605417878b0c914da64369d62 "pdflatex"
+  "main.out" 1777603962.46914 5745 52d4017dc87cccdfdb25a5526eb02ab6 "pdflatex"
+  "main.tex" 1777603957.53049 33062 2ac03cfc7dcac38fffc5ab3c2eee3873 ""
+  "main.toc" 1777603962.46938 2585 398aa8247a9300950293d2330dc1cfcf "pdflatex"
   (generated)
   "main.aux"
   "main.log"

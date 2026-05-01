@@ -1,0 +1,60 @@
+
+
+% Bibstyle aea.bst version 2009.05.20
+
+\begin{thebibliography}{xx}
+
+\harvarditem[Baker, Bloom \harvardand\ Davis]{Scott~R. Baker, Nicholas Bloom
+  \harvardand\ Steven~J. Davis}{2016}{baker2016measuring}
+{\bf Baker, Scott~R., Nicholas Bloom, and Steven~J. Davis.} 2016. ``{Measuring
+  Economic Policy Uncertainty}.'' {\em Quarterly Journal of Economics},
+  131(4):~1593--1636.
+
+\harvarditem[Bloom]{Nicholas Bloom}{2009}{bloom2009impact}
+{\bf Bloom, Nicholas.} 2009. ``{The Impact of Uncertainty Shocks}.'' {\em
+  Econometrica}, 77(3):~623--685.
+
+\harvarditem[Bloom]{Nicholas Bloom}{2014}{bloom2014fluctuations}
+{\bf Bloom, Nicholas.} 2014. ``{Fluctuations in Uncertainty}.'' {\em Journal of
+  Economic Perspectives}, 28(2):~153--176.
+
+\harvarditem[Carriero, Clark \harvardand\ Marcellino]{Andrea Carriero, Todd~E.
+  Clark \harvardand\ Massimiliano Marcellino}{2018}{carriero2018measuring}
+{\bf Carriero, Andrea, Todd~E. Clark, and Massimiliano Marcellino.} 2018.
+  ``{Measuring Uncertainty and Its Impact on the Economy}.'' {\em Review of
+  Economics and Statistics}, 100(5):~799--815.
+
+\harvarditem[Chari, Kehoe \harvardand\ McGrattan]{V.~V. Chari, Patrick~J. Kehoe
+  \harvardand\ Ellen~R. McGrattan}{2007}{chari2007business}
+{\bf Chari, V.~V., Patrick~J. Kehoe, and Ellen~R. McGrattan.} 2007. ``{Business
+  Cycle Accounting}.'' {\em Econometrica}, 75(3):~781--836.
+
+\harvarditem[Davidson, Hou \harvardand\ Koop]{Sharada~Nia Davidson, Chenghan
+  Hou \harvardand\ Gary Koop}{2025}{davidson2025investigating}
+{\bf Davidson, Sharada~Nia, Chenghan Hou, and Gary Koop.} 2025.
+  ``{Investigating Economic Uncertainty Using Stochastic Volatility in Mean
+  {VAR}s: The Importance of Model Size, Order-Invariance and Classification}.''
+  {\em Journal of Business \& Economic Statistics}.
+
+\harvarditem[Fern{\'a}ndez-Villaverde \harvardand\
+  Guerr{\'o}n-Quintana]{Jes{\'u}s Fern{\'a}ndez-Villaverde \harvardand\
+  Pablo~A. Guerr{\'o}n-Quintana}{2020}{fernandez-villaverde2020uncertainty}
+{\bf Fern{\'a}ndez-Villaverde, Jes{\'u}s, and Pablo~A. Guerr{\'o}n-Quintana.}
+  2020. ``{Uncertainty Shocks and Business Cycle Research}.'' {\em Review of
+  Economic Dynamics}, 37:~S118--S146.
+
+\harvarditem[Fern{\'a}ndez-Villaverde et~al.]{Jes{\'u}s
+  Fern{\'a}ndez-Villaverde, Pablo Guerr{\'o}n-Quintana, Juan~F.
+  Rubio-Ram{\'\i}rez \harvardand\ Mart{\'\i}n
+  Uribe}{2011}{fernandez-villaverde2011risk}
+{\bf Fern{\'a}ndez-Villaverde, Jes{\'u}s, Pablo Guerr{\'o}n-Quintana, Juan~F.
+  Rubio-Ram{\'\i}rez, and Mart{\'\i}n Uribe.} 2011. ``{Risk Matters: The Real
+  Effects of Volatility Shocks}.'' {\em American Economic Review},
+  101(6):~2530--2561.
+
+\harvarditem[Handley \harvardand\ Limao]{Kyle Handley \harvardand\ Nuno
+  Limao}{2022}{handley2022tpu}
+{\bf Handley, Kyle, and Nuno Limao.} 2022. ``{Trade Policy Uncertainty}.'' {\em
+  Annual Review of Economics}, 14:~363--395.
+
+\end{thebibliography}

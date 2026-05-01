@@ -75,7 +75,7 @@ This allows the model to objectively identify:
 │       ├── config.py            # Shared constants (paths, sample period, FRED IDs)
 │       ├── fetch_fred.py        # US macro from FRED (FFR, IPI, credit spread, VIX, TWD/USD)
 │       ├── fetch_csv_sources.py # US EPU, Global EPU, GPR, Trade Policy Uncertainty
-│       ├── fetch_yahoo.py       # TAIEX (returns, vol, level, turnover) via yfinance
+│       ├── fetch_twse_taiex.py  # TAIEX price index, turnover, total-return index via TWSE API
 │       ├── fetch_cbc.py         # CBC Statistics DB API (interest rates, M1B, M2, loans)
 │       ├── fetch_stat_gov.py    # Taiwan macro from eng.stat.gov.tw (19 series)
 │       ├── fetch_bis.py         # Taiwan REER from BIS SDMX API
@@ -83,6 +83,7 @@ This allows the model to objectively identify:
 │       └── fetch_dgbas.py       # DGBAS nstatdb API (WPI, price indices)
 ├── data/
 │   └── raw/                     # Downloaded raw data (git-ignored CSVs)
+│       ├── raw_data_inventory.csv # Planned variables and raw-data coverage/status
 │       ├── taiwan_macro/        # 20 files (CPI, IPI, employment, wages, trade, etc.)
 │       ├── taiwan_financial/    # 8 files (interest rates, monetary, TAIEX, TWD/USD)
 │       ├── us/                  # 5 files (FFR, IPI, credit spread, EPU, TPU)
@@ -189,7 +190,7 @@ The model will reveal whether these external variables transmit shocks to Taiwan
 
 ### Data Sources
 - **Taiwan Macro**: eng.stat.gov.tw (hidden form fields), DGBAS nstatdb API
-- **Taiwan Financial**: CBC Statistics Database (cpx.cbc.gov.tw API), Yahoo Finance
+- **Taiwan Financial**: CBC Statistics Database (cpx.cbc.gov.tw API), TWSE API
 - **US**: Federal Reserve Economic Data (FRED), PolicyUncertainty.com
 - **China**: OECD SDMX API, FRED (partial)
 - **Global**: Baker-Bloom-Davis EPU, Caldara-Iacoviello GPR, VIX (FRED), BIS (REER)
@@ -232,7 +233,7 @@ The model will reveal whether these external variables transmit shocks to Taiwan
 - [x] Variable classification strategy determined (19 macro / 10 financial / 14 unclassified)
 
 ### Phase 2: Data Collection (In Progress)
-- [x] Variable planning: 47 variables, 2001M1–2025M12 (300 months) — see [`docs/variable_planning.md`](docs/variable_planning.md)
+- [x] Variable planning: 47 variables, baseline 2003M1–2025M12 (276 months) with 2001M1–2025M12 price-index robustness — see [`docs/variable_planning.md`](docs/variable_planning.md)
 - [x] Automated download pipeline: 9 Python scripts in `code/data_processing/`
 - [x] 39 raw data files downloaded (covering ~35 of 47 variables)
 - [ ] Remaining: China IPI/PPI/M2, TWSE flows, housing prices, sector employment

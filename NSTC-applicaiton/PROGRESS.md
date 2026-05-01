@@ -1,6 +1,6 @@
 # NSTC Grant Writing Progress Dashboard
 
-**Application**: 115WFA1110048 — 2-year individual project (人文處)
+**Application**: 115WFA1110048 — 3-year individual project (人文處)
 **Title**: Caught in the Crossfire: Time-Varying Transmission of U.S.-China Uncertainty to Taiwan
 **Page limit**: 45 pages (including references, figures, tables)
 **Language**: English
@@ -20,8 +20,10 @@
 | **Sec 1: Background** | `proposal/sec1_background.tex` | ✅ Complete | ~7 | — |
 | **Y1 Sec 2: Methods** | `proposal/y1_sec2_methods.tex` | 🔲 Plan ready | ~10–12 | 14th unclassified var (see Blockers) |
 | Y1 Sec 3: Results | `proposal/y1_sec3_results.tex` | ❌ Not started | ~1 | — |
-| **Y2 Sec 2: Methods** | `proposal/y2_sec2_methods.tex` | ✅ Complete | ~8–10 | — |
+| **Y2 Sec 2: Methods** | `proposal/y2_sec2_methods.tex` | ✅ Complete | ~6–8 | — |
 | Y2 Sec 3: Results | `proposal/y2_sec3_results.tex` | ❌ Not started | ~1 | — |
+| **Y3 Sec 2: Methods** | `proposal/y3_sec2_methods.tex` | ✅ Complete | ~4–5 | — |
+| Y3 Sec 3: Results | `proposal/y3_sec3_results.tex` | ❌ Not started | ~1 | — |
 | Sec 4: Integrated Summary | `proposal/sec4_integrated.tex` | ❌ Not started | ~1–2 | — |
 | References | `proposal/references.bib` | ⚠️ Partial | ~3–4 | Needs full cite list |
 
@@ -85,3 +87,8 @@
 ---
 
 *Last updated: 2026-04-17*
+Empirical BCA Validation via MCMC local projections. Old Y2 Methods archived. |
+
+---
+
+*Last updated: 2026-05-01*
