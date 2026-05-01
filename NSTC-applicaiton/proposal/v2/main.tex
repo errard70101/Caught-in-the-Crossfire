@@ -21,213 +21,286 @@
 
 \subsection{Motivation and Taiwan Context}
 
-This project studies how external uncertainty shocks originating in the United States, China,
-and the global economy are transmitted to Taiwan, which external sources matter most for
-Taiwan's domestic uncertainty, and whether the dominant transmission channel changes over
-time. These questions are especially important because Taiwan is deeply integrated with both
-the U.S. and Chinese economies and lies directly in the path of major policy and geopolitical
-developments between them. When the Federal Reserve tightens monetary policy, when
-U.S.--China trade disputes escalate, or when cross-strait tensions rise, Taiwan often faces
-immediate consequences for trade, investment, capital flows, exchange rates, and financial
-conditions.
+Taiwan provides a particularly important setting for studying external uncertainty
+transmission. It is a small open economy, but not a peripheral one. Taiwan is deeply
+connected to the United States through financial markets, monetary conditions, and
+technology demand, and it is closely linked to China through trade, production networks,
+and cross-strait risk. At the same time, Taiwan occupies a central position in global
+semiconductor supply chains. These features make Taiwan highly exposed to external uncertainty. They also make identification difficult because the same external disturbance can reach Taiwan through
+several channels at once. A U.S. monetary tightening, for example, may affect Taiwan
+through capital flows and exchange rates, but it may also affect Taiwan through export
+demand and firms' production expectations. Similarly, a China slowdown may operate
+through trade and supply-chain linkages in one episode and through financial-market
+sentiment in another.
 
-Major policy shifts and geopolitical realignments rarely move from initial proposal to a
-well-defined policy trajectory overnight. Central banks move in sequences of decisions, trade
-conflicts unfold through rounds of negotiation and retaliation, and cross-strait relations evolve
-over extended periods rather than at a single point in time. As a result, there is often a long
-interval between the anticipation of a policy change and the emergence of a stable policy
-regime. During this interval, firms, households, and investors face heightened uncertainty about
-the future path of policy, demand, and financial conditions, which can affect investment,
-consumption, hiring, and portfolio decisions \citep{bloom2009impact,bloom2014fluctuations}.
-Because these uncertainty shocks often materialize as high-frequency spikes rather than smooth
-quarter-to-quarter transitions, this project uses monthly data to capture the evolving dynamics
-without sacrificing the macroeconomic dimension. Monthly observations are granular enough to
-capture short-lived uncertainty spikes that quarterly data often smooth out, while still allowing
-the analysis to include real-side variables such as industrial production, trade flows, employment,
-and prices.
+External uncertainty rarely affects Taiwan through a single observable margin. When the
+Federal Reserve tightens monetary policy, Taiwan may face pressure through capital flows,
+exchange rates, equity markets, and credit conditions. When China's economy slows or
+U.S.--China trade tensions rise, Taiwan may instead be affected through export demand,
+production linkages, inventory adjustment, and firms' investment expectations. When
+geopolitical risk increases, both channels may operate at the same time. The same external
+shock may therefore look financial in one episode, macroeconomic in another episode, and
+mixed in periods of severe stress.
 
-Existing uncertainty measures, such as global financial volatility indices or country-specific
-policy uncertainty indices, do not distinguish between the channels through which uncertainty
-transmits to the economy. Widely adopted indices such as the VIX or the
-\citet{baker2016measuring} Economic Policy Uncertainty (EPU) index compress the
-multidimensional nature of uncertainty into a single scalar, obscuring whether a given shock
-propagates through real activity or financial markets. For Taiwan, this distinction has direct
-policy content:
-macroeconomic transmission points to trade flows, export demand, and production linkages,
-whereas financial transmission points to capital flows, asset prices, exchange-rate pressure,
-and credit conditions.
+This project asks how external uncertainty shocks from the United States, China, and the
+global economy enter Taiwan. The central question is not only whether uncertainty matters,
+but also where it comes from, through which channel it is transmitted, and which structural
+friction best explains its effects. In particular, the project studies whether external
+uncertainty reaches Taiwan mainly through macroeconomic channels such as trade,
+production, demand, and employment, or through financial channels such as capital flows,
+risk premia, exchange-rate pressure, asset-price volatility, and credit-market stress. It also
+asks whether the dominant channel changes over time.
+
+This question matters because different transmission channels imply different policy
+diagnoses. If external uncertainty mainly operates through real-side demand and production
+linkages, the relevant policy margin concerns export support, industrial adjustment,
+supply-chain resilience, and firms' investment planning. If it operates mainly through
+financial conditions, the relevant margin concerns liquidity provision, exchange-market
+monitoring, credit-market stability, and macroprudential policy. A single uncertainty index
+cannot distinguish these cases. Taiwan therefore requires an empirical framework that can
+measure domestic uncertainty, separate macroeconomic and financial transmission
+channels, and allow the channel of external shocks to vary over time.
+
+Major policy shifts and geopolitical realignments also unfold over time rather than at a
+single date. Central banks act through sequences of decisions, trade conflicts evolve through
+rounds of negotiation and retaliation, and geopolitical tensions build through repeated
+events. During these periods, firms, households, and investors face uncertainty about future
+policy, demand, financing costs, and external market access. This uncertainty can delay
+investment, hiring, consumption, and portfolio adjustment
+\citep{bloom2009impact,bloom2014fluctuations,handley2022tpu}. Because these episodes
+often appear as sharp monthly movements rather than smooth quarterly trends, this project
+uses monthly data to capture short-lived uncertainty spikes while retaining real-side
+information on production, trade, labor markets, and prices.
+
+The main empirical challenge is that widely used uncertainty indicators do not reveal the
+channel through which uncertainty is transmitted. Measures such as the VIX or the
+\citet{baker2016measuring} Economic Policy Uncertainty index summarize broad movements
+in risk or policy-related uncertainty, but they do not show whether a given external
+disturbance reaches Taiwan through trade and production or through financial markets and
+credit conditions. This project addresses that limitation by estimating Taiwan's
+macroeconomic and financial uncertainty factors jointly and by using time-varying
+classification probabilities to identify whether external drivers are more closely associated
+with Taiwan's macroeconomic or financial uncertainty in each episode.
+
+\textcolor{blue}{This project asks a sharp question: when external uncertainty shocks from the
+United States, China, and the global economy hit Taiwan, do they transmit primarily through
+macroeconomic channels or through financial channels, and does that transmission mechanism
+change over time? The question is economically important because Taiwan is a small open
+economy that is deeply integrated with both the U.S. and Chinese economies and repeatedly
+exposed to global policy, trade, and geopolitical disturbances. When the Federal Reserve tightens
+monetary policy, when U.S.--China trade tensions escalate, or when cross-strait risk rises,
+Taiwan can face simultaneous pressure on exports, investment, capital flows, exchange rates, and
+domestic financial conditions.}
+
+\textcolor{blue}{Major policy shifts and geopolitical realignments rarely move from announcement
+to a stable regime in a single step. Central banks act through sequences of decisions, trade
+conflicts unfold through rounds of negotiation and retaliation, and geopolitical tensions evolve
+over extended periods rather than at a single point in time. During these intervals, firms,
+households, and investors face heightened uncertainty about the future path of policy, demand,
+and financing conditions, which can delay investment, hiring, consumption, and portfolio
+adjustment \citep{bloom2009impact,bloom2014fluctuations,handley2022tpu}. Because these
+uncertainty episodes often arrive as sharp monthly spikes rather than smooth quarterly
+movements, this project uses monthly data so that it can capture high-frequency changes in
+uncertainty while still retaining real-side macroeconomic information such as industrial
+production, trade, labor-market outcomes, and prices.}
+
+\textcolor{blue}{The central difficulty is that existing uncertainty measures usually do not reveal
+the \emph{channel} through which uncertainty is transmitted. Widely used indicators such as the
+VIX or the \citet{baker2016measuring} Economic Policy Uncertainty index compress multiple
+dimensions of uncertainty into a single scalar and therefore cannot show whether a given
+external disturbance primarily propagates through trade, production, and demand, or through
+asset prices, capital flows, exchange-rate pressure, and credit conditions. For Taiwan, this
+distinction is not cosmetic. A macroeconomic transmission channel points toward export demand,
+production linkages, and real-side adjustment, whereas a financial transmission channel points
+toward liquidity, risk premia, market volatility, and credit-market stress.}
 
 \subsection{Research Questions}
 
-The project is organized around three main research questions.
+\textcolor{blue}{The project is organized around three tightly connected research questions.}
 
 \begin{enumerate}
-    \item Which external uncertainty sources---U.S., Chinese, or global---contribute most to
-    Taiwan's domestic macroeconomic and financial uncertainty?
+    \item \textcolor{blue}{Which external uncertainty sources---U.S., Chinese, or global---contribute
+    most to Taiwan's domestic macroeconomic and financial uncertainty?}
 
-    \item Do these external shocks transmit to Taiwan mainly through macroeconomic channels
-    or through financial channels?
+    \item \textcolor{blue}{Do these external shocks transmit to Taiwan mainly through
+    macroeconomic channels or through financial channels?}
 
-    \item Can the time-varying empirical transmission channels be linked to structural economic
-    mechanisms, such as collateral constraints, risk-premium channels, or working-capital
-    frictions?
+    \item \textcolor{blue}{Can the time-varying empirical transmission channels be linked to
+    structural economic mechanisms, such as collateral constraints, risk-premium channels, or
+    working-capital frictions?}
 \end{enumerate}
 
-The first question concerns the source of uncertainty. Taiwan is simultaneously exposed to the
-United States, China, and global financial and geopolitical conditions. It is therefore not enough
-to estimate the effect of a single external index. The empirical model must allow different external
-drivers to contribute differently over time.
+\textcolor{blue}{The first question concerns the source of uncertainty. Taiwan is simultaneously
+exposed to U.S. monetary and financial conditions, Chinese real-side developments, and broader
+global financial and geopolitical risks. It is therefore not enough to study a single proxy index.
+The empirical framework must allow multiple external drivers to compete within the same model
+and to contribute differently over time.}
 
-The second question concerns the channel of transmission. An increase in uncertainty associated
-with U.S. monetary policy, for example, may affect Taiwan through weaker export demand and
-production expectations, or through exchange-rate depreciation, financial volatility, and tighter
-credit conditions. These channels are conceptually distinct and have different policy implications.
+\textcolor{blue}{The second question concerns the transmission channel. The same external shock
+may reach Taiwan through weaker export demand and production expectations, or through tighter
+financial conditions, exchange-rate movements, and market volatility. Distinguishing these
+channels is essential because they imply different diagnostics and different policy responses.}
 
-The third question links empirical measurement to structural interpretation. A reduced-form
-model can identify when external uncertainty affects Taiwan and whether the effect is associated
-with macroeconomic or financial conditions. However, it does not by itself reveal the underlying
-friction. To address this limitation, the project develops a wedge-based framework that maps
-uncertainty shocks into Business Cycle Accounting (BCA) wedges. This framework allows the
-project to test whether the data are more consistent with an intertemporal collateral or
-risk-premium mechanism, or with a static working-capital mechanism.
+\textcolor{blue}{The third question links reduced-form measurement to structural interpretation. A
+large empirical model can identify when external uncertainty affects Taiwan and whether the
+response is associated with macroeconomic or financial conditions, but it cannot by itself reveal
+which structural friction is operative. To address that limitation, the project develops a
+wedge-based framework that maps uncertainty shocks into Business Cycle Accounting (BCA)
+wedges and uses those wedges to distinguish intertemporal collateral or risk-premium mechanisms
+from static working-capital mechanisms.}
 
 \subsection{Empirical and Methodological Challenges}
 
-Identifying the transmission of external uncertainty to Taiwan is difficult for four reasons.
+\textcolor{blue}{Identifying the transmission of external uncertainty to Taiwan is difficult for four
+reasons.}
 
-First, external and domestic sources of uncertainty are tightly intertwined, creating a severe
-challenge for identification. A single geopolitical or policy event may simultaneously trigger
-global financial volatility, shift Taiwan's domestic political environment, and alter expectations
-about trade and production. In a small-scale model that lacks sufficient domestic controls, these
-domestic movements may be erroneously attributed solely to the external shock. This
-omitted-variable bias can lead to a misdiagnosis of the true drivers of uncertainty, overstating
-the direct influence of external factors while neglecting local transmission mechanisms
-\citep{carriero2018measuring}. Addressing this issue requires a rich information set of both
-domestic and external variables.
+\textcolor{blue}{First, external and domestic sources of uncertainty are tightly intertwined. A
+single geopolitical or policy event may simultaneously alter global risk sentiment, Taiwan's
+domestic political outlook, and expectations about trade, production, and finance. In a small
+model with limited domestic controls, these domestic movements may be misattributed to
+external shocks, creating severe omitted-variable bias \citep{carriero2018measuring}. Addressing
+this problem requires a rich information set that includes both domestic anchors and external
+drivers.}
 
-Second, while a large-scale model is necessary to address this bias, it introduces identification
-trade-offs. In large systems, standard Cholesky-based identification becomes problematic because
-results are sensitive to variable ordering. Addressing this issue requires an order-invariant
-framework. However, order invariance is difficult to reconcile with the strict block-exogeneity
-restrictions commonly used in small open economy models. Consequently, the empirical
-framework should avoid both arbitrary recursive orderings and rigid zero restrictions that
-predetermine how external and domestic variables interact.
+\textcolor{blue}{Second, the large model needed to reduce omitted-variable bias creates its own
+identification problem. In high-dimensional VAR systems, standard Cholesky identification
+becomes fragile because results depend on arbitrary variable ordering. At the same time, the
+strict block-exogeneity restrictions often imposed in small open economy models are too rigid
+for the present question, because they predetermine how external and domestic variables can
+interact. A credible framework must therefore avoid both arbitrary recursive orderings and
+pre-imposed zero restrictions.}
 
-Third, many existing approaches face two related limitations. One is their reliance on proxy
-measures of uncertainty; the other is their use of a two-step procedure that first estimates
-uncertainty and then evaluates its macroeconomic effects in a separate model. Widely used
-text-based indices built from international news may not reflect domestic conditions and can
-create a perception gap between external coverage and uncertainty as experienced by local
-households, firms, and investors. The two-step design also treats the estimated uncertainty
-series as observed data, ignores estimation uncertainty, and can induce measurement-error
-bias and model inconsistency \citep{carriero2018measuring}. A coherent framework should
-therefore estimate uncertainty and its economic effects jointly.
+\textcolor{blue}{Third, many existing approaches rely either on proxy indicators of uncertainty or
+on a two-step design that first estimates uncertainty and then studies its macroeconomic effects
+in a separate model. Text-based indices constructed from international news may not capture how
+uncertainty is experienced inside Taiwan. The two-step procedure also treats estimated
+uncertainty as observed data, ignores estimation uncertainty, and can induce measurement-error
+bias and model inconsistency \citep{carriero2018measuring}. A coherent design should estimate
+uncertainty and its effects jointly.}
+
+\textcolor{blue}{Fourth, even when reduced-form evidence identifies a strong uncertainty response,
+it does not by itself reveal the underlying mechanism. A financial-channel response may reflect
+collateral risk, time-varying risk premia, working-capital finance, or several frictions at once.
+The project therefore needs a second layer that connects empirical transmission channels to
+structural interpretation rather than stopping at reduced-form impulse responses alone.}
 
 
 \subsection{Relation to the Literature}
 
-This project is related to three strands of literature. The first studies the macroeconomic effects
-of uncertainty shocks. This literature shows that uncertainty can depress investment, hiring, and
-economic activity by increasing the option value of waiting and by strengthening precautionary
-motives \citep{bloom2009impact,bloom2014fluctuations}. A related strand studies policy
-uncertainty and trade policy uncertainty, emphasizing that uncertainty about future policy can
-affect firms' investment, export participation, and production decisions even before policy changes
-are fully implemented \citep{baker2016measuring,handley2022tpu}.
+\textcolor{blue}{This project contributes to three strands of literature. The first studies the
+macroeconomic effects of uncertainty shocks. This literature shows that uncertainty can depress
+investment, hiring, and economic activity by increasing the option value of waiting and by
+strengthening precautionary motives \citep{bloom2009impact,bloom2014fluctuations}. A
+related branch studies policy and trade-policy uncertainty, emphasizing that uncertainty about
+future policy can alter firms' investment, export, and production decisions before policy changes
+are fully implemented \citep{baker2016measuring,handley2022tpu}.}
 
-The second strand develops empirical methods for measuring uncertainty in macroeconomic
-models. Existing work shows that large information sets are important because small models can
-confound uncertainty shocks with omitted domestic and external conditions
-\citep{carriero2018measuring}. The OI-SVMVAR framework of
-\citet{davidson2025investigating} is especially relevant because it jointly estimates uncertainty
-and its macroeconomic effects, allows uncertainty to enter the conditional mean, and avoids
-ordering dependence in large VAR systems.
+\textcolor{blue}{The second strand develops empirical methods for measuring uncertainty in
+macroeconomic systems. Existing work emphasizes that small models can confound uncertainty
+shocks with omitted domestic and external conditions, and that two-step procedures can create
+measurement-error and model-consistency problems \citep{carriero2018measuring}. The
+OI-SVMVAR framework of \citet{davidson2025investigating} is especially relevant because it
+jointly estimates uncertainty and its macroeconomic effects, accommodates large information
+sets, and avoids ordering dependence in large VAR systems.}
 
-The third strand is the Business Cycle Accounting literature. BCA decomposes observed aggregate
-fluctuations into wedges that summarize distortions in prototype equilibrium conditions
-\citep{chari2007business}. This
-project uses BCA not as a complete structural model, but as a diagnostic device. The
-small-open-economy setting is important because Taiwan's external absorption, imported inputs, and
-exchange-rate movements may appear in efficiency and external wedges rather than only in the
-standard investment and labor wedges. By deriving how uncertainty-related risk corrections
-project into BCA wedges, the project links reduced-form uncertainty measurement to structural
-mechanism testing.
+\textcolor{blue}{The third strand is the Business Cycle Accounting literature. BCA decomposes
+observed aggregate fluctuations into wedges that summarize distortions in prototype equilibrium
+conditions \citep{chari2007business}. This project uses BCA not as a complete structural model
+but as a diagnostic device. In a small open economy, external absorption, imported-input
+dependence, and exchange-rate movements may appear in efficiency and external wedges rather
+than only in the standard investment and labor wedges. By deriving how uncertainty-related risk
+corrections project into BCA wedges, the project links reduced-form uncertainty measurement to
+structural mechanism testing.}
 
-Relative to these literatures, the project makes two advances. First, it studies Taiwan as a small
-open economy exposed simultaneously to U.S., Chinese, and global uncertainty sources. Second,
-it combines time-varying empirical channel classification with wedge-level structural validation.
-This combination allows the project to ask not only whether uncertainty matters, but also where
-it comes from, how it enters the economy, and which friction best explains its effects.
+\textcolor{blue}{Relative to these literatures, the project makes four advances. First, it reframes
+the OI-SVMVAR classification problem from ``which domestic variables are macro or financial''
+to ``through which channel do external shocks enter a small open economy?'' The key empirical
+innovation is to place external drivers in the unclassified block and let the data determine whether
+they co-move with Taiwan's macroeconomic or financial uncertainty. Second, it builds a unified
+monthly dataset covering Taiwan domestic anchors together with U.S., Chinese, and global
+uncertainty drivers, allowing competing external sources to be compared within one empirical
+framework. Third, it combines order-invariant large-scale uncertainty measurement with an
+\textit{MCMC-integrated} validation strategy that propagates first-stage estimation uncertainty
+into the final empirical mechanism test. Fourth, it connects empirical transmission-channel
+classification to a wedge-based structural interpretation, allowing the project to ask not only
+whether uncertainty matters, but also where it comes from, how it enters Taiwan, and which
+friction best explains its effects.}
 
 \subsection{Research Design and Main Contributions}
 
-To address these challenges, the first year of the project applies the order-invariant stochastic
+\textcolor{blue}{To address these challenges, the project uses the order-invariant stochastic
 volatility in mean vector autoregression (OI-SVMVAR) framework of
-\citet{davidson2025investigating} to Taiwan. The model jointly estimates Taiwan's domestic
-macroeconomic uncertainty and financial uncertainty as latent common volatility factors. It also
-allows uncertainty to enter the conditional mean of the vector autoregression, so uncertainty can
-directly affect macroeconomic and financial outcomes rather than only changing their variances.
+\citet{davidson2025investigating}. The model jointly estimates Taiwan's domestic
+macroeconomic uncertainty and financial uncertainty as latent common volatility factors and
+allows those uncertainty factors to enter the conditional mean of the VAR, so uncertainty can
+directly affect macroeconomic and financial outcomes rather than merely changing their
+variances.}
 
-The key adaptation to Taiwan is to treat \textbf{external drivers as unclassified variables}. Taiwan's
-clearly real-side variables anchor the domestic macroeconomic uncertainty factor, while Taiwan's
-clearly financial variables anchor the domestic financial uncertainty factor. External drivers,
-including U.S. monetary policy, Chinese activity, global financial risk, geopolitical risk, and
-trade-policy uncertainty, are then classified by their time-varying co-movement with Taiwan's
-macroeconomic and financial common factors. The resulting posterior classification probabilities
-provide a time-varying indicator of the operative transmission channel without requiring the
-researcher to impose it ex ante.
+\textcolor{blue}{The key adaptation is to treat \textbf{external drivers as unclassified variables}.
+Taiwan's clearly real-side variables anchor the domestic macroeconomic uncertainty factor, while
+Taiwan's clearly financial variables anchor the domestic financial uncertainty factor. External
+drivers---including U.S. monetary variables, Chinese real-side indicators, global financial risk,
+geopolitical risk, and trade-policy uncertainty---are then classified by their time-varying
+co-movement with Taiwan's macroeconomic and financial common factors. The resulting
+posterior classification probabilities provide a data-driven, time-varying measure of the operative
+transmission channel without requiring the researcher to impose it ex ante.}
 
-This research design differs from a standard country-level application of an existing model. The
-unclassified-variable mechanism is used here not only to classify ambiguous domestic variables,
-but also to identify how external shocks enter a small open economy. This is the first contribution
-of the project.
+\textcolor{blue}{This design yields one project-level contribution and three year-specific
+contributions. The project-level contribution is methodological: it shows how the OI-SVMVAR
+unclassified-variable mechanism can be repurposed from classifying ambiguous domestic
+variables to identifying the channel through which external shocks enter a small open economy.}
 
-The second contribution is substantive. The project constructs a monthly Taiwan external
-uncertainty dataset covering domestic macroeconomic variables, domestic financial variables,
-U.S. indicators, Chinese indicators, global financial and geopolitical risk indicators, and trade-policy
-uncertainty measures. This dataset allows the project to compare the relative importance of U.S.,
-Chinese, and global uncertainty sources within a single empirical framework.
+\textcolor{blue}{The \textbf{first-year main contribution} is empirical identification. The project
+constructs a monthly Taiwan external-uncertainty dataset that combines domestic macroeconomic
+anchors, domestic financial anchors, and external drivers from the United States, China, and the
+global economy. Using this dataset, the first year identifies Taiwan-specific macroeconomic and
+financial uncertainty factors and estimates time-varying classification probabilities that reveal
+whether external shocks enter mainly through macroeconomic or financial channels.}
 
-The third contribution is methodological. The project uses an order-invariant identification
-strategy to avoid arbitrary Cholesky ordering in a large model. This feature is important because
-the project studies multiple external and domestic variables whose contemporaneous relationships
-are difficult to order on purely theoretical grounds.
+\textcolor{blue}{The \textbf{second-year main contribution} is theoretical mapping. The project
+develops a wedge-projection framework that links uncertainty-related risk corrections in a
+nonlinear structural model to BCA wedges. This framework converts transmission-channel
+evidence into testable structural predictions: collateral or risk-premium mechanisms should load
+primarily on the investment wedge, whereas working-capital mechanisms should load primarily on
+the after-tax labor wedge.}
 
-The fourth contribution is structural. The project develops a wedge-projection framework that
-links empirical uncertainty factors to BCA wedges. This framework allows the project to move
-beyond reduced-form impulse responses and ask which structural friction is most consistent with
-the data. In particular, the project compares two competing mechanisms. A collateral or
-risk-premium channel should mainly appear in the investment wedge. A working-capital channel
-should mainly appear in the after-tax labor wedge. This wedge-based comparison provides a
-testable bridge between the empirical OI-SVMVAR evidence and micro-founded economic
-mechanisms.
+\textcolor{blue}{The \textbf{third-year main contribution} is empirical validation. The project
+constructs Taiwan BCA wedges and introduces an \textit{MCMC-integrated} mechanism test that
+passes the full posterior distribution of the first-year uncertainty factors into the wedge-level local
+projections. This design propagates first-stage estimation uncertainty into the final validation
+exercise and mitigates the generated-regressor bias typical of two-step uncertainty analyses.}
 
 \subsection{Overview of the Three-Year Project}
 
-The three years of the project are designed as one integrated research program.
+\textcolor{blue}{The three years of the project are designed as one integrated research program in
+which each year answers a different layer of the same question.}
 
-The first year focuses on empirical identification. I construct a monthly dataset for Taiwan and
-external drivers, estimate the OI-SVMVAR model, extract Taiwan's macroeconomic and financial
-uncertainty factors, and compute time-varying classification probabilities for external variables.
-The main outputs are Taiwan-specific uncertainty factors, posterior classification probabilities,
-impulse responses (IRFs), and forecast error variance decompositions (FEVDs).
+\textcolor{blue}{The first year asks \emph{through which channel do external shocks reach Taiwan?}
+It constructs the monthly dataset, estimates the OI-SVMVAR model, extracts Taiwan's
+macroeconomic and financial uncertainty factors, and computes time-varying classification
+probabilities for external variables. Its main outputs are Taiwan-specific uncertainty factors,
+posterior classification probabilities, impulse responses (IRFs), and forecast error variance
+decompositions (FEVDs).}
 
-The second year focuses on theoretical mapping. I develop a wedge-projection framework that
-shows how second-moment uncertainty corrections in a nonlinear structural model can appear as
-first-order wedges in a BCA prototype. This theoretical component derives wedge signatures for
-competing mechanisms. In particular, it distinguishes an intertemporal collateral or risk-premium
-channel from a static working-capital channel.
+\textcolor{blue}{The second year asks \emph{which structural mechanism is consistent with those
+channels?} It develops the wedge-projection framework showing how second-moment uncertainty
+corrections in a nonlinear structural model can appear as first-order wedges in a BCA prototype.
+Its main output is a set of wedge signatures that distinguish an intertemporal collateral or
+risk-premium channel from a static working-capital channel, while also clarifying the role of
+efficiency and external wedges in a small open economy.}
 
-The third year focuses on empirical validation. I construct BCA wedges for Taiwan and estimate
-the responses of these wedges to the uncertainty factors extracted in the first year. The estimation
-passes the posterior uncertainty from the first-year OI-SVMVAR into the third-year local
-projections, rather than using only a single posterior mean path. This design reduces the risk that
-the final mechanism comparison is driven by generated-regressor bias.
+\textcolor{blue}{The third year asks \emph{does Taiwan's data validate those structural signatures?}
+It constructs BCA wedges for Taiwan and estimates their responses to the uncertainty factors
+extracted in the first year. By passing posterior uncertainty from the first-year OI-SVMVAR into
+the third-year local projections, the final mechanism comparison remains consistent with the
+Bayesian structure of the first-stage model instead of relying on a single posterior mean path.}
 
-Taken together, the project provides a unified account of external uncertainty transmission to
-Taiwan. The first year identifies when and through which channel external uncertainty enters the
-domestic economy. The second year derives structural wedge signatures for competing mechanisms.
-The third year tests these signatures in Taiwan's data and translates the results into policy-relevant
-evidence.
+\textcolor{blue}{Taken together, the project provides a unified account of external uncertainty
+transmission to Taiwan. The first year identifies where the shocks come from and through which
+channel they enter. The second year derives structural predictions for competing mechanisms.
+The third year tests those predictions in Taiwan's data and turns the result into policy-relevant
+evidence on whether the dominant friction is mainly macroeconomic, financial, or wedge-specific
+to a small open economy.}
 
 \section{Preliminary Progress and Feasibility}
 
@@ -256,8 +329,7 @@ but construction of the final estimation matrix: harmonizing dates, applying tra
 materializing derived variables such as the term spread and exchange-rate volatility, documenting
 short endpoint gaps, and producing the balanced panel used in the Bayesian estimation.
 
-The most important preliminary progress is on the second-year theoretical component. I have
-already developed a standalone wedge-projection report that turns the informal idea that
+The most important preliminary progress is on the second-year theoretical component. To ensure the feasibility of the second-year theoretical component, I have developed a preliminary proof-of-concept for the wedge projection mechanism that turns the informal idea that
 ``uncertainty appears as a BCA wedge'' into a formal theoretical framework. Because
 intertemporal financial frictions primarily distort the household Euler equation, their natural
 BCA counterpart is the investment wedge. The central result is a projection equation for the BCA
@@ -286,9 +358,9 @@ labor-demand condition because firms must finance part of their wage bill before
 This mechanism projects mainly into the after-tax labor wedge. These two mechanisms therefore
 generate different empirical predictions.
 
-The preliminary work further extends the projection argument to third order. This extension is
+Building on this baseline, a major task for the second year is to extend the projection argument to third order. This extension is highly nontrivial but
 important because uncertainty shocks enter higher-order perturbation solutions through
-volatility innovations and state-dependent terms. The third-order extension introduces
+volatility innovations and state-dependent terms. The third-order generalization introduces
 vol-of-vol effects, level-volatility interaction terms, and asymmetric responses to positive and
 negative uncertainty innovations. These objects provide additional empirical handles for
 distinguishing structural mechanisms.
@@ -327,10 +399,12 @@ the numerical validation, and adapt the theoretical presentation to the Taiwan a
 
 Fourth, the third-year empirical validation uses outputs from the first two years rather than
 requiring a separate data project. Once the first-year OI-SVMVAR produces posterior draws of
-the uncertainty factors and the second-year theory produces wedge signatures, the third-year task
-is to construct Taiwan's BCA wedges and estimate wedge-level local projections. The design also
-passes first-year posterior uncertainty into the third-year local projections, which reduces the
-risk of generated-regressor bias.
+the uncertainty factors and the second-year theory produces wedge signatures, the third-year
+task is to construct Taiwan's BCA wedges, compute MCMC-integrated GIRF profiles, and compare
+them against theoretically simulated wedge paths using a quantitative RMSE criterion. The
+design propagates first-year posterior uncertainty directly into the GIRF calculations, which
+eliminates the generated-regressor bias that would arise from treating the latent factors as
+observed.
 
 Overall, the project has a clear fallback structure. If the full 52-variable OI-SVMVAR is slow to
 converge, I will first estimate a reduced benchmark model using the core Taiwan anchors and the
@@ -587,9 +661,7 @@ developed for the OI-SVMVAR framework. The estimation jointly samples the VAR co
 matrix, the common log-volatility factors, idiosyncratic volatility components, and the Markov
 classification paths for unclassified variables. I will use the implementation details of
 \citet{davidson2025investigating} as the baseline and adapt the code to the Taiwan dataset.
-Because the baseline system contains 52 variables, the estimation will rely on the shrinkage-prior
-structure of the OI-SVMVAR framework to regularize the high-dimensional VAR coefficients and
-limit overfitting while preserving the large information set needed to reduce omitted-variable
+Because the baseline system contains 52 variables, the estimation will rely on strong Bayesian shrinkage priors (such as Minnesota-type or Horseshoe priors adapted for SV models) to regularize the high-dimensional VAR coefficients, aggressively compress the parameter space, and limit overfitting while preserving the large information set needed to reduce omitted-variable
 bias.
 For the unclassified variables, the latent macro-financial classification indicators will be treated
 as finite-state Markov paths and sampled with a forward-filtering/backward-sampling step, so that
@@ -941,30 +1013,33 @@ ensure that the mechanism comparison is not driven by omitted accounting compone
 
 \subsection{Linking Uncertainty Factors to Wedge Signatures}
 
-The core third-year exercise estimates how Taiwan's BCA wedges respond to the uncertainty
-factors extracted in the first year. Let $w_t$ denote an empirical BCA wedge and let
-$h_{m,t}$ and $h_{f,t}$ denote Taiwan's macroeconomic and financial uncertainty factors from
-the OI-SVMVAR. The baseline local projection takes the form
+The core third-year exercise constructs an empirical wedge IRF profile from the first-year
+OI-SVMVAR posterior draws and compares it against theoretically simulated wedge paths from
+competing structural models. The two-step BCA accounting procedure is applied identically on
+the empirical and theoretical sides, ensuring that the RMSE comparison is not contaminated by
+differences in the measurement protocol.
+
+\paragraph{Empirical wedge IRF construction.}
+Let $\varepsilon_{m,t}$ and $\varepsilon_{f,t}$ denote the macroeconomic and financial
+uncertainty shocks identified in the first-year OI-SVMVAR. For each posterior draw
+$\theta^{(s)}$, the model's impulse response functions yield draw-specific paths of output
+$\hat{y}_{t+h}^{(s)}$, consumption $\hat{c}_{t+h}^{(s)}$, investment $\hat{x}_{t+h}^{(s)}$,
+and labor $\hat{\ell}_{t+h}^{(s)}$ in response to a shock of size $\delta$. The BCA prototype
+accounting identities are then applied to each draw to recover the corresponding wedge
+responses:
+\begin{align}
+\hat{A}_{h}^{(s)} &= \hat{y}_{h}^{(s)} - \alpha\hat{k}_{h-1}^{(s)} - (1-\alpha)\hat{\ell}_{h}^{(s)}, \label{eq:eff}\\
+\widehat{(1-\tau_{\ell})}_{h}^{(s)} &= (\nu+1)\hat{\ell}_{h}^{(s)} + \gamma\hat{c}_{h}^{(s)} - \hat{y}_{h}^{(s)}, \label{eq:lab}\\
+\widehat{(1+\tau_{x})}_{h}^{(s)} &= \text{backward Euler induction from }\hat{c},\hat{y},\hat{k}, \label{eq:inv}
+\end{align}
+where \eqref{eq:eff}--\eqref{eq:inv} are the standard CKM log-linearized accounting
+conditions. The posterior-averaged empirical wedge IRF profile is
 \[
-w_{t+h}
+\hat{w}_{h}^{\mathrm{emp}}(\delta)
 =
-\alpha_h
-+
-\beta_{m,h} \varepsilon^h_{m,t}
-+
-\beta_{f,h} \varepsilon^h_{f,t}
-+
-\Gamma_h' X_t
-+
-u_{t+h},
-\qquad h=0,1,\ldots,H,
+\frac{1}{S}\sum_{s=1}^{S}\hat{w}_{h}^{(s)}(\delta),
 \]
-where $\varepsilon^h_{m,t}$ and $\varepsilon^h_{f,t}$ are macroeconomic and financial
-uncertainty shocks extracted from the first-year model, and $X_t$ contains controls such as lagged
-wedges, lagged macroeconomic variables, and external controls, while $u_{t+h}$ is the projection
-residual. The coefficients
-$\beta_{m,h}$ and $\beta_{f,h}$ trace the impulse responses of each wedge to macroeconomic and
-financial uncertainty shocks.
+with credible bands constructed from the 16th and 84th posterior quantiles across draws.
 
 The theoretical predictions from the second year guide the interpretation. If financial uncertainty
 mainly raises the investment wedge, the evidence supports a collateral or risk-premium mechanism.
@@ -993,57 +1068,121 @@ factor is estimated in the first step and then treated as observed in the second
 confidence intervals may be too narrow. This issue is especially relevant here because
 $h_{m,t}$ and $h_{f,t}$ are latent factors estimated from a large Bayesian model.
 
-To address this problem, the third-year analysis will propagate first-year posterior uncertainty
-into the wedge-level local projections. I will not rely only on a single posterior mean path of
-$h_{m,t}$ and $h_{f,t}$. Instead, I will use retained posterior draws from the first-year
-OI-SVMVAR. For each posterior draw, I will compute the associated uncertainty shocks and
-estimate the wedge responses. The final credible intervals will integrate over both the uncertainty
-in the first-year factor estimates and the uncertainty in the third-year local projections.
+To address this problem, the third-year analysis propagates first-year posterior uncertainty
+directly into the empirical wedge IRF construction. Rather than conditioning on a single
+posterior mean draw, I retain the full set of posterior draws
+$\{\theta^{(s)}\}_{s=1}^{S}$ from the first-year OI-SVMVAR and apply the BCA accounting
+identities \eqref{eq:eff}--\eqref{eq:inv} to each draw's IRF path independently. The
+final credible intervals therefore integrate over both the uncertainty in the first-year
+shock identification and the draw-to-draw variation in the resulting wedge responses.
 
-This procedure has two advantages. First, it keeps the empirical validation consistent with the
-Bayesian structure of the first-year model. Second, it makes the mechanism comparison more
+This procedure has two advantages. First, it keeps the empirical validation fully consistent
+with the Bayesian structure of the first-year model, so that the three years of the project
+share a coherent posterior framework. Second, it makes the mechanism comparison more
 conservative. If the data strongly support one mechanism even after posterior uncertainty is
-propagated, the conclusion will be more credible. If the posterior uncertainty makes the evidence
-ambiguous, the project will report the relative strength of evidence rather than forcing a binary
-classification.
+propagated, the conclusion will be more credible. If the posterior uncertainty renders the
+evidence ambiguous, the project will report the relative strength of evidence rather than
+forcing a binary classification.
+
 The procedure is also computationally feasible. The expensive step is the first-year OI-SVMVAR
-estimation. Once posterior draws of the uncertainty factors are retained, the third-year local
-projections are sequential linear regressions, so repeating them across posterior draws is much
-less demanding than re-estimating the high-dimensional Bayesian VAR.
+estimation. Once posterior draws are retained, applying the BCA accounting identities to each
+draw's IRF path involves only closed-form matrix operations and a backward recursion for the
+investment wedge, which is far less demanding than re-estimating the full high-dimensional
+Bayesian VAR.
 
 \subsection{Hypothesis Testing and Policy Interpretation}
 
-The third-year empirical tests are organized around the wedge signatures derived in the second
-year. The main hypotheses are:
+The third-year mechanism comparison is organized as a quantitative model selection exercise.
+Rather than asking whether a regression coefficient has the right sign, the exercise asks which
+structural model best reproduces Taiwan's empirically observed wedge responses. The model
+whose theoretically predicted wedge path most closely matches the GIRF profile estimated from
+the data is selected as the dominant channel. This framing imposes a strict and objective
+standard that is directly traceable to the first-year OI-SVMVAR output.
+
+The procedure follows four steps.
+
+\textbf{Step 1 --- Empirical target.}
+Using the macroeconomic and financial uncertainty shocks $\varepsilon_{m,t}$ and
+$\varepsilon_{f,t}$ identified by the first-year OI-SVMVAR, I extract the posterior IRF paths
+of output, consumption, investment, and labor for each of the $S$ posterior draws. The BCA
+accounting identities \eqref{eq:eff}--\eqref{eq:inv} are applied to each draw to recover the
+corresponding wedge IRF paths. The posterior-averaged empirical wedge profile
+$\hat{w}_{h}^{\mathrm{emp}}(\delta)$, together with its 68\% credible bands, constitutes the
+empirical target.
+
+\textbf{Step 2 --- Theoretical candidates.}
+The second-year theory produces wedge-projection signatures for two competing structural
+mechanisms: the collateral and risk-premium channel
+($\mathcal{M}^{\mathrm{coll}}$, FVGQ-style model) and the working-capital channel
+($\mathcal{M}^{\mathrm{wc}}$). Under each model, I simulate structural dynamics in response
+to an uncertainty shock of size $\delta$.
+
+\textbf{Step 3 --- Simulated wedge extraction.}
+For each structural model candidate, I compute the Generalized Impulse Response Function
+\citep{koop1996impulse} of the BCA wedges via an antithetic-pair simulation design. Starting
+from the model's stochastic steady state (SSS), $N$ matched path pairs of length $H$ are
+generated. Within each pair, a baseline path sets the volatility shock to zero ($\varepsilon_t
+= 0$) while the shocked path sets it to $\varepsilon_t = \delta$; all remaining innovations
+are shared. The BCA accounting identities \eqref{eq:eff}--\eqref{eq:inv} are applied to every
+simulated path to extract the wedge series. The theoretical GIRF is the cross-pair mean
+difference:
 \[
-H_0^{\mathrm{coll}}:
+\hat{w}_{h}^{m}
+=
+\frac{1}{N}\sum_{i=1}^{N}
+\Bigl[w_{h}^{m,\mathrm{shock},i} - w_{h}^{m,\mathrm{base},i}\Bigr],
+\]
+with 5th--95th cross-pair quantile bands providing a measure of simulation uncertainty.
+
+\textbf{Step 4 --- Quantitative matching.}
+The fit of each structural model is evaluated by the root mean squared error between the
+empirical wedge IRF profile and the theoretical wedge GIRF:
+\[
+\mathrm{RMSE}^{m}
+=
+\left(
+\frac{1}{H+1}
+\sum_{h=0}^{H}
+\Bigl[\hat{w}_{h}^{\mathrm{emp}}(\delta)\;-\;\hat{w}_{h}^{m}\Bigr]^{2}
+\right)^{\!1/2}.
+\]
+The dominant mechanism is the model with the smallest RMSE. A correlation-based criterion
+serves as a robustness check.
+
+The formal model-selection hypotheses are:
+\[
+H_{0}^{\mathrm{coll}}:
 \quad
-\text{financial uncertainty mainly raises the investment wedge},
+\mathrm{RMSE}^{\mathrm{coll}} < \mathrm{RMSE}^{\mathrm{wc}}
+\quad\text{for the investment-wedge GIRF path,}
 \]
 and
 \[
-H_1^{\mathrm{wc}}:
+H_{0}^{\mathrm{wc}}:
 \quad
-\text{financial uncertainty mainly lowers the after-tax labor wedge}.
+\mathrm{RMSE}^{\mathrm{wc}} < \mathrm{RMSE}^{\mathrm{coll}}
+\quad\text{for the labor-wedge GIRF path.}
 \]
-The first hypothesis corresponds to an intertemporal collateral or risk-premium mechanism. The
-second corresponds to a working-capital mechanism. The empirical analysis will compare the
-magnitude, sign, timing, and statistical uncertainty of the wedge responses.
+The first hypothesis identifies the collateral or risk-premium mechanism as dominant through
+the intertemporal Euler equation. The second identifies the working-capital mechanism as
+dominant through the intratemporal labor condition. A clear RMSE gap across models constitutes
+strong evidence for a single mechanism; overlapping posterior credible intervals indicate that
+the data support a mixed or time-varying channel.
 
-The policy implications differ across mechanisms. If the collateral or risk-premium channel
-dominates, external uncertainty primarily affects Taiwan by tightening intertemporal financing
-conditions. In that case, policy attention should focus on credit-market stabilization, liquidity
-provision, and financial-market resilience. If the working-capital channel dominates, external
-uncertainty acts more directly through firms' short-term financing costs and labor demand. In
-that case, policies that reduce liquidity pressure on firms and stabilize working-capital finance
-may be more relevant. If real-side wedges dominate, the appropriate response may involve export
-support, industrial adjustment, or supply-chain resilience.
+The policy implications differ sharply across mechanisms. If $H_{0}^{\mathrm{coll}}$ is
+supported, external uncertainty primarily affects Taiwan by tightening intertemporal financing
+conditions, and policy attention should focus on credit-market stabilization, liquidity
+provision, and financial-market resilience. If $H_{0}^{\mathrm{wc}}$ is supported, external
+uncertainty acts more directly through firms' short-term financing costs and labor demand, and
+policies that reduce working-capital pressure on firms become more relevant. If real-side wedges
+achieve the smallest RMSE instead, the appropriate response may involve export support,
+industrial adjustment, or supply-chain resilience.
 
 The empirical goal is not to assign all episodes to a single permanent mechanism. Taiwan's
-transmission channel may change over time. For example, the Global Financial Crisis may display
-a stronger financial-market component, while the U.S.--China trade war may show stronger real
-and external-demand components. The third-year analysis will therefore report both average
-responses and episode-specific evidence when the data allow.
+transmission channel may change over time. The Global Financial Crisis may display a stronger
+collateral-channel component while the U.S.--China trade war may show stronger real and
+external-demand components. The third-year analysis will therefore report both the full-sample
+RMSE comparison and episode-specific wedge IRF evidence when the data allow.
 
 \subsection{Third-Year Work Plan and Anticipated Results}
 
@@ -1063,8 +1202,8 @@ Link Year 1 uncertainty posterior draws to wedge data &
 Matched uncertainty-wedge dataset and posterior shock measures \\
 \addlinespace
 Months 6--9 &
-Estimate MCMC-integrated wedge-level local projections &
-Impulse responses of BCA wedges to uncertainty shocks \\
+Compute MCMC-integrated GIRF paths and theoretical wedge simulations &
+Empirical GIRF profiles and structural-model wedge candidates \\
 \addlinespace
 Months 9--12 &
 Test structural mechanisms and write final manuscript &
@@ -1074,11 +1213,13 @@ Mechanism comparison, policy interpretation, and journal-paper draft \\
 \end{center}
 
 By the end of the third year, I expect to complete four outputs. First, I will produce a Taiwan
-BCA wedge dataset suitable for studying uncertainty transmission. Second, I will estimate
-wedge-level impulse responses to Taiwan's macroeconomic and financial uncertainty shocks.
-Third, I will conduct a formal mechanism comparison using the theoretical signatures derived in
-the second year. Fourth, I will prepare a complete manuscript that integrates the empirical
-OI-SVMVAR evidence, the wedge-projection theory, and the Taiwan BCA validation.
+BCA wedge dataset suitable for studying uncertainty transmission. Second, I will compute
+MCMC-integrated GIRF paths for Taiwan's investment and labor wedges in response to the
+macroeconomic and financial uncertainty shocks identified in the first year. Third, I will
+conduct a formal model selection exercise using RMSE comparison between the empirical GIRF
+profiles and the theoretically simulated wedge paths derived in the second year. Fourth, I will
+prepare a complete manuscript that integrates the first-year OI-SVMVAR evidence, the
+second-year wedge-projection theory, and the third-year Taiwan BCA validation.
 
 The third year completes the project's main contribution. It transforms the first-year uncertainty
 measurement exercise and the second-year theoretical mapping into direct evidence on the
@@ -1178,7 +1319,7 @@ or appendix \\
 \addlinespace
 Year 3 &
 Empirical BCA validation and mechanism testing &
-Taiwan BCA wedge dataset, MCMC-integrated local projections, mechanism
+Taiwan BCA wedge dataset, MCMC-integrated GIRF profiles, RMSE-based mechanism
 comparison, journal-paper draft \\
 \bottomrule
 \end{tabular}
@@ -1200,8 +1341,8 @@ are summarized below.
 Risk & Mitigation strategy \\
 \midrule
 The full 52-variable OI-SVMVAR is slow to converge. &
-Begin with a reduced benchmark model using the core Taiwan macroeconomic and financial
-anchors and the most important external drivers. Move to the full model after validating the
+Begin with a systematically reduced benchmark model (e.g., a 15-to-20 variable system) focusing on the core Taiwan macroeconomic and financial
+anchors and the most prominent external indices. Move to the full high-dimensional model incrementally after validating the
 sampler and convergence diagnostics. \\
 \addlinespace
 Some data series require interpolation or have limited coverage. &
@@ -1539,6 +1680,6 @@ collateral/risk-premium channel, which projects mainly into $\hat{\tau}_{x,t}$, 
 working-capital channel, which projects mainly into $\hat{\Lambda}_{\ell,t}^{BCA}$.
 
 \bibliographystyle{aea}
-\bibliography{references}
+\bibliography{../references}
 
 \end{document}
