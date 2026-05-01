@@ -1,0 +1,90 @@
+\section{BCA-Style Accounting Logic}
+
+The accounting exercise follows the classical BCA sequence: infer wedges from
+data or simulated allocations, then run counterfactuals by allowing one wedge at
+a time to move while holding the others fixed.
+
+\subsection{Step 1: Infer Canonical Wedges}
+
+Given series for \(\{Y_t,C_t,X_t,K_t,L_t\}\), infer the wedges as follows:
+\begin{align}
+    \widehat{A}_t
+    &=
+    \frac{Y_t}{F(K_t,L_t)},
+    \label{eq:infer_efficiency}
+    \\
+    \widehat{G}_t
+    &=
+    Y_t-C_t-X_t,
+    \label{eq:infer_government}
+    \\
+    1-\widehat{\tau}_{\ell,t}
+    &=
+    \frac{-U_L(C_t,L_t)}
+    {U_C(C_t,L_t)\widehat{A}_tF_L(K_t,L_t)},
+    \label{eq:infer_labor}
+    \\
+    \widehat{\xi}^x_t
+    &=
+    \E_t m^k_{t+1}.
+    \label{eq:infer_investment_log}
+\end{align}
+Equation \eqref{eq:infer_investment_log} writes the investment wedge as a log
+Euler residual. Under the second-order no-friction benchmark, this residual is
+\[
+    \widehat{\xi}^x_t
+    =
+    -\frac{1}{2}\Var_t(m^k_{t+1}).
+\]
+In empirical BCA, expectations and the stochastic process for wedges are usually
+estimated jointly. This note isolates the algebraic interpretation.
+
+\subsection{Step 2: Test the TFP-Uncertainty Restriction}
+
+The single-source TFP uncertainty hypothesis implies
+\begin{equation}
+    \widehat{\xi}^x_t
+    =
+    \lambda_x q_t + u^x_t,
+    \label{eq:test_investment_loading}
+\end{equation}
+where \(q_t\) is the centered variance state of the efficiency wedge. A strong
+relationship between \(\widehat{\xi}^x_t\) and \(q_t\) would support the idea
+that second-moment movements in the efficiency wedge show up as investment
+wedges. Large systematic movements in labor or resource wedges would instead
+suggest that the model is missing other mechanisms or that the data require
+additional primitive shocks.
+
+\subsection{Step 3: Counterfactual Wedge Experiments}
+
+The counterfactual exercises are the standard BCA exercises:
+\begin{enumerate}[label=(\alph*)]
+    \item Efficiency-only: allow \(\widehat{A}_t\) and its volatility state
+    \(q_t\) to move; hold other wedges fixed.
+    \item Investment-wedge channel: allow the investment wedge implied by
+    Equation \eqref{eq:investment_uncertainty_wedge} to move; hold labor and
+    resource wedges fixed.
+    \item Labor-wedge channel: allow \(\widehat{\tau}_{\ell,t}\) to move; hold
+    efficiency, investment, and resource wedges fixed.
+    \item Resource-wedge channel: allow \(\widehat{G}_t\) to move; hold other
+    wedges fixed.
+\end{enumerate}
+The contribution of each wedge is evaluated by how closely the counterfactual
+paths reproduce the observed paths of output, consumption, investment, and
+labor.
+
+\subsection{Connection to the Later SOE Nonlinear BCA}
+
+The later small-open-economy framework will expand the resource wedge into
+trade and external-finance objects, and may add a UIP or country-premium wedge.
+The present closed-economy note establishes the core logic first:
+\[
+    \begin{aligned}
+    \text{stochastic volatility in the efficiency wedge}
+    &\rightarrow
+    \text{Euler-equation risk correction}
+    \\
+    &\rightarrow
+    \text{investment wedge representation}.
+    \end{aligned}
+\]

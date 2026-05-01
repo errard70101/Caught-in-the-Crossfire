@@ -1,0 +1,69 @@
+\section{Mapping TFP Uncertainty to Canonical BCA Wedges}
+
+The mapping implied by the prototype model is summarized in Table
+\ref{tab:bca_wedge_mapping}.
+
+\begin{table}[htbp]
+\centering
+\caption{Canonical BCA Interpretation of TFP Uncertainty}
+\label{tab:bca_wedge_mapping}
+\begin{tabular}{p{0.34\textwidth}p{0.56\textwidth}}
+\toprule
+Canonical BCA wedge & Role of TFP uncertainty \\
+\midrule
+Efficiency wedge \(A_t\) in production
+& Direct second-moment shock to \(A_t\) \\
+Government/resource wedge \(G_t\) in the resource constraint
+& No direct role; absorbs resource residuals and approximation terms \\
+Labor wedge \(\tau_{\ell,t}\) in the intratemporal labor FOC
+& Indirect, through allocations or misspecification \\
+Investment wedge \(\tau_{x,t}\) in the capital Euler equation
+& Direct risk correction through \(\Var_t(m^k_{t+1})\) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The central lesson is that TFP uncertainty is not a new canonical wedge. It is a
+second-moment process attached to the efficiency wedge:
+\begin{equation}
+    a_{t+1}
+    =
+    \rho_a a_t
+    +
+    \exp(V_{A,t})\sigma_A\varepsilon_{A,t+1}.
+    \label{eq:efficiency_sv_process}
+\end{equation}
+However, when agents optimize under this time-varying volatility, the
+second-order risk terms can appear as residuals in other equilibrium
+conditions. The most natural channel is the investment wedge because the capital
+Euler equation contains expectations over future marginal utility and future
+capital returns.
+
+A compact accounting representation is
+\begin{align}
+    a_t
+    &=
+    \text{efficiency wedge level},
+    \label{eq:compact_efficiency}
+    \\
+    q_t
+    &=
+    \text{efficiency wedge volatility state},
+    \label{eq:compact_efficiency_vol}
+    \\
+    \xi^x_t
+    &\approx
+    -\frac{1}{2}\Var_t(m^k_{t+1})
+    =
+    \lambda_x q_t+\text{higher-order terms},
+    \label{eq:compact_investment_loading}
+\end{align}
+where \(q_t\) is the centered TFP variance state defined in Equation
+\eqref{eq:variance_state}. This is the simplest sense in which a second-moment
+shock to the efficiency wedge can be represented as an investment wedge in a
+first-order BCA accounting exercise.
+
+By contrast, labor and resource wedges should not be mechanically attributed to
+TFP uncertainty. They may move in simulations because equilibrium allocations
+move, but they are not the first place where conditional variance enters the
+prototype model.

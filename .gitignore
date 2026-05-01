@@ -199,3 +199,8 @@ archive/**/*.mat
 # Adjust as needed for your workflow
 # Last updated: 2025-11-14
 .claude/worktrees/funny-mclaren/
+code/empirical_bca_us/data/**
+code/empirical_bca_us/output/**
+!code/empirical_bca_us/data/.gitkeep
+!code/empirical_bca_us/output/.gitkeep
+code/empirical_bca_us/output/.tmp/**

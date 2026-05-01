@@ -1,0 +1,134 @@
+\section{Classical BCA Prototype Model}
+
+\subsection{Preferences and Technology}
+
+The representative household has expected utility
+\begin{equation}
+    \E_0
+    \sum_{t=0}^{\infty}
+    \beta^t U(C_t,L_t),
+    \qquad 0<\beta<1.
+    \label{eq:utility}
+\end{equation}
+For algebraic examples, one can use
+\begin{equation}
+    U(C_t,L_t)
+    =
+    \frac{C_t^{1-\gamma}-1}{1-\gamma}
+    -
+    \chi\frac{L_t^{1+\nu}}{1+\nu},
+    \qquad
+    \gamma>0,\ \nu>0,\ \chi>0.
+    \label{eq:period_utility_example}
+\end{equation}
+
+Output is produced with capital, labor, and total factor productivity:
+\begin{equation}
+    Y_t
+    =
+    A_t F(K_t,L_t)
+    =
+    A_t K_t^\alpha L_t^{1-\alpha},
+    \qquad 0<\alpha<1.
+    \label{eq:production}
+\end{equation}
+This is the location of the efficiency wedge. In the prototype model,
+\(A_t\) is not merely a Solow residual; it is the object that absorbs any
+distortion that makes measured output differ from what capital and labor alone
+would predict.
+
+\subsection{Resource Constraint and Capital Accumulation}
+
+The closed-economy resource constraint is
+\begin{equation}
+    C_t + X_t + G_t = Y_t,
+    \label{eq:resource}
+\end{equation}
+where \(X_t\) is investment and \(G_t\) is the government or resource wedge. In
+BCA, \(G_t\) should be interpreted broadly: it includes government purchases,
+net exports in open-economy variants, measurement residuals, and any other
+resource absorption not modeled as consumption or investment.
+
+Capital evolves according to
+\begin{equation}
+    K_{t+1}
+    =
+    (1-\delta)K_t + X_t,
+    \qquad 0<\delta<1.
+    \label{eq:capital_accumulation}
+\end{equation}
+
+\subsection{Canonical Wedges}
+
+The labor wedge is defined by the intratemporal condition
+\begin{equation}
+    -\frac{U_L(C_t,L_t)}{U_C(C_t,L_t)}
+    =
+    (1-\tau_{\ell,t})A_t F_L(K_t,L_t).
+    \label{eq:labor_wedge}
+\end{equation}
+When \(\tau_{\ell,t}=0\), the household's marginal rate of substitution equals
+the marginal product of labor. A positive labor wedge lowers the effective
+return to working.
+
+Define the gross marginal product return on capital as
+\begin{equation}
+    R^k_{t+1}
+    =
+    A_{t+1}F_K(K_{t+1},L_{t+1}) + 1-\delta.
+    \label{eq:capital_return}
+\end{equation}
+The investment wedge is defined by
+\begin{equation}
+    1
+    =
+    \beta
+    \E_t
+    \left[
+        \frac{U_C(C_{t+1},L_{t+1})}{U_C(C_t,L_t)}
+        (1-\tau_{x,t})
+        R^k_{t+1}
+    \right].
+    \label{eq:investment_wedge}
+\end{equation}
+This normalization places the investment wedge at date \(t\) as a tax on the
+expected return to saving through capital. Other BCA normalizations place the
+wedge as a tax on investment goods or index it at \(t+1\). These conventions are
+equivalent up to timing and sign conventions as long as the definition is held
+fixed.
+
+The four canonical wedges are therefore:
+\begin{align}
+    \text{Efficiency wedge:} \quad & A_t,
+    \label{eq:efficiency_wedge_def}
+    \\
+    \text{Government/resource wedge:} \quad & G_t = Y_t-C_t-X_t,
+    \label{eq:government_wedge_def}
+    \\
+    \text{Labor wedge:} \quad &
+    1-\tau_{\ell,t}
+    =
+    \frac{-U_L(C_t,L_t)}
+    {U_C(C_t,L_t)A_tF_L(K_t,L_t)},
+    \label{eq:labor_wedge_def}
+    \\
+    \text{Investment wedge:} \quad &
+    1-\tau_{x,t}
+    =
+    \left\{
+    \beta
+    \E_t
+    \left[
+        \frac{U_C(C_{t+1},L_{t+1})}{U_C(C_t,L_t)}
+        R^k_{t+1}
+    \right]
+    \right\}^{-1}.
+    \label{eq:investment_wedge_def}
+\end{align}
+
+\begin{remark}
+There is no Phillips curve, markup wedge, or Taylor-rule wedge in this
+prototype. If one later wants to study price rigidity, it should be introduced
+as a structural mechanism that may show up through the labor wedge or other
+canonical wedges, not as an additional BCA wedge.
+\end{remark}

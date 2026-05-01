@@ -1,0 +1,96 @@
+\section{Generic Algebra for a Second-Order Accounting Wedge}
+
+This appendix records the generic algebra behind the wedge construction. The
+important sequencing point is that the Taylor expansion is applied to the
+nonlinear equilibrium condition, not to an already log-linearized equation. Let
+an equilibrium condition be written as
+\begin{equation}
+    \E_t
+    \left[
+        F(z_t,z_{t+1})
+    \right]
+    =
+    0,
+    \label{eq:generic_equilibrium_condition}
+\end{equation}
+where \(z_t\) stacks local coordinates for the relevant endogenous and exogenous
+variables. These coordinates can be log deviations, such as
+\(Z_t=\bar{Z}\exp(z_t)\), but this is only a change of variables. It is not a
+first-order approximation. Let \(\bar{z}=0\) denote the deterministic steady
+state in those coordinates and define \(\tilde{z}_t=z_t-\bar{z}\). A
+second-order expansion gives
+\begin{equation}
+    0
+    \approx
+    F(\bar{z},\bar{z})
+    +
+    F_0 \tilde{z}_t
+    +
+    F_1 \E_t \tilde{z}_{t+1}
+    +
+    \frac{1}{2}
+    \E_t
+    \left[
+        \tilde{z}_{t+1}'
+        H_1
+        \tilde{z}_{t+1}
+    \right]
+    +
+    \text{terms involving } \tilde{z}_t^2.
+    \label{eq:generic_second_order_expansion}
+\end{equation}
+At the deterministic steady state, \(F(\bar{z},\bar{z})=0\). The conditional
+quadratic term can be decomposed as
+\begin{equation}
+    \E_t
+    \left[
+        \tilde{z}_{t+1}'
+        H_1
+        \tilde{z}_{t+1}
+    \right]
+    =
+    (\E_t\tilde{z}_{t+1})'
+    H_1
+    (\E_t\tilde{z}_{t+1})
+    +
+    \tr(H_1\Omega_t),
+    \label{eq:mean_variance_decomposition}
+\end{equation}
+where
+\begin{equation}
+    \Omega_t
+    =
+    \Var_t(\tilde{z}_{t+1}).
+    \label{eq:omega_covariance}
+\end{equation}
+
+For an accounting exercise focused on uncertainty, collect all terms involving
+\(\Omega_t\) into a wedge:
+\begin{equation}
+    \omega^F_t
+    \equiv
+    -A_F^{-1}
+    \left[
+        \frac{1}{2}\tr(H_1\Omega_t)
+    \right],
+    \label{eq:generic_wedge}
+\end{equation}
+where \(A_F\) is the coefficient on the endogenous variable being isolated.
+
+If one first replaces Equation \eqref{eq:generic_equilibrium_condition} by its
+first-order approximation,
+\begin{equation}
+    F_0 \tilde{z}_t
+    +
+    F_1 \E_t\tilde{z}_{t+1}
+    =
+    0,
+    \label{eq:first_order_discard}
+\end{equation}
+then the Hessian term \(H_1\) has already been discarded. In that case there is
+no \(\tr(H_1\Omega_t)\) term left to interpret as an uncertainty wedge.
+
+For the capital Euler condition, the generic wedge in Equation
+\eqref{eq:generic_wedge} corresponds to the log investment wedge in Equation
+\eqref{eq:investment_uncertainty_wedge}. This is why the investment wedge is the
+canonical BCA wedge most closely connected to second-moment risk corrections.

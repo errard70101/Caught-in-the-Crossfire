@@ -1,0 +1,52 @@
+\section{TFP Level and TFP Uncertainty}
+
+Let \(a_t=\log A_t\). The level innovation to TFP has stochastic volatility:
+\begin{align}
+    a_{t+1}
+    &=
+    \rho_a a_t
+    +
+    \exp(V_{A,t})\sigma_A\varepsilon_{A,t+1},
+    \qquad
+    \varepsilon_{A,t+1}\sim N(0,1),
+    \label{eq:tfp_level}
+    \\
+    V_{A,t+1}
+    &=
+    (1-\rho_{VA})\bar{V}_A
+    +
+    \rho_{VA} V_{A,t}
+    +
+    \sigma_{VA}\varepsilon_{VA,t+1},
+    \qquad
+    \varepsilon_{VA,t+1}\sim N(0,1).
+    \label{eq:tfp_vol}
+\end{align}
+The primitive first-moment shock is \(\varepsilon_{A,t+1}\). The primitive
+uncertainty shock is \(\varepsilon_{VA,t+1}\), which moves the conditional
+volatility state.
+
+Conditional on date \(t\) information,
+\begin{equation}
+    \Var_t(a_{t+1})=\sigma_A^2\exp(2V_{A,t}).
+    \label{eq:conditional_tfp_variance}
+\end{equation}
+Define the centered variance state
+\begin{equation}
+    q_t
+    \equiv
+    \sigma_A^2\left[\exp(2V_{A,t})-\exp(2\bar{V}_A)\right].
+    \label{eq:variance_state}
+\end{equation}
+
+The key conceptual point is that \(A_t\) is already the efficiency wedge. Hence
+\(V_{A,t}\) is not a fifth wedge. It is a time-varying second moment of the
+efficiency wedge:
+\[
+    \varepsilon_{VA,t}
+    \quad \Rightarrow \quad
+    \text{higher conditional variance of } A_{t+1}.
+\]
+The question is whether this second-moment movement in the efficiency wedge
+creates risk correction terms that, when represented in a first-order BCA
+accounting system, look like labor, investment, or resource wedges.

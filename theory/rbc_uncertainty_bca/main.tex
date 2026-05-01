@@ -1,0 +1,48 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath, amssymb, amsthm, bm, mathtools}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{xcolor}
+
+\input{macros}
+
+\title{A Minimal Business Cycle Accounting Prototype for TFP Uncertainty}
+\author{Caught in the Crossfire Research Notes}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+This note rewrites the uncertainty-accounting exercise in the classical
+Business Cycle Accounting (BCA) prototype model. The model has no price
+rigidity, no Phillips curve, and no monetary policy rule. The primitive
+equilibrium conditions are a production function, a resource constraint, a
+labor intratemporal condition, a capital Euler equation, and capital
+accumulation. The only primitive source of second-moment variation is stochastic
+volatility in total factor productivity. The goal is to clarify how TFP
+uncertainty maps into the four canonical BCA wedges: efficiency, government or
+resource, labor, and investment.
+\end{abstract}
+
+\tableofcontents
+
+\clearpage
+
+\input{sections/01_motivation}
+\input{sections/02_baseline_rbc_model}
+\input{sections/03_tfp_uncertainty_process}
+\input{sections/04_second_order_expansion}
+\input{sections/05_wedge_representation}
+\input{sections/06_accounting_logic}
+\input{sections/07_simulation_based_bca}
+\input{sections/08_open_questions}
+
+\appendix
+\input{appendix/A_algebra_details}
+
+\end{document}

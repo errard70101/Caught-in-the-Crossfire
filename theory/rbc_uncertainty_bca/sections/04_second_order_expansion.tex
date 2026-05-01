@@ -1,0 +1,129 @@
+\section{Second-Order Expansion of the BCA Conditions}
+
+\subsection{Production and Resource Constraint}
+
+For the Cobb-Douglas technology in Equation \eqref{eq:production},
+\begin{equation}
+    \log Y_t
+    =
+    a_t+\alpha\log K_t+(1-\alpha)\log L_t
+    \label{eq:log_production_exact}
+\end{equation}
+is exact. Therefore, TFP level shocks enter the efficiency wedge directly. TFP
+uncertainty does not create a separate production wedge at date \(t\); it changes
+the conditional distribution of future \(A_{t+1}\).
+
+The resource constraint is nonlinear in log coordinates. If
+\(\hat{y}_t=\log(Y_t/\bar{Y})\), \(\hat{c}_t=\log(C_t/\bar{C})\), and
+\(\hat{x}_t=\log(X_t/\bar{X})\), then
+\begin{equation}
+    \exp(\hat{y}_t)
+    =
+    s_c\exp(\hat{c}_t)
+    +
+    s_x\exp(\hat{x}_t)
+    +
+    s_g\exp(\hat{g}_t),
+    \label{eq:exact_resource_log_coords}
+\end{equation}
+where \(s_j=\bar{J}/\bar{Y}\) for \(J\in\{C,X,G\}\). A second-order expansion
+gives
+\begin{equation}
+    \hat{y}_t+\frac{1}{2}\hat{y}_t^2
+    =
+    s_c\left(\hat{c}_t+\frac{1}{2}\hat{c}_t^2\right)
+    +
+    s_x\left(\hat{x}_t+\frac{1}{2}\hat{x}_t^2\right)
+    +
+    s_g\left(\hat{g}_t+\frac{1}{2}\hat{g}_t^2\right)
+    +
+    O(3).
+    \label{eq:second_order_resource}
+\end{equation}
+These curvature terms are resource-accounting terms. They should not be
+confused with price-setting or demand wedges.
+
+\subsection{Labor Wedge}
+
+The labor wedge is static:
+\[
+    -\frac{U_L(C_t,L_t)}{U_C(C_t,L_t)}
+    =
+    (1-\tau_{\ell,t})A_tF_L(K_t,L_t).
+\]
+With the separable utility in Equation \eqref{eq:period_utility_example}, the
+log labor wedge is
+\begin{equation}
+    \log(1-\tau_{\ell,t})
+    =
+    \log\chi+\nu\log L_t+\gamma\log C_t
+    -
+    \log A_t
+    -
+    \log F_L(K_t,L_t).
+    \label{eq:log_labor_wedge}
+\end{equation}
+Because this condition is static, there is no direct Jensen term involving
+\(\Var_t(a_{t+1})\). TFP uncertainty can move the measured labor wedge only
+indirectly through equilibrium movements in \(C_t\), \(L_t\), \(K_t\), and
+\(A_t\), or through model misspecification when the accounting system is too
+small.
+
+\subsection{Investment Wedge}
+
+The investment Euler equation is where TFP uncertainty most naturally appears
+as a second-order risk correction. Define
+\begin{equation}
+    m^k_{t+1}
+    \equiv
+    \log\beta
+    +
+    \log U_C(C_{t+1},L_{t+1})
+    -
+    \log U_C(C_t,L_t)
+    +
+    \log R^k_{t+1}.
+    \label{eq:capital_euler_log_return}
+\end{equation}
+Without an investment wedge, the nonlinear Euler equation is
+\begin{equation}
+    \E_t[\exp(m^k_{t+1})]=1.
+    \label{eq:capital_euler_no_wedge}
+\end{equation}
+A second-order log-normal approximation gives
+\begin{equation}
+    0
+    \approx
+    \E_t m^k_{t+1}
+    +
+    \frac{1}{2}\Var_t(m^k_{t+1}).
+    \label{eq:capital_euler_second_order}
+\end{equation}
+Thus, if one writes a first-order accounting Euler equation with a log
+investment wedge \(\xi^x_t\),
+\begin{equation}
+    0
+    =
+    \E_t m^k_{t+1}
+    -
+    \xi^x_t,
+    \label{eq:first_order_investment_wedge}
+\end{equation}
+then the second-order no-friction model is represented by
+\begin{equation}
+    \xi^x_t
+    =
+    -\frac{1}{2}\Var_t(m^k_{t+1}).
+    \label{eq:investment_uncertainty_wedge}
+\end{equation}
+The sign depends on the exact convention used for \(\tau_{x,t}\). The substantive
+point is invariant: uncertainty in future marginal utility and future capital
+returns creates a risk term in the capital Euler equation. In canonical BCA
+language, this risk term is closest to the investment wedge.
+
+\begin{remark}
+This result does not mean that TFP uncertainty is literally a financial
+friction. It means that, when the nonlinear risk term is forced into a
+first-order BCA accounting system, the Euler-equation residual is represented as
+an investment wedge.
+\end{remark}
