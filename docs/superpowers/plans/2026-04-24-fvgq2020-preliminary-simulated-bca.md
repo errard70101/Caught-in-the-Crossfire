@@ -4,7 +4,7 @@
 
 **Goal:** Produce a preliminary set of simulated Business Cycle Accounting (BCA) results by driving the FVGQ (2020, *Review of Economic Dynamics*) DSGE model, adapted to Dynare 6.2 native pruning, through a three-phase simulation pipeline and a four-wedge CKM (2007) extraction — delivering discussion-ready output, CKM-style measured-wedge figures, and a scholar-discussion memo.
 
-**Architecture:** A new isolated subfolder `code/bca_uncertainty_simulation/fvgq2020_preliminary/` with its own `.mod` file, MATLAB driver, CKM estimator, local-projection helper, and plotting module. Mirrors the existing §7 scaffold's file layout and `simult_`-based `(solve → warm-up → Experiment 1 → Experiment 2)` pipeline 1:1 so review can proceed by analogy. The existing scaffold and `theory/nk_uncertainty_bca/sections/07_simulation_based_bca.tex` are not modified.
+**Architecture:** A new isolated subfolder `code/bca_uncertainty_simulation/fvgq2020_preliminary/` with its own `.mod` file, MATLAB driver, CKM estimator, local-projection helper, and plotting module. Mirrors the existing §7 scaffold's file layout and `simult_`-based `(solve → warm-up → Experiment 1 → Experiment 2)` pipeline 1:1 so review can proceed by analogy. The existing scaffold and `theory/rbc_uncertainty_bca/sections/07_simulation_based_bca.tex` are not modified.
 
 **Tech Stack:** MATLAB R2024b/R2025b · Dynare 6.2-arm64 (native `pruning` + `simult_` for order=3) · No external pruning toolbox.
 
@@ -69,7 +69,7 @@ amended as follows:
 | `code/bca_uncertainty_simulation/fvgq2020_preliminary/output/*` | Generated | CSV/MAT/PNG outputs (gitignored), including transformed measured-wedge reporting files |
 | `llm_logs/2026-04-XX_fvgq2020_preliminary_results.md` | Create (last task) | Scholar-discussion memo |
 
-**Non-goals (from spec §2):** no modification of `code/bca_uncertainty_simulation/{dynare,matlab}/*` or `theory/nk_uncertainty_bca/sections/07_simulation_based_bca.tex`, no change to FVGQ's economic structure or parameter values, no Taiwan data, no working-capital friction.
+**Non-goals (from spec §2):** no modification of `code/bca_uncertainty_simulation/{dynare,matlab}/*` or `theory/rbc_uncertainty_bca/sections/07_simulation_based_bca.tex`, no change to FVGQ's economic structure or parameter values, no Taiwan data, no working-capital friction.
 
 ---
 

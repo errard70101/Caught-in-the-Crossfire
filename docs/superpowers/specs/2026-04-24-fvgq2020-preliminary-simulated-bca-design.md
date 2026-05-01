@@ -4,14 +4,14 @@
 **Status**: Brainstorming complete, awaiting user review before writing implementation plan
 **Project**: Caught in the Crossfire — Year 2 theoretical module
 **Related**:
-- `theory/nk_uncertainty_bca/sections/07_simulation_based_bca.tex` (long-term target, unchanged by this spec)
+- `theory/rbc_uncertainty_bca/sections/07_simulation_based_bca.tex` (long-term target, unchanged by this spec)
 - `code/bca_uncertainty_simulation/` (existing scaffold for §7, unchanged by this spec)
 - `llm_logs/2026-04-24_simulated_bca_vs_dsge_irf.md` (narrative rationale)
 - External plan: `/Users/linshih-yang/.gemini/tmp/caught-in-the-crossfire/e19260f7-ddd0-4fe5-a83f-3089a0808e01/plans/2026-04-24-fvgq2020-preliminary-bca-plan.md`
 
 ## 1. Objective
 
-Produce a **preliminary set of simulated Business Cycle Accounting (BCA) results** using the off-the-shelf DSGE model from Fernández-Villaverde and Guerrón-Quintana (2020, *Review of Economic Dynamics*, "Uncertainty Shocks and Business Cycle Research") — hereafter FVGQ (2020) — in order to generate a concrete artifact that can be circulated to scholars for feedback **before** investing weeks developing the custom representative-agent hybrid model described in `theory/nk_uncertainty_bca/sections/07_simulation_based_bca.tex` (hereafter §7).
+Produce a **preliminary set of simulated Business Cycle Accounting (BCA) results** using the off-the-shelf DSGE model from Fernández-Villaverde and Guerrón-Quintana (2020, *Review of Economic Dynamics*, "Uncertainty Shocks and Business Cycle Research") — hereafter FVGQ (2020) — in order to generate a concrete artifact that can be circulated to scholars for feedback **before** investing weeks developing the custom representative-agent hybrid model described in `theory/rbc_uncertainty_bca/sections/07_simulation_based_bca.tex` (hereafter §7).
 
 The goal is velocity, not completeness. Any substantive model change (extension to working-capital friction, Taiwan calibration, open-economy block) waits on scholar feedback.
 

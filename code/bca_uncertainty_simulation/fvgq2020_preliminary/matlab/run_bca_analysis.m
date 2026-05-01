@@ -1,4 +1,4 @@
-% Apply CKM wedge extraction, local projections, and GIRFs to FVGQ outputs.
+% Apply Inside-Dynare CKM wedge observables, local projections, and GIRFs.
 
 clear;
 clc;
@@ -22,37 +22,73 @@ end
 
 addpath(matlab_dir);
 
-pp.alpha = 0.36;
-pp.beta = 0.994;
-pp.delta = 0.01625;
-pp.gamma = 2;
-pp.nu = 1;
-l_ss = 0.3546099291;
-y_ss = 1.422989127;
-c_ss = 1.070799318;
-pp.chi = (1 - pp.alpha) * y_ss / (l_ss^(pp.nu + 1) * c_ss^pp.gamma);
-fprintf('Prototype chi = %.6f\n', pp.chi);
+pp = ckm_prototype_calibration(workspace_mat);
+run_id = make_run_id();
+legacy_manifest_entries = detect_legacy_manifest_entries(output_dir);
+fprintf(['Prototype chi = %.6f (steady state source: y=%.6f, c=%.6f, l=%.6f)\n'], ...
+        pp.chi, pp.y_ss, pp.c_ss, pp.l_ss);
+
+aux_provenance = make_provenance('inside_dynare_auxiliary', run_id);
+posthoc_provenance = make_provenance('posthoc_ckm_accounting', run_id);
+likelihood_provenance = make_provenance('likelihood_kalman_filter', run_id);
+manifest_entries = empty_manifest_entries();
 
 T = readtable(exp1_csv);
-
 Y = T.y;
-C = T.cspt;
-I = 0.06 * T.ivst;
-L = T.labor;
-K = T.k;
+I = pp.ifrac * T.ivst;
 
-wedges = estimate_ckm_wedges(Y, C, I, L, K, pp);
-fprintf('CKM on Exp1: max |G_share| = %.3e\n', max(abs(wedges.G_share)));
-writetable(wedges, fullfile(output_dir, 'wedges_exp1.csv'));
-report_fixed = build_ckm_report_table(wedges.t, Y, wedges);
-writetable(report_fixed, fullfile(output_dir, 'wedges_exp1_report.csv'));
-lp_targets_fixed = build_ckm_lp_targets(wedges);
+wedges_aux = inside_dynare_wedges_from_table(T);
+wedges_posthoc = compute_ckm_posthoc_wedges(T.y, T.cspt, I, T.labor, T.k, pp);
+fprintf('Inside-Dynare auxiliary wedges on Exp1: max |G_share| = %.3e\n', ...
+        max(abs(wedges_aux.G_share)));
+write_provenance_csv(fullfile(output_dir, 'wedges_exp1.csv'), wedges_aux, ...
+                     aux_provenance, 'exp1_inside_dynare_auxiliary_wedges');
+manifest_entries = append_manifest_entry(manifest_entries, 'wedges_exp1.csv', ...
+    'csv', 'exp1_inside_dynare_auxiliary_wedges', aux_provenance, 'current_generated');
+report_aux = build_ckm_report_table(wedges_aux.t, Y, wedges_aux);
+write_provenance_csv(fullfile(output_dir, 'wedges_exp1_report.csv'), report_aux, ...
+                     aux_provenance, 'exp1_inside_dynare_auxiliary_report');
+manifest_entries = append_manifest_entry(manifest_entries, 'wedges_exp1_report.csv', ...
+    'csv', 'exp1_inside_dynare_auxiliary_report', aux_provenance, 'current_generated');
+[report_posthoc, posthoc_level_info] = build_ckm_report_table(wedges_posthoc.t, Y, wedges_posthoc);
+write_provenance_csv(fullfile(output_dir, 'wedges_exp1_posthoc.csv'), wedges_posthoc, ...
+                     posthoc_provenance, 'exp1_posthoc_ckm_wedges');
+manifest_entries = append_manifest_entry(manifest_entries, 'wedges_exp1_posthoc.csv', ...
+    'csv', 'exp1_posthoc_ckm_wedges', posthoc_provenance, 'current_generated');
+write_provenance_csv(fullfile(output_dir, 'wedges_exp1_posthoc_report.csv'), report_posthoc, ...
+                     posthoc_provenance, 'exp1_posthoc_ckm_report');
+manifest_entries = append_manifest_entry(manifest_entries, 'wedges_exp1_posthoc_report.csv', ...
+    'csv', 'exp1_posthoc_ckm_report', posthoc_provenance, 'current_generated');
+[lp_targets_dgp, dgp_target_info] = build_ckm_lp_targets( ...
+    wedges_aux, struct('invalid_policy', 'nan'));
+if dgp_target_info.bad_labor_count > 0 || dgp_target_info.bad_investment_count > 0
+    fprintf(['Inside-Dynare auxiliary transformed LP targets: dropped %d labor-target and %d ', ...
+             'investment-target observations due to domain violations.\n'], ...
+            dgp_target_info.bad_labor_count, dgp_target_info.bad_investment_count);
+end
+if posthoc_level_info.bad_labor_count > 0 || posthoc_level_info.bad_investment_count > 0
+    fprintf(['Post-hoc CKM report levels: dropped %d labor-level and %d ', ...
+             'investment-level observations due to domain violations.\n'], ...
+            posthoc_level_info.bad_labor_count, posthoc_level_info.bad_investment_count);
+end
 
 ckm_like = estimate_ckm_wedges_likelihood(T, pp);
-writetable(ckm_like.proxy_wedges, fullfile(output_dir, 'wedges_exp1_proxy.csv'));
-writetable(ckm_like.smoothed_wedges, fullfile(output_dir, 'wedges_exp1_likelihood.csv'));
+write_provenance_csv(fullfile(output_dir, 'wedges_exp1_proxy.csv'), ckm_like.proxy_wedges, ...
+                     aux_provenance, 'exp1_inside_dynare_auxiliary_proxy_wedges');
+manifest_entries = append_manifest_entry(manifest_entries, 'wedges_exp1_proxy.csv', ...
+    'csv', 'exp1_inside_dynare_auxiliary_proxy_wedges', aux_provenance, 'current_generated');
+write_provenance_csv(fullfile(output_dir, 'wedges_exp1_likelihood.csv'), ...
+                     ckm_like.smoothed_wedges, likelihood_provenance, ...
+                     'exp1_likelihood_smoothed_wedges');
+manifest_entries = append_manifest_entry(manifest_entries, 'wedges_exp1_likelihood.csv', ...
+    'csv', 'exp1_likelihood_smoothed_wedges', likelihood_provenance, 'current_generated');
 report_likelihood = build_ckm_report_table(ckm_like.smoothed_wedges.t, Y, ckm_like.smoothed_wedges);
-writetable(report_likelihood, fullfile(output_dir, 'wedges_exp1_likelihood_report.csv'));
+write_provenance_csv(fullfile(output_dir, 'wedges_exp1_likelihood_report.csv'), ...
+                     report_likelihood, likelihood_provenance, ...
+                     'exp1_likelihood_report');
+manifest_entries = append_manifest_entry(manifest_entries, ...
+    'wedges_exp1_likelihood_report.csv', 'csv', 'exp1_likelihood_report', ...
+    likelihood_provenance, 'current_generated');
 [lp_targets_likelihood, like_target_info] = build_ckm_lp_targets( ...
     ckm_like.smoothed_wedges, struct('invalid_policy', 'nan'));
 if like_target_info.bad_labor_count > 0 || like_target_info.bad_investment_count > 0
@@ -60,13 +96,17 @@ if like_target_info.bad_labor_count > 0 || like_target_info.bad_investment_count
              'investment-target observations due to domain violations.\n'], ...
             like_target_info.bad_labor_count, like_target_info.bad_investment_count);
 end
-save(fullfile(output_dir, 'ckm_likelihood_exp1.mat'), 'ckm_like', '-v7.3');
+provenance = likelihood_provenance;
+save(fullfile(output_dir, 'ckm_likelihood_exp1.mat'), ...
+     'ckm_like', 'provenance', '-v7.3');
+manifest_entries = append_manifest_entry(manifest_entries, 'ckm_likelihood_exp1.mat', ...
+    'mat', 'exp1_likelihood_workspace', likelihood_provenance, 'current_generated');
 fprintf('CKM likelihood on Exp1: saved %s\n', fullfile(output_dir, 'wedges_exp1_likelihood.csv'));
 
 raw_wedge_names = {'log_A', 'G_share', 'tau_l', 'tau_x'};
 transformed_wedge_names = {'log_efficiency_wedge', 'log_labor_wedge', 'log_investment_wedge'};
-lp_target_names = lp_targets_fixed.Properties.VariableNames(2:end);
-lp_target_matrix = table2array(lp_targets_fixed(:, lp_target_names));
+lp_target_names = lp_targets_dgp.Properties.VariableNames(2:end);
+lp_target_matrix = table2array(lp_targets_dgp(:, lp_target_names));
 lagged_targets = [nan(1, size(lp_target_matrix, 2)); lp_target_matrix(1:end-1, :)];
 shocks = [T.uA, T.ue];
 controls = [T.eA, T.ed, T.ethet, T.ud, T.sigAt, T.sigdt, T.siget, lagged_targets];
@@ -75,14 +115,17 @@ H_lp = 60;
 lp_results = struct();
 for j = 1:numel(lp_target_names)
     lp_results.(lp_target_names{j}) = local_projection( ...
-        lp_targets_fixed.(lp_target_names{j}), shocks, controls, H_lp);
+        lp_targets_dgp.(lp_target_names{j}), shocks, controls, H_lp);
 end
 panel_controls_macro = [T.eA, T.ed, T.ethet, T.ud, T.sigdt, T.siget, lagged_targets];
 panel_controls_fin = [T.eA, T.ed, T.ethet, T.ud, T.sigAt, T.sigdt, lagged_targets];
 lp_shock_panels = build_lp_shock_panels(T.sigAt, T.siget, shocks, ...
                                         panel_controls_macro, panel_controls_fin, H_lp);
+provenance = aux_provenance;
 save(fullfile(output_dir, 'lp_results.mat'), 'lp_results', 'lp_target_names', ...
-      'lp_shock_panels', 'H_lp', '-v7.3');
+      'lp_shock_panels', 'H_lp', 'provenance', '-v7.3');
+manifest_entries = append_manifest_entry(manifest_entries, 'lp_results.mat', ...
+    'mat', 'lp_results_inside_dynare_auxiliary', aux_provenance, 'current_generated');
 fprintf('LP on Exp1: saved %s\n', fullfile(output_dir, 'lp_results.mat'));
 
 lp_target_matrix_like = table2array(lp_targets_likelihood(:, lp_target_names));
@@ -99,14 +142,19 @@ panel_controls_fin_like = [T.eA, T.ed, T.ethet, T.ud, T.sigAt, T.sigdt, lagged_t
 lp_shock_panels_likelihood = build_lp_shock_panels(T.sigAt, T.siget, shocks, ...
                                                    panel_controls_macro_like, ...
                                                    panel_controls_fin_like, H_lp);
+provenance = likelihood_provenance;
 save(fullfile(output_dir, 'lp_results_likelihood.mat'), ...
      'lp_results_likelihood', 'lp_target_names', 'lp_shock_panels_likelihood', ...
-     'H_lp', '-v7.3');
+     'H_lp', 'provenance', '-v7.3');
+manifest_entries = append_manifest_entry(manifest_entries, 'lp_results_likelihood.mat', ...
+    'mat', 'lp_results_likelihood', likelihood_provenance, 'current_generated');
 fprintf('LP on Exp1 likelihood wedges: saved %s\n', ...
         fullfile(output_dir, 'lp_results_likelihood.mat'));
 
 lp_width_table = compare_lp_widths(lp_results, lp_results_likelihood, lp_target_names);
 writetable(lp_width_table, fullfile(output_dir, 'lp_interval_comparison.csv'));
+manifest_entries = append_manifest_entry(manifest_entries, 'lp_interval_comparison.csv', ...
+    'csv', 'lp_interval_comparison', likelihood_provenance, 'current_generated');
 fprintf('LP interval comparison: saved %s\n', ...
         fullfile(output_dir, 'lp_interval_comparison.csv'));
 
@@ -121,16 +169,19 @@ controls_no_sv = [T.eA, T.ed, T.ethet, T.ud, lagged_targets];
 lp_results_no_svctrl = struct();
 for j = 1:numel(lp_target_names)
     lp_results_no_svctrl.(lp_target_names{j}) = local_projection( ...
-        lp_targets_fixed.(lp_target_names{j}), shocks, controls_no_sv, H_lp);
+        lp_targets_dgp.(lp_target_names{j}), shocks, controls_no_sv, H_lp);
 end
 panel_controls_macro_no_sv = [T.eA, T.ed, T.ethet, T.ud, lagged_targets];
 panel_controls_fin_no_sv = [T.eA, T.ed, T.ethet, T.ud, lagged_targets];
 lp_shock_panels_no_svctrl = build_lp_shock_panels(T.sigAt, T.siget, shocks, ...
                                                   panel_controls_macro_no_sv, ...
                                                   panel_controls_fin_no_sv, H_lp);
+provenance = aux_provenance;
 save(fullfile(output_dir, 'lp_results_no_svctrl.mat'), ...
      'lp_results_no_svctrl', 'lp_target_names', ...
-     'lp_shock_panels_no_svctrl', 'H_lp', '-v7.3');
+     'lp_shock_panels_no_svctrl', 'H_lp', 'provenance', '-v7.3');
+manifest_entries = append_manifest_entry(manifest_entries, 'lp_results_no_svctrl.mat', ...
+    'mat', 'lp_results_inside_dynare_auxiliary_no_svctrl', aux_provenance, 'current_generated');
 fprintf('Sensitivity LP (no SV-state controls): saved %s\n', ...
         fullfile(output_dir, 'lp_results_no_svctrl.mat'));
 
@@ -145,14 +196,21 @@ panel_controls_fin_no_sv_like = [T.eA, T.ed, T.ethet, T.ud, lagged_targets_like]
 lp_shock_panels_likelihood_no_svctrl = build_lp_shock_panels(T.sigAt, T.siget, shocks, ...
                                                              panel_controls_macro_no_sv_like, ...
                                                              panel_controls_fin_no_sv_like, H_lp);
+provenance = likelihood_provenance;
 save(fullfile(output_dir, 'lp_results_likelihood_no_svctrl.mat'), ...
      'lp_results_likelihood_no_svctrl', 'lp_target_names', ...
-     'lp_shock_panels_likelihood_no_svctrl', 'H_lp', '-v7.3');
+     'lp_shock_panels_likelihood_no_svctrl', 'H_lp', 'provenance', '-v7.3');
+manifest_entries = append_manifest_entry(manifest_entries, ...
+    'lp_results_likelihood_no_svctrl.mat', 'mat', ...
+    'lp_results_likelihood_no_svctrl', likelihood_provenance, 'current_generated');
 fprintf('Sensitivity LP likelihood (no SV-state controls): saved %s\n', ...
         fullfile(output_dir, 'lp_results_likelihood_no_svctrl.mat'));
 
 lp_sens_table = compare_lp_peak_table(lp_results, lp_results_no_svctrl, lp_target_names);
 writetable(lp_sens_table, fullfile(output_dir, 'lp_no_svctrl_peak_comparison.csv'));
+manifest_entries = append_manifest_entry(manifest_entries, ...
+    'lp_no_svctrl_peak_comparison.csv', 'csv', 'lp_no_svctrl_peak_comparison', ...
+    aux_provenance, 'current_generated');
 fprintf('LP no-SV-control peak comparison: saved %s\n', ...
         fullfile(output_dir, 'lp_no_svctrl_peak_comparison.csv'));
 
@@ -160,14 +218,20 @@ mc_config = struct('B', 10000, 'T', 400, 'H', H_lp, ...
                    'seed_base', 2026042400, 'verbose', true, ...
                    'progress_every', 250);
 sim_workspace = load(workspace_mat, 'M_', 'oo_', 'options_', 'sss_state', 'var_names', 'exo_var_names');
-lp_results_mc_fixed = monte_carlo_lp_bands(sim_workspace, pp, mc_config);
-save(fullfile(output_dir, 'lp_results_mc_fixed.mat'), ...
-     'lp_results_mc_fixed', 'lp_target_names', '-v7.3');
-writetable(monte_carlo_summary_table(lp_results_mc_fixed), ...
-           fullfile(output_dir, 'lp_results_mc_fixed_summary.csv'));
-fprintf(['Monte Carlo LP on fixed-point wedges: saved %s ', ...
+lp_results_mc_dgp = monte_carlo_lp_bands(sim_workspace, pp, mc_config);
+provenance = aux_provenance;
+save(fullfile(output_dir, 'lp_results_mc_dgp.mat'), ...
+     'lp_results_mc_dgp', 'lp_target_names', 'provenance', '-v7.3');
+manifest_entries = append_manifest_entry(manifest_entries, 'lp_results_mc_dgp.mat', ...
+    'mat', 'lp_results_mc_inside_dynare_auxiliary', aux_provenance, 'current_generated');
+writetable(monte_carlo_summary_table(lp_results_mc_dgp), ...
+           fullfile(output_dir, 'lp_results_mc_dgp_summary.csv'));
+manifest_entries = append_manifest_entry(manifest_entries, ...
+    'lp_results_mc_dgp_summary.csv', 'csv', 'lp_results_mc_inside_dynare_auxiliary_summary', ...
+    aux_provenance, 'current_generated');
+fprintf(['Monte Carlo LP on Inside-Dynare auxiliary wedges: saved %s ', ...
         'with B=%d, T=%d, center=median\n'], ...
-        fullfile(output_dir, 'lp_results_mc_fixed.mat'), mc_config.B, mc_config.T);
+        fullfile(output_dir, 'lp_results_mc_dgp.mat'), mc_config.B, mc_config.T);
 
 S = load(exp2_mat);
 if isfield(S, 'exp2_shock_size')
@@ -176,11 +240,7 @@ else
     exp2_shock_size = 1;
 end
 var_names = S.var_names;
-y_idx = find(strcmp(var_names, 'y'));
-cspt_idx = find(strcmp(var_names, 'cspt'));
-ivst_idx = find(strcmp(var_names, 'ivst'));
-labor_idx = find(strcmp(var_names, 'labor'));
-k_idx = find(strcmp(var_names, 'k'));
+wedge_idx = locate_inside_dynare_wedge_indices(var_names);
 
 girf = struct();
 girf_likelihood = struct();
@@ -188,23 +248,39 @@ girf_transformed = struct();
 girf_transformed_likelihood = struct();
 girf_transform_info = struct();
 girf_transform_info_likelihood = struct();
+girf_likelihood_path_info = struct();
 for tag = {'fin', 'macro'}
     tag_str = tag{1};
     pb = S.(['paths_base_' tag_str]);
     ps = S.(['paths_shock_' tag_str]);
     [Npairs, Hpairs, ~] = size(pb);
+    girf_likelihood_path_info.(tag_str) = struct( ...
+        'base_fail_count', 0, ...
+        'shock_fail_count', 0, ...
+        'base_fail_indices', zeros(0, 1), ...
+        'shock_fail_indices', zeros(0, 1));
 
     wedge_base = zeros(Npairs, Hpairs, numel(raw_wedge_names));
     wedge_shock = zeros(Npairs, Hpairs, numel(raw_wedge_names));
     wedge_base_like = zeros(Npairs, Hpairs, numel(raw_wedge_names));
     wedge_shock_like = zeros(Npairs, Hpairs, numel(raw_wedge_names));
     for i = 1:Npairs
-        wb = wedges_from_path(squeeze(pb(i, :, :)), y_idx, cspt_idx, ivst_idx, ...
-                              labor_idx, k_idx, pp);
-        ws = wedges_from_path(squeeze(ps(i, :, :)), y_idx, cspt_idx, ivst_idx, ...
-                              labor_idx, k_idx, pp);
-        wb_like = likelihood_wedges_from_path(squeeze(pb(i, :, :)), var_names, pp);
-        ws_like = likelihood_wedges_from_path(squeeze(ps(i, :, :)), var_names, pp);
+        wb = inside_dynare_wedges_from_path(squeeze(pb(i, :, :)), wedge_idx);
+        ws = inside_dynare_wedges_from_path(squeeze(ps(i, :, :)), wedge_idx);
+        [wb_like, wb_like_status] = likelihood_wedges_from_path( ...
+            squeeze(pb(i, :, :)), var_names, pp);
+        [ws_like, ws_like_status] = likelihood_wedges_from_path( ...
+            squeeze(ps(i, :, :)), var_names, pp);
+        if ~wb_like_status.success
+            girf_likelihood_path_info.(tag_str).base_fail_count = ...
+                girf_likelihood_path_info.(tag_str).base_fail_count + 1;
+            girf_likelihood_path_info.(tag_str).base_fail_indices(end + 1, 1) = i; %#ok<AGROW>
+        end
+        if ~ws_like_status.success
+            girf_likelihood_path_info.(tag_str).shock_fail_count = ...
+                girf_likelihood_path_info.(tag_str).shock_fail_count + 1;
+            girf_likelihood_path_info.(tag_str).shock_fail_indices(end + 1, 1) = i; %#ok<AGROW>
+        end
         for j = 1:numel(raw_wedge_names)
             wedge_base(i, :, j) = wb.(raw_wedge_names{j});
             wedge_shock(i, :, j) = ws.(raw_wedge_names{j});
@@ -251,17 +327,114 @@ for tag = {'fin', 'macro'}
              'pair-horizon points due to domain violations\n'], ...
             tag_str, girf_transform_info_likelihood.(tag_str).bad_labor_count, ...
             girf_transform_info_likelihood.(tag_str).bad_investment_count);
+    if girf_likelihood_path_info.(tag_str).base_fail_count > 0 || ...
+            girf_likelihood_path_info.(tag_str).shock_fail_count > 0
+        fprintf(['GIRF likelihood (%s): %d base paths and %d shock paths failed ', ...
+                 'CKM steady-state refresh and were set to NaN.\n'], ...
+                tag_str, ...
+                girf_likelihood_path_info.(tag_str).base_fail_count, ...
+                girf_likelihood_path_info.(tag_str).shock_fail_count);
+    end
 end
 
+provenance = aux_provenance;
 save(fullfile(output_dir, 'wedges_girf.mat'), 'girf', 'girf_transformed', ...
      'raw_wedge_names', 'transformed_wedge_names', 'girf_transform_info', ...
-     'exp2_shock_size', '-v7.3');
+     'exp2_shock_size', 'provenance', '-v7.3');
+manifest_entries = append_manifest_entry(manifest_entries, 'wedges_girf.mat', ...
+    'mat', 'girf_inside_dynare_auxiliary', aux_provenance, 'current_generated');
 fprintf('GIRF: saved %s\n', fullfile(output_dir, 'wedges_girf.mat'));
+provenance = likelihood_provenance;
 save(fullfile(output_dir, 'wedges_girf_likelihood.mat'), ...
      'girf_likelihood', 'girf_transformed_likelihood', 'raw_wedge_names', ...
      'transformed_wedge_names', 'girf_transform_info_likelihood', ...
-     'exp2_shock_size', '-v7.3');
+     'girf_likelihood_path_info', ...
+     'exp2_shock_size', 'provenance', '-v7.3');
+manifest_entries = append_manifest_entry(manifest_entries, 'wedges_girf_likelihood.mat', ...
+    'mat', 'girf_likelihood', likelihood_provenance, 'current_generated');
 fprintf('GIRF likelihood: saved %s\n', fullfile(output_dir, 'wedges_girf_likelihood.mat'));
+
+write_output_manifest(output_dir, manifest_entries, legacy_manifest_entries);
+if ~isempty(legacy_manifest_entries)
+    fprintf(['Detected %d legacy *fixed* artifacts in %s; ', ...
+             'see analysis_output_manifest.csv before comparing outputs.\n'], ...
+            numel(legacy_manifest_entries), output_dir);
+end
+
+function provenance = make_provenance(wedge_source, run_id)
+    provenance = struct();
+    provenance.schema_version = 'ckm_dual_track_v1';
+    provenance.wedge_source = wedge_source;
+    provenance.generated_by = 'run_bca_analysis';
+    provenance.run_id = run_id;
+end
+
+function write_provenance_csv(path, tbl, provenance, artifact_role)
+    tbl = attach_provenance_columns(tbl, provenance, artifact_role);
+    writetable(tbl, path);
+end
+
+function tbl = attach_provenance_columns(tbl, provenance, artifact_role)
+    n = height(tbl);
+    tbl.schema_version = repmat(string(provenance.schema_version), n, 1);
+    tbl.wedge_source = repmat(string(provenance.wedge_source), n, 1);
+    tbl.generated_by = repmat(string(provenance.generated_by), n, 1);
+    tbl.run_id = repmat(string(provenance.run_id), n, 1);
+    tbl.artifact_role = repmat(string(artifact_role), n, 1);
+end
+
+function entries = empty_manifest_entries()
+    entries = struct('artifact', {}, 'format', {}, 'artifact_role', {}, ...
+                     'status', {}, 'schema_version', {}, 'wedge_source', {}, ...
+                     'run_id', {}, 'generated_by', {});
+end
+
+function entries = append_manifest_entry(entries, artifact, format, artifact_role, provenance, status)
+    entry = struct();
+    entry.artifact = string(artifact);
+    entry.format = string(format);
+    entry.artifact_role = string(artifact_role);
+    entry.status = string(status);
+    entry.schema_version = string(provenance.schema_version);
+    entry.wedge_source = string(provenance.wedge_source);
+    entry.run_id = string(provenance.run_id);
+    entry.generated_by = string(provenance.generated_by);
+    entries(end + 1) = entry; %#ok<AGROW>
+end
+
+function entries = detect_legacy_manifest_entries(output_dir)
+    entries = empty_manifest_entries();
+    legacy_files = dir(fullfile(output_dir, '*fixed*'));
+    legacy_files = legacy_files(~[legacy_files.isdir]);
+    for ii = 1:numel(legacy_files)
+        [~, ~, ext] = fileparts(legacy_files(ii).name);
+        entry = struct();
+        entry.artifact = string(legacy_files(ii).name);
+        entry.format = string(strip(ext, 'left', '.'));
+        entry.artifact_role = "legacy_fixed_artifact";
+        entry.status = "legacy_existing";
+        entry.schema_version = "legacy_pre_v2";
+        entry.wedge_source = "legacy_fixed_point";
+        entry.run_id = "";
+        entry.generated_by = "pre_v2_pipeline";
+        entries(end + 1) = entry; %#ok<AGROW>
+    end
+end
+
+function write_output_manifest(output_dir, generated_entries, legacy_entries)
+    entries = [generated_entries, legacy_entries];
+    if isempty(entries)
+        return;
+    end
+    manifest_table = struct2table(entries);
+    manifest_table = sortrows(manifest_table, {'status', 'artifact'});
+    writetable(manifest_table, fullfile(output_dir, 'analysis_output_manifest.csv'));
+end
+
+function run_id = make_run_id()
+    run_id = char(datetime('now', 'TimeZone', 'UTC', ...
+                           'Format', "yyyyMMdd'T'HHmmss'Z'"));
+end
 
 function tbl = compare_lp_peak_table(lp_baseline, lp_no_sv, wedge_names)
     rows = {};
@@ -284,22 +457,22 @@ function tbl = compare_lp_peak_table(lp_baseline, lp_no_sv, wedge_names)
          'no_svctrl_peak', 'no_svctrl_h', 'ratio_no_sv_over_base'});
 end
 
-function tbl = compare_lp_widths(lp_fixed, lp_like, wedge_names)
+function tbl = compare_lp_widths(lp_dgp, lp_like, wedge_names)
     rows = {};
     for j = 1:numel(wedge_names)
         w = wedge_names{j};
         for s = 1:2
-            fixed = lp_fixed.(w);
+            dgp = lp_dgp.(w);
             like = lp_like.(w);
             rows(end + 1, :) = {w, s, ...
-                mean(fixed.ci_hi(:, s) - fixed.ci_lo(:, s), 'omitnan'), ...
+                mean(dgp.ci_hi(:, s) - dgp.ci_lo(:, s), 'omitnan'), ...
                 mean(like.ci_hi(:, s) - like.ci_lo(:, s), 'omitnan'), ...
                 mean(like.ci_hi(:, s) - like.ci_lo(:, s), 'omitnan') / ...
-                    mean(fixed.ci_hi(:, s) - fixed.ci_lo(:, s), 'omitnan')}; %#ok<AGROW>
+                    mean(dgp.ci_hi(:, s) - dgp.ci_lo(:, s), 'omitnan')}; %#ok<AGROW>
         end
     end
     tbl = cell2table(rows, 'VariableNames', ...
-        {'wedge', 'shock_index', 'mean_ci_width_fixed', 'mean_ci_width_likelihood', 'width_ratio'});
+        {'wedge', 'shock_index', 'mean_ci_width_dgp', 'mean_ci_width_likelihood', 'width_ratio'});
 end
 
 function panels = build_lp_shock_panels(sigAt_series, siget_series, shocks, controls_macro, controls_fin, H)
@@ -388,29 +561,87 @@ function tbl = monte_carlo_summary_table(mc)
         {'wedge', 'shock', 'horizon', 'median', 'mean', 'q025', 'q975'});
 end
 
-function wedges = wedges_from_path(path_rows, y_idx, cspt_idx, ivst_idx, ...
-                                   labor_idx, k_idx, pp)
-    Y = path_rows(:, y_idx);
-    C = path_rows(:, cspt_idx);
-    I = 0.06 * path_rows(:, ivst_idx);
-    L = path_rows(:, labor_idx);
-    K = path_rows(:, k_idx);
-    wedges = estimate_ckm_wedges(Y, C, I, L, K, pp);
+function wedges = inside_dynare_wedges_from_table(tbl)
+    required_vars = {'wedge_A', 'wedge_G', 'wedge_l', 'wedge_x'};
+    missing_vars = setdiff(required_vars, tbl.Properties.VariableNames);
+    if ~isempty(missing_vars)
+        error('run_bca_analysis:missing_inside_dynare_wedges', ...
+              ['Missing Inside-Dynare wedge columns: %s. ', ...
+               'Rerun run_fvgq2020_simulation after updating fvgq2020_solveonly.mod.'], ...
+              strjoin(missing_vars, ', '));
+    end
+    wedges = table( ...
+        tbl.t(:), ...
+        tbl.wedge_A(:), ...
+        tbl.wedge_G(:), ...
+        tbl.wedge_l(:), ...
+        tbl.wedge_x(:), ...
+        'VariableNames', {'t', 'log_A', 'G_share', 'tau_l', 'tau_x'});
 end
 
-function wedges = likelihood_wedges_from_path(path_rows, var_names, pp)
+function idx = locate_inside_dynare_wedge_indices(var_names)
+    idx = struct();
+    idx.wedge_A = find(strcmp(var_names, 'wedge_A'));
+    idx.wedge_G = find(strcmp(var_names, 'wedge_G'));
+    idx.wedge_l = find(strcmp(var_names, 'wedge_l'));
+    idx.wedge_x = find(strcmp(var_names, 'wedge_x'));
+
+    names = fieldnames(idx);
+    for ii = 1:numel(names)
+        if isempty(idx.(names{ii}))
+            error('run_bca_analysis:missing_inside_dynare_wedge_index', ...
+                  ['Missing Inside-Dynare wedge variable %s in Experiment 2 paths. ', ...
+                   'Rerun run_fvgq2020_simulation after updating fvgq2020_solveonly.mod.'], ...
+                  names{ii});
+        end
+    end
+end
+
+function wedges = inside_dynare_wedges_from_path(path_rows, wedge_idx)
+    T = size(path_rows, 1);
+    wedges = table( ...
+        (1:T)', ...
+        path_rows(:, wedge_idx.wedge_A), ...
+        path_rows(:, wedge_idx.wedge_G), ...
+        path_rows(:, wedge_idx.wedge_l), ...
+        path_rows(:, wedge_idx.wedge_x), ...
+        'VariableNames', {'t', 'log_A', 'G_share', 'tau_l', 'tau_x'});
+end
+
+function [wedges, status] = likelihood_wedges_from_path(path_rows, var_names, pp) %#ok<INUSD>
     tbl = array2table(path_rows, 'VariableNames', var_names);
     tbl.t = (1:height(tbl))';
-    tbl = movevars(tbl, 't', 'Before', 1);
-    like_opts = struct('force_recompile', false, 'verbose', false);
-    evalc('tmp_result = estimate_ckm_wedges_likelihood(tbl, pp, like_opts);');
-    wedges = tmp_result.smoothed_wedges;
+    tbl = movevars(tbl, 't', 'Before', 1); %#ok<NASGU>
+    like_opts = struct('force_recompile', false, 'verbose', false); %#ok<NASGU>
+    status = struct('success', true, 'failure_reason', "", 'error_id', "");
+    try
+        evalc('tmp_result = estimate_ckm_wedges_likelihood(tbl, pp, like_opts);');
+        wedges = tmp_result.smoothed_wedges;
+    catch ME
+        if any(strcmp(ME.identifier, { ...
+                'estimate_ckm_wedges_likelihood:steady_state_failed', ...
+                'estimate_ckm_wedges_likelihood:stoch_simul_failed'}))
+            T = size(path_rows, 1);
+            wedges = table( ...
+                (1:T)', nan(T, 1), nan(T, 1), nan(T, 1), nan(T, 1), ...
+                'VariableNames', {'t', 'log_A', 'G_share', 'tau_l', 'tau_x'});
+            status.success = false;
+            status.failure_reason = string(ME.identifier);
+            status.error_id = string(ME.identifier);
+        else
+            rethrow(ME);
+        end
+    end
 end
 
-function report = build_ckm_report_table(t, Y, wedges)
+function [report, info] = build_ckm_report_table(t, Y, wedges)
     efficiency_wedge = exp(wedges.log_A);
     labor_wedge = 1 - wedges.tau_l;
     investment_wedge = 1 ./ (1 + wedges.tau_x);
+    invalid_labor = labor_wedge <= 0;
+    invalid_investment = investment_wedge <= 0;
+    labor_wedge(invalid_labor) = NaN;
+    investment_wedge(invalid_investment) = NaN;
 
     report = table( ...
         t(:), ...
@@ -428,6 +659,8 @@ function report = build_ckm_report_table(t, Y, wedges)
             'efficiency_wedge', 'efficiency_index', ...
             'labor_wedge', 'labor_index', ...
             'investment_wedge', 'investment_index'});
+    info = struct('bad_labor_count', nnz(invalid_labor), ...
+                  'bad_investment_count', nnz(invalid_investment));
 end
 
 function idx = base_100(series)

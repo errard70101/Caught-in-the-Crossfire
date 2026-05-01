@@ -2,6 +2,7 @@ function [ys, params, check] = ckm_three_wedge_likelihood_steadystate(ys, exo, M
 % Compute the steady state for the three-wedge CKM prototype.
 
 check = 0;
+params = M_.params;
 
 p = struct();
 for ii = 1:M_.param_nbr
@@ -56,8 +57,6 @@ for ii = 1:M_.orig_endo_nbr
         eval(['ys(' int2str(ii) ') = log(' var_name ');']); %#ok<EVLDIR>
     end
 end
-
-params = M_.params;
 
 function name = get_name(raw_names, idx)
 if iscell(raw_names)

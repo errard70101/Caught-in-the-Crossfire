@@ -14,6 +14,28 @@ The goal is to obtain concrete wedge signatures of uncertainty shocks
 volatility) before investing in the Section 7 representative-agent
 LWZ+CGK hybrid.
 
+## Methodology update: Inside-Dynare wedges (2026-04-25)
+
+The wedge extraction pipeline has been migrated from a MATLAB-side algebraic
+fixed-point approximation to **Inside-Dynare wedge extraction**. The solve-only
+Dynare file now exports four auxiliary accounting observables:
+
+- `wedge_A` → `log_A`
+- `wedge_G` → `G_share`
+- `wedge_l` → `tau_l`
+- `wedge_x` → `tau_x`
+
+The investment wedge is now pinned down by the CKM Euler accounting identity
+inside Dynare, including the `wedge_x(+1)` forward expectation term. This makes
+the wedge series true DGP observables rather than ex post fixed-point estimates
+constructed from a finite simulated path. The likelihood/Kalman smoother remains
+as the econometrician-facing recovery exercise and is now initialized from
+`[wedge_A, wedge_l, wedge_x]`, with `G_share` copied from `wedge_G`.
+
+The numerical tables below were produced before this migration and should be
+treated as superseded once `run_fvgq2020_simulation`, `run_bca_analysis`, and
+`plot_bca_responses` are rerun under the Inside-Dynare pipeline.
+
 ## Setup recap
 
 - **DGP:** FVGQ (2020) model unchanged; baseline `higherphi = 0`; third-order
@@ -94,8 +116,9 @@ Figures:
 
 ## Caveats
 
-- CKM wedge extraction uses a realized-value fixed point for `tau_x`, not the
-  full CKM (2007) likelihood-based state-space estimator.
+- The current code now compares True DGP (Inside-Dynare) wedges against the
+  likelihood/Kalman recovery. Re-run the simulation and analysis after this
+  migration before quoting the headline numbers above.
 - FVGQ calibration is a U.S. business-cycle calibration; no Taiwan calibration
   is attempted here.
 - The DGP contains capital utilization, but the prototype accounting system

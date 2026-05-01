@@ -2,7 +2,7 @@
 //
 // Government wedge is excluded because the FVGQ simulated data satisfy
 // Y = C + I exactly. We therefore smooth {z, tau_l, tau_x} in the linearized
-// prototype and append G_share from the exact resource identity outside Dynare.
+// prototype and append G_share from the FVGQ Inside-Dynare wedge_G observable.
 
 var y c k x l w z tau_l tau_x log_labor_wedge log_investment_wedge log_efficiency_wedge;
 varexo eps_z eps_tau_l eps_tau_x;

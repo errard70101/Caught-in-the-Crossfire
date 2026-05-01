@@ -1,10 +1,10 @@
-function wedges = estimate_ckm_wedges(Y, C, I, L, K, prototype_params)
-%ESTIMATE_CKM_WEDGES Recover four CKM-style wedges from aggregate series.
+function wedges = compute_ckm_posthoc_wedges(Y, C, I, L, K, prototype_params)
+%COMPUTE_CKM_POSTHOC_WEDGES Recover CKM accounting wedges from aggregate data.
 
     T = numel(Y);
     if numel(C) ~= T || numel(I) ~= T || numel(L) ~= T || numel(K) ~= T
-        error('estimate_ckm_wedges:size_mismatch', ...
-              'Y, C, I, L, K must all have the same length.');
+        error('compute_ckm_posthoc_wedges:size_mismatch', ...
+              'Y, C, I, L, and K must all have the same length.');
     end
 
     alpha = prototype_params.alpha;
@@ -20,14 +20,13 @@ function wedges = estimate_ckm_wedges(Y, C, I, L, K, prototype_params)
     G_share = 1 - C ./ Y - I ./ Y;
     tau_l = 1 - chi * L.^(nu + 1) .* C.^gamma ./ ((1 - alpha) * Y);
 
-    tau_x = zeros(T, 1);
-    MPK_next = alpha * [Y(2:T); Y(T)] ./ K;
+    tau_x = nan(T, 1);
+    tau_x(T) = beta * (alpha * Y(T) / K(T)) / (1 - beta * (1 - delta)) - 1;
     uc = C.^(-gamma);
-    uc_next = [uc(2:T); uc(T)];
-    for iter = 1:5
-        tau_x_next = [tau_x(2:T); tau_x(T)];
-        rhs = beta * uc_next .* (MPK_next + (1 - delta) * (1 + tau_x_next));
-        tau_x = rhs ./ uc - 1;
+    for tt = T - 1:-1:1
+        mpk_next = alpha * Y(tt + 1) / K(tt);
+        tau_x(tt) = beta * (uc(tt + 1) / uc(tt)) * ...
+            (mpk_next + (1 - delta) * (1 + tau_x(tt + 1))) - 1;
     end
 
     wedges = table((1:T)', log_A, G_share, tau_l, tau_x, ...

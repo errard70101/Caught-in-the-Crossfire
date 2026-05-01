@@ -17,7 +17,7 @@ third-order uncertainty shock, so the wedge representation is obtained
 operationally from simulated data.
 
 The authoritative specification for the simulation design lives in
-`theory/nk_uncertainty_bca/sections/07_simulation_based_bca.tex`.
+`theory/rbc_uncertainty_bca/sections/07_simulation_based_bca.tex`.
 
 ## Files
 
@@ -63,7 +63,7 @@ baseline TFP innovation scale written separately as `sigma_a`.
 
 ## Experimental design
 
-See `theory/nk_uncertainty_bca/sections/07_simulation_based_bca.tex` for the
+See `theory/rbc_uncertainty_bca/sections/07_simulation_based_bca.tex` for the
 authoritative specification. The pipeline has three phases:
 
 1. **Shared warm-up to SSS.** Starting from the deterministic steady state,

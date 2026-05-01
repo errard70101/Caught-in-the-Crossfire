@@ -7,17 +7,20 @@
 //   * switched to Dynare 6.2 native pruning
 //   * replaced resid(1) with resid;
 //   * added set_dynare_seed(20260424)
+//   * added CKM prototype accounting wedges as auxiliary observables
 //
-// Model structure and calibration are otherwise unchanged.
+// Core FVGQ equilibrium equations and calibration are otherwise unchanged.
 
 @#define higherphi = 0
 
-var ce cw ivst q k labor y cspt phi utilt delt deltp demt lambdat At sigAt sigdt thetat siget;
+var ce cw ivst q k labor y cspt phi utilt delt deltp demt lambdat At sigAt sigdt thetat siget
+    wedge_A wedge_G wedge_l wedge_x;
 varexo ethet eA ed uA ud ue;
 
 parameters beta ifrac alpha delt0 delt1 delt2 ssPhi theta rho eta gss
            rhothet rhoA rhod sigA sigd sige rhosigA rhosigd rhosige
-           metaA metad metae;
+           metaA metad metae
+           ckm_gamma ckm_nu;
 
 beta = 0.994;
 ifrac = 0.06;
@@ -51,6 +54,9 @@ rhosige = 0.75;
 metaA = (log(2)/(1-rhosigA^2)^0.5);
 metad = (log(2)/(1-rhosigd^2)^0.5);
 metae = (log(2)/(1-rhosige^2)^0.5);
+
+ckm_gamma = 2;
+ckm_nu = 1;
 
 model;
 
@@ -94,6 +100,15 @@ deltp = delt1 + delt2*(utilt - 1);
 
 (lambdat) = ((q) - 1)/(1 - (q)*theta);
 
+wedge_A = log(y) - alpha*log(k(-1)) - (1-alpha)*log(labor);
+
+wedge_G = 1 - cspt/y - ifrac*ivst/y;
+
+wedge_l = 1 - (steady_state(y) / y) * (labor / steady_state(labor))^(ckm_nu + 1) * (cspt / steady_state(cspt))^ckm_gamma;
+
+(1 + wedge_x) * cspt^(-ckm_gamma) =
+    beta * cspt(+1)^(-ckm_gamma) * (alpha*y(+1)/k + (1-delt0)*(1 + wedge_x(+1)));
+
 end;
 
 shocks;
@@ -126,6 +141,10 @@ thetat = theta;
 sigAt = sigA;
 sigdt = sigd;
 siget = sige;
+wedge_A = log(y) - alpha*log(k) - (1-alpha)*log(labor);
+wedge_G = 1 - cspt/y - ifrac*ivst/y;
+wedge_l = 0;
+wedge_x = beta * (alpha*y/k) / (1 - beta*(1-delt0)) - 1;
 @#else
 ce = 0.8202039838;
 cw = 1.250189404;
@@ -146,6 +165,10 @@ thetat = theta;
 sigAt = sigA;
 sigdt = sigd;
 siget = sige;
+wedge_A = log(y) - alpha*log(k) - (1-alpha)*log(labor);
+wedge_G = 1 - cspt/y - ifrac*ivst/y;
+wedge_l = 0;
+wedge_x = beta * (alpha*y/k) / (1 - beta*(1-delt0)) - 1;
 @#endif
 end;
 

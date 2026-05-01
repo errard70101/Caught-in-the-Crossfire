@@ -1,9 +1,9 @@
-function result = monte_carlo_lp_bands(sim_workspace, pp, config)
+function result = monte_carlo_lp_bands(sim_workspace, ~, config)
 %MONTE_CARLO_LP_BANDS Monte Carlo LP bands from repeated simulated samples.
 %
 % Inputs
 %   sim_workspace : struct loaded from output/simulated_workspace.mat
-%   pp            : prototype parameters used by estimate_ckm_wedges
+%   pp            : retained for caller compatibility; wedges come from Dynare
 %   config        : optional struct with fields
 %       .B            number of Monte Carlo repetitions (default 10000)
 %       .T            sample length per repetition (default 400)
@@ -48,14 +48,9 @@ function result = monte_carlo_lp_bands(sim_workspace, pp, config)
                        sim_workspace.sss_state, sim_workspace.oo_.dr, ex, 3);
         sim = path(:, 2:end)';
 
-        Y = sim(:, idx.y);
-        C = sim(:, idx.cspt);
-        I = 0.06 * sim(:, idx.ivst);
-        L = sim(:, idx.labor);
-        K = sim(:, idx.k);
-        wedges = estimate_ckm_wedges(Y, C, I, L, K, pp);
+        wedges = inside_dynare_wedges_from_matrix(sim, idx);
 
-        lp_targets = build_ckm_lp_targets(wedges);
+        lp_targets = build_ckm_lp_targets(wedges, struct('invalid_policy', 'nan'));
         wedge_matrix = table2array(lp_targets(:, wedge_names));
         lagged_wedges = [nan(1, size(wedge_matrix, 2)); wedge_matrix(1:end-1, :)];
         shocks = ex(:, [idx.uA, idx.ue]);
@@ -150,11 +145,10 @@ end
 
 function idx = locate_indices(var_names, exo_var_names)
     idx = struct();
-    idx.y = find(strcmp(var_names, 'y'));
-    idx.cspt = find(strcmp(var_names, 'cspt'));
-    idx.ivst = find(strcmp(var_names, 'ivst'));
-    idx.labor = find(strcmp(var_names, 'labor'));
-    idx.k = find(strcmp(var_names, 'k'));
+    idx.wedge_A = find(strcmp(var_names, 'wedge_A'));
+    idx.wedge_G = find(strcmp(var_names, 'wedge_G'));
+    idx.wedge_l = find(strcmp(var_names, 'wedge_l'));
+    idx.wedge_x = find(strcmp(var_names, 'wedge_x'));
     idx.sigAt = find(strcmp(var_names, 'sigAt'));
     idx.sigdt = find(strcmp(var_names, 'sigdt'));
     idx.siget = find(strcmp(var_names, 'siget'));
@@ -169,9 +163,21 @@ function idx = locate_indices(var_names, exo_var_names)
     for ii = 1:numel(names)
         if isempty(idx.(names{ii}))
             error('monte_carlo_lp_bands:missing_index', ...
-                  'Missing required index: %s', names{ii});
+                  ['Missing required index: %s. Rerun run_fvgq2020_simulation ', ...
+                   'after updating fvgq2020_solveonly.mod.'], names{ii});
         end
     end
+end
+
+function wedges = inside_dynare_wedges_from_matrix(sim, idx)
+    T = size(sim, 1);
+    wedges = table( ...
+        (1:T)', ...
+        sim(:, idx.wedge_A), ...
+        sim(:, idx.wedge_G), ...
+        sim(:, idx.wedge_l), ...
+        sim(:, idx.wedge_x), ...
+        'VariableNames', {'t', 'log_A', 'G_share', 'tau_l', 'tau_x'});
 end
 
 function out = merge_structs(defaults, overrides)
