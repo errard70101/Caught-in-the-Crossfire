@@ -167,3 +167,16 @@ Reduction from current ~280 lines is roughly 25%, driven primarily by deduplicat
 ## 8. Implementation Note
 
 The next step after user approval of this spec is to invoke the writing-plans skill to produce a step-by-step implementation plan covering: (1) extracting and preserving paras 1–3, (2) drafting each new subsection in order, (3) deleting superseded blocks, (4) recompiling and visually checking the PDF, (5) running a duplication / citation audit.
+
+## 9. Deviations During Implementation (2026-05-12)
+
+During execution, the user decided that a dedicated §1.2 Research Questions subsection would either restate paragraph 3 of §1.1 or trespass into the following subsections. The subsection was therefore **dropped**, and the three keywords `source` / `channel` / `mechanism` were italicized in paragraph 3 of §1.1 so the RQ structure remains visible.
+
+The final implemented structure (after renumbering) is:
+
+- 1.1 Motivation and Taiwan Context (paras 1–3 retained verbatim, with emph on the three keywords)
+- 1.2 Open Challenges and Relation to the Literature (corresponds to §3.3 of this spec)
+- 1.3 Research Design and Main Contributions (corresponds to §3.4 of this spec)
+- 1.4 Three-Year Roadmap (corresponds to §3.5 of this spec)
+
+The §3.2 Research Questions section of this spec is therefore historical; it was not implemented. All other sections of this spec were implemented as specified.
