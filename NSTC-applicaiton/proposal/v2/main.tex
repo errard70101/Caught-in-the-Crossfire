@@ -51,47 +51,17 @@ Together these four gaps define the project's methodological contribution. The n
 
 \subsection{Research Design and Main Contributions}
 
-\textcolor{blue}{To address these challenges, the project uses the order-invariant stochastic
-volatility in mean vector autoregression (OI-SVMVAR) framework of
-\citet{davidson2025investigating}. The model jointly estimates Taiwan's domestic
-macroeconomic uncertainty and financial uncertainty as latent common volatility factors and
-allows those uncertainty factors to enter the conditional mean of the VAR, so uncertainty can
-directly affect macroeconomic and financial outcomes rather than merely changing their
-variances.}
+The empirical design responds to the four challenges of the previous subsection through three design choices, and yields one project-level methodological contribution plus three year-specific contributions.
 
-\textcolor{blue}{The key adaptation is to treat \textbf{external drivers as unclassified variables}.
-Taiwan's clearly real-side variables anchor the domestic macroeconomic uncertainty factor, while
-Taiwan's clearly financial variables anchor the domestic financial uncertainty factor. External
-drivers---including U.S. monetary variables, Chinese real-side indicators, global financial risk,
-geopolitical risk, and trade-policy uncertainty---are then classified by their time-varying
-co-movement with Taiwan's macroeconomic and financial common factors. The resulting
-posterior classification probabilities provide a data-driven, time-varying measure of the operative
-transmission channel without requiring the researcher to impose it ex ante.}
+\textbf{Joint estimation in a large information set.} The project uses the order-invariant stochastic volatility in mean vector autoregression (OI-SVMVAR) framework of \citet{davidson2025investigating} to estimate Taiwan's macroeconomic and financial uncertainty factors jointly with their VAR dynamics. The model allows both latent uncertainty factors to enter the conditional mean of the VAR, so uncertainty directly affects macroeconomic and financial outcomes rather than merely altering their variances. Joint estimation addresses the omitted-variable problem (C1) by accommodating a rich information set covering both domestic anchors and multiple external drivers; the order-invariant identification scheme addresses the large-VAR ordering problem (C2) without requiring restrictive block-exogeneity assumptions; and the single-stage Bayesian estimation removes the measurement-error bias of two-step procedures (C3).
 
-\textcolor{blue}{This design yields one project-level contribution and three year-specific
-contributions. The project-level contribution is methodological: it shows how the OI-SVMVAR
-unclassified-variable mechanism can be repurposed from classifying ambiguous domestic
-variables to identifying the channel through which external shocks enter a small open economy.}
+\textbf{External drivers as an unclassified block.} The central adaptation is to repurpose the OI-SVMVAR unclassified-variable mechanism for transmission-channel identification. Taiwan's clearly real-side variables (industrial production, exports, employment, prices) anchor the domestic macroeconomic uncertainty factor, while Taiwan's clearly financial variables (equity returns, exchange-rate volatility, credit conditions) anchor the domestic financial uncertainty factor. External drivers---U.S. monetary stance, Chinese real-side cyclical indicators, global financial-market volatility, geopolitical risk, and trade-policy uncertainty---are placed in the unclassified block. The posterior classification probabilities then deliver a data-driven, time-varying measure of which channel each external driver activates in any given month, without requiring the researcher to assume the channel ex ante.
 
-\textcolor{blue}{The \textbf{first-year main contribution} is empirical identification. The project
-constructs a monthly Taiwan external-uncertainty dataset that combines domestic macroeconomic
-anchors, domestic financial anchors, and external drivers from the United States, China, and the
-global economy. Using this dataset, the first year identifies Taiwan-specific macroeconomic and
-financial uncertainty factors and estimates time-varying classification probabilities that reveal
-whether external shocks enter mainly through macroeconomic or financial channels.}
+\textbf{Wedge projection and MCMC-integrated validation.} Reduced-form classification cannot by itself distinguish competing structural frictions (C4). Year~2 derives a wedge-projection framework that maps uncertainty-related second-moment risk corrections in a nonlinear structural model into Business Cycle Accounting wedges, converting transmission-channel evidence into testable structural predictions: collateral and risk-premium mechanisms should load primarily on the investment wedge, while working-capital mechanisms should load primarily on the after-tax labor wedge. Year~3 then estimates wedge-level local projections that take the full posterior distribution of the Year~1 uncertainty factors as input. By propagating first-stage posterior uncertainty into the structural test rather than relying on a point estimate, this MCMC-integrated design closes the residual two-step bias of C3 and yields a coherent end-to-end inference path.
 
-\textcolor{blue}{The \textbf{second-year main contribution} is theoretical mapping. The project
-develops a wedge-projection framework that links uncertainty-related risk corrections in a
-nonlinear structural model to BCA wedges. This framework converts transmission-channel
-evidence into testable structural predictions: collateral or risk-premium mechanisms should load
-primarily on the investment wedge, whereas working-capital mechanisms should load primarily on
-the after-tax labor wedge.}
+The project's central \textbf{methodological contribution} is to repurpose the OI-SVMVAR unclassified-block mechanism. Where the original framework uses it to classify ambiguous domestic variables, the present project uses it to identify the transmission channel of external shocks into a small open economy. This reframing turns a domestic-variable classification tool into a structural diagnostic for external-shock transmission, and it makes the channel of transmission a posterior object rather than an ex ante assumption.
 
-\textcolor{blue}{The \textbf{third-year main contribution} is empirical validation. The project
-constructs Taiwan BCA wedges and introduces an \textit{MCMC-integrated} mechanism test that
-passes the full posterior distribution of the first-year uncertainty factors into the wedge-level local
-projections. This design propagates first-stage estimation uncertainty into the final validation
-exercise and mitigates the generated-regressor bias typical of two-step uncertainty analyses.}
+The project also produces three year-specific contributions. The \textbf{first-year contribution} is \emph{empirical identification}: the project constructs a monthly Taiwan external-uncertainty dataset, estimates Taiwan-specific macroeconomic and financial uncertainty factors, and computes time-varying classification probabilities for each external driver. The \textbf{second-year contribution} is \emph{theoretical mapping}: the project derives wedge signatures for collateral, risk-premium, and working-capital frictions in a small-open-economy environment, clarifying how each friction should appear in the investment, labor, efficiency, and external wedges. The \textbf{third-year contribution} is \emph{empirical validation}: the project constructs Taiwan's BCA wedges and uses the MCMC-integrated wedge-level local projections to test which structural signature best matches the reduced-form transmission patterns identified in Year~1.
 
 \subsection{Overview of the Three-Year Project}
 
