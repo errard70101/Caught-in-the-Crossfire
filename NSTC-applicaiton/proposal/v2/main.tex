@@ -35,82 +35,19 @@ Exposure to these external sources makes identification difficult because the sa
 
 This project therefore asks how external uncertainty shocks from the United States, China, and the global economy operate in Taiwan, and which structural friction explains their macroeconomic effects. It answers this question by moving from \emph{source}, to \emph{channel}, to \emph{mechanism}. Year 1 identifies the source and reduced-form transmission channel of external uncertainty by estimating Taiwan's macroeconomic and financial uncertainty factors and by classifying external drivers according to their time-varying association with these factors. Year 2 provides the structural mapping by deriving how competing mechanisms, including collateral constraints, risk-premium channels, working-capital frictions, and small-open-economy trade or input-finance channels, should appear in Business Cycle Accounting wedges. Year 3 validates the mechanism empirically by constructing Taiwan's BCA wedges and testing which wedge signature best matches the response to the uncertainty shocks identified in Year 1.
 
-\subsection{Empirical and Methodological Challenges}
+\subsection{Open Challenges and Relation to the Literature}
 
-\textcolor{blue}{Identifying the transmission of external uncertainty to Taiwan is difficult for four
-reasons.}
+A direct identification of how external uncertainty reaches Taiwan must overcome four overlapping difficulties. Each has been engaged separately by prior literature, but no existing study addresses them jointly. The four challenges below organize what is missing and motivate the methodological choices described in the next subsection.
 
-\textcolor{blue}{First, external and domestic sources of uncertainty are tightly intertwined. A
-single geopolitical or policy event may simultaneously alter global risk sentiment, Taiwan's
-domestic political outlook, and expectations about trade, production, and finance. In a small
-model with limited domestic controls, these domestic movements may be misattributed to
-external shocks, creating severe omitted-variable bias \citep{carriero2018measuring}. Addressing
-this problem requires a rich information set that includes both domestic anchors and external
-drivers.}
+The first challenge is that external and domestic sources of uncertainty are tightly intertwined. A single geopolitical or policy event---an FOMC tightening, a U.S.--China tariff round, or a cross-strait incident---may simultaneously alter global risk sentiment, Taiwan's domestic political outlook, and expectations about trade, production, and finance. In a small model with limited domestic controls, these domestic movements may be misattributed to external shocks, producing severe omitted-variable bias \citep{carriero2018measuring}. The macro-uncertainty literature has documented the broad effects of uncertainty on investment, hiring, and economic activity \citep{bloom2009impact,bloom2014fluctuations,baker2016measuring,handley2022tpu}, but these studies typically rely on a single proxy index or a small model and cannot separate domestic from external contributions. The closest Taiwan-focused precedent, \citet{huang2021taiwan}, constructs a Baker--Davis-style text-based EPU index for Taiwan and uses a Diebold--Yilmaz spillover model to examine linkages with U.S. and Japanese EPU indices, finding that roughly half of Taiwan's economic uncertainty originates domestically and that U.S. and Japanese spillovers are significant. Even this work, however, delivers a single scalar EPU index and a reduced-form spillover decomposition: it does not separate Taiwan's domestic uncertainty into macroeconomic and financial components, does not identify whether external uncertainty enters Taiwan through macroeconomic or financial channels, and does not estimate uncertainty jointly with its macroeconomic effects in one model. To close all three of these gaps, the present project builds a unified monthly dataset that combines Taiwan domestic anchors with U.S., Chinese, and global drivers, and estimates two latent uncertainty factors jointly with the VAR dynamics that govern their macroeconomic effects.
 
-\textcolor{blue}{Second, the large model needed to reduce omitted-variable bias creates its own
-identification problem. In high-dimensional VAR systems, standard Cholesky identification
-becomes fragile because results depend on arbitrary variable ordering. At the same time, the
-strict block-exogeneity restrictions often imposed in small open economy models are too rigid
-for the present question, because they predetermine how external and domestic variables can
-interact. A credible framework must therefore avoid both arbitrary recursive orderings and
-pre-imposed zero restrictions.}
+The second challenge is that the large information set needed to reduce omitted-variable bias creates its own identification problem. In high-dimensional VAR systems, standard Cholesky identification becomes fragile because the results depend on arbitrary variable orderings. At the same time, the strict block-exogeneity restrictions traditionally imposed in small-open-economy models are too rigid for the present question, because they predetermine how external and domestic variables can interact---a particularly costly assumption when the goal is to learn the operative transmission channel from the data. The order-invariant stochastic volatility in mean vector autoregression (OI-SVMVAR) framework of \citet{davidson2025investigating} resolves the ordering problem and accommodates large information sets without imposing recursive zero restrictions. Its ``unclassified-block'' mechanism has so far been used to classify ambiguous domestic variables, for example financial conditions indices that might plausibly belong to either the macroeconomic or financial block. It has not yet been adapted to identify the transmission channel of external shocks into a small open economy. The present project repurposes the unclassified block in exactly that way: external drivers are placed in the unclassified block, and the posterior classification probabilities then reveal whether each external driver co-moves with Taiwan's macroeconomic or financial uncertainty factor in any given month.
 
-\textcolor{blue}{Third, many existing approaches rely either on proxy indicators of uncertainty or
-on a two-step design that first estimates uncertainty and then studies its macroeconomic effects
-in a separate model. Text-based indices constructed from international news may not capture how
-uncertainty is experienced inside Taiwan. The two-step procedure also treats estimated
-uncertainty as observed data, ignores estimation uncertainty, and can induce measurement-error
-bias and model inconsistency \citep{carriero2018measuring}. A coherent design should estimate
-uncertainty and its effects jointly.}
+The third challenge concerns how uncertainty is measured and how the estimate is used downstream. Many existing approaches rely either on proxy indicators (such as the VIX or a text-based EPU index) or on a two-step design that first estimates uncertainty and then studies its macroeconomic effects in a separate model. Proxy indicators may not capture how uncertainty is experienced inside Taiwan, and two-step procedures treat the first-stage estimate as observed data, discarding estimation uncertainty and inducing measurement-error and model-consistency bias \citep{carriero2018measuring}. \citet{davidson2025investigating} addresses the first-stage problem by estimating uncertainty and its effects jointly. The literature has not, however, propagated first-stage posterior uncertainty into downstream structural-mechanism tests; downstream validation typically uses a point estimate of the latent uncertainty factor and a single posterior-mean impulse response. The present project closes this residual gap with an \textit{MCMC-integrated} wedge-level local projection that passes the full posterior distribution of Year~1 uncertainty factors into the Year~3 mechanism test, providing a coherent end-to-end Bayesian inference rather than a hybrid Bayesian-frequentist pipeline.
 
-\textcolor{blue}{Fourth, even when reduced-form evidence identifies a strong uncertainty response,
-it does not by itself reveal the underlying mechanism. A financial-channel response may reflect
-collateral risk, time-varying risk premia, working-capital finance, or several frictions at once.
-The project therefore needs a second layer that connects empirical transmission channels to
-structural interpretation rather than stopping at reduced-form impulse responses alone.}
+The fourth challenge is that even a well-identified reduced-form impulse response does not by itself reveal the underlying mechanism. A financial-channel response may reflect a collateral constraint, a time-varying risk premium, a working-capital friction, or several of these at once. The Business Cycle Accounting (BCA) literature \citep{chari2007business} provides a useful diagnostic by decomposing observed aggregate fluctuations into wedges that summarize distortions in prototype equilibrium conditions, and small-open-economy extensions add efficiency and external wedges that capture imported-input dependence and exchange-rate movements. BCA has, however, been used primarily as a positive accounting device for ordinary business-cycle dynamics; it has not been connected to uncertainty-driven second-moment risk corrections, and there is no existing wedge-projection framework that converts uncertainty-shock impulse responses into testable wedge signatures. The present project derives such a framework: it shows how collateral and risk-premium frictions should project primarily into the investment wedge, while working-capital frictions should project primarily into the after-tax labor wedge. The reduced-form transmission-channel evidence from Year~1 can then be matched against these structural signatures in Year~3, allowing the project to distinguish competing mechanisms rather than stopping at reduced-form descriptions.
 
-
-\subsection{Relation to the Literature}
-
-\textcolor{blue}{This project contributes to three strands of literature. The first studies the
-macroeconomic effects of uncertainty shocks. This literature shows that uncertainty can depress
-investment, hiring, and economic activity by increasing the option value of waiting and by
-strengthening precautionary motives \citep{bloom2009impact,bloom2014fluctuations}. A
-related branch studies policy and trade-policy uncertainty, emphasizing that uncertainty about
-future policy can alter firms' investment, export, and production decisions before policy changes
-are fully implemented \citep{baker2016measuring,handley2022tpu}.}
-
-\textcolor{blue}{The second strand develops empirical methods for measuring uncertainty in
-macroeconomic systems. Existing work emphasizes that small models can confound uncertainty
-shocks with omitted domestic and external conditions, and that two-step procedures can create
-measurement-error and model-consistency problems \citep{carriero2018measuring}. The
-OI-SVMVAR framework of \citet{davidson2025investigating} is especially relevant because it
-jointly estimates uncertainty and its macroeconomic effects, accommodates large information
-sets, and avoids ordering dependence in large VAR systems.}
-
-\textcolor{blue}{The third strand is the Business Cycle Accounting literature. BCA decomposes
-observed aggregate fluctuations into wedges that summarize distortions in prototype equilibrium
-conditions \citep{chari2007business}. This project uses BCA not as a complete structural model
-but as a diagnostic device. In a small open economy, external absorption, imported-input
-dependence, and exchange-rate movements may appear in efficiency and external wedges rather
-than only in the standard investment and labor wedges. By deriving how uncertainty-related risk
-corrections project into BCA wedges, the project links reduced-form uncertainty measurement to
-structural mechanism testing.}
-
-\textcolor{blue}{Relative to these literatures, the project makes four advances. First, it reframes
-the OI-SVMVAR classification problem from ``which domestic variables are macro or financial''
-to ``through which channel do external shocks enter a small open economy?'' The key empirical
-innovation is to place external drivers in the unclassified block and let the data determine whether
-they co-move with Taiwan's macroeconomic or financial uncertainty. Second, it builds a unified
-monthly dataset covering Taiwan domestic anchors together with U.S., Chinese, and global
-uncertainty drivers, allowing competing external sources to be compared within one empirical
-framework. Third, it combines order-invariant large-scale uncertainty measurement with an
-\textit{MCMC-integrated} validation strategy that propagates first-stage estimation uncertainty
-into the final empirical mechanism test. Fourth, it connects empirical transmission-channel
-classification to a wedge-based structural interpretation, allowing the project to ask not only
-whether uncertainty matters, but also where it comes from, how it enters Taiwan, and which
-friction best explains its effects.}
+Together these four gaps define the project's methodological contribution. The next subsection describes the empirical design that addresses them, and the final subsection explains how the design is implemented across the three years.
 
 \subsection{Research Design and Main Contributions}
 
