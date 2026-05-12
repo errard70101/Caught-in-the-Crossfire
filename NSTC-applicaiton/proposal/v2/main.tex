@@ -5,6 +5,7 @@
 \usepackage{amsmath, amssymb, bm}
 \usepackage{setspace}
 \usepackage{xcolor}
+\usepackage{graphicx}
 \usepackage{longtable}
 \usepackage{booktabs}
 \usepackage{array}
@@ -21,98 +22,18 @@
 
 \subsection{Motivation and Taiwan Context}
 
-Taiwan provides a particularly important setting for studying external uncertainty
-transmission. It is a small open economy, but not a peripheral one. Taiwan is deeply
-connected to the United States through financial markets, monetary conditions, and
-technology demand, and it is closely linked to China through trade, production networks,
-and cross-strait risk. At the same time, Taiwan occupies a central position in global
-semiconductor supply chains. These features make Taiwan highly exposed to external uncertainty. They also make identification difficult because the same external disturbance can reach Taiwan through
-several channels at once. A U.S. monetary tightening, for example, may affect Taiwan
-through capital flows and exchange rates, but it may also affect Taiwan through export
-demand and firms' production expectations. Similarly, a China slowdown may operate
-through trade and supply-chain linkages in one episode and through financial-market
-sentiment in another.
+Taiwan provides a particularly important setting for studying external uncertainty transmission. It is deeply connected to the United States through financial markets, monetary conditions, and technology demand, and it is closely linked to China through trade, production networks, and cross-strait risk. At the same time, Taiwan occupies a central position in global semiconductor supply chains. These features make Taiwan highly exposed to external uncertainty. As Figure~\ref{fig:taiwan-vix-events} shows, Taiwan's option-implied volatility rises sharply around several major global and regional uncertainty episodes.
 
-External uncertainty rarely affects Taiwan through a single observable margin. When the
-Federal Reserve tightens monetary policy, Taiwan may face pressure through capital flows,
-exchange rates, equity markets, and credit conditions. When China's economy slows or
-U.S.--China trade tensions rise, Taiwan may instead be affected through export demand,
-production linkages, inventory adjustment, and firms' investment expectations. When
-geopolitical risk increases, both channels may operate at the same time. The same external
-shock may therefore look financial in one episode, macroeconomic in another episode, and
-mixed in periods of severe stress.
+\begin{figure}[ht]
+    \centering
+    \caption{Taiwan VIX and major uncertainty episodes}
+    \includegraphics[width=0.98\textwidth]{../../../figures/tw_taifex_vix_bloom_style.pdf}
+    \label{fig:taiwan-vix-events}
+\end{figure}
 
-This project asks how external uncertainty shocks from the United States, China, and the
-global economy enter Taiwan. The central question is not only whether uncertainty matters,
-but also where it comes from, through which channel it is transmitted, and which structural
-friction best explains its effects. In particular, the project studies whether external
-uncertainty reaches Taiwan mainly through macroeconomic channels such as trade,
-production, demand, and employment, or through financial channels such as capital flows,
-risk premia, exchange-rate pressure, asset-price volatility, and credit-market stress. It also
-asks whether the dominant channel changes over time.
+Exposure to these external sources makes identification difficult because the same external disturbance can reach Taiwan through several channels at once. A U.S. monetary tightening, for example, may affect Taiwan through capital flows and exchange rates, but it may also affect Taiwan through export demand and firms' production expectations. Similarly, a China slowdown may operate through trade and supply-chain linkages in one episode and through financial-market sentiment in another. The same external shock may therefore look financial in one episode, macroeconomic in another, and mixed in periods of severe stress.
 
-This question matters because different transmission channels imply different policy
-diagnoses. If external uncertainty mainly operates through real-side demand and production
-linkages, the relevant policy margin concerns export support, industrial adjustment,
-supply-chain resilience, and firms' investment planning. If it operates mainly through
-financial conditions, the relevant margin concerns liquidity provision, exchange-market
-monitoring, credit-market stability, and macroprudential policy. A single uncertainty index
-cannot distinguish these cases. Taiwan therefore requires an empirical framework that can
-measure domestic uncertainty, separate macroeconomic and financial transmission
-channels, and allow the channel of external shocks to vary over time.
-
-Major policy shifts and geopolitical realignments also unfold over time rather than at a
-single date. Central banks act through sequences of decisions, trade conflicts evolve through
-rounds of negotiation and retaliation, and geopolitical tensions build through repeated
-events. During these periods, firms, households, and investors face uncertainty about future
-policy, demand, financing costs, and external market access. This uncertainty can delay
-investment, hiring, consumption, and portfolio adjustment
-\citep{bloom2009impact,bloom2014fluctuations,handley2022tpu}. Because these episodes
-often appear as sharp monthly movements rather than smooth quarterly trends, this project
-uses monthly data to capture short-lived uncertainty spikes while retaining real-side
-information on production, trade, labor markets, and prices.
-
-The main empirical challenge is that widely used uncertainty indicators do not reveal the
-channel through which uncertainty is transmitted. Measures such as the VIX or the
-\citet{baker2016measuring} Economic Policy Uncertainty index summarize broad movements
-in risk or policy-related uncertainty, but they do not show whether a given external
-disturbance reaches Taiwan through trade and production or through financial markets and
-credit conditions. This project addresses that limitation by estimating Taiwan's
-macroeconomic and financial uncertainty factors jointly and by using time-varying
-classification probabilities to identify whether external drivers are more closely associated
-with Taiwan's macroeconomic or financial uncertainty in each episode.
-
-\textcolor{blue}{This project asks a sharp question: when external uncertainty shocks from the
-United States, China, and the global economy hit Taiwan, do they transmit primarily through
-macroeconomic channels or through financial channels, and does that transmission mechanism
-change over time? The question is economically important because Taiwan is a small open
-economy that is deeply integrated with both the U.S. and Chinese economies and repeatedly
-exposed to global policy, trade, and geopolitical disturbances. When the Federal Reserve tightens
-monetary policy, when U.S.--China trade tensions escalate, or when cross-strait risk rises,
-Taiwan can face simultaneous pressure on exports, investment, capital flows, exchange rates, and
-domestic financial conditions.}
-
-\textcolor{blue}{Major policy shifts and geopolitical realignments rarely move from announcement
-to a stable regime in a single step. Central banks act through sequences of decisions, trade
-conflicts unfold through rounds of negotiation and retaliation, and geopolitical tensions evolve
-over extended periods rather than at a single point in time. During these intervals, firms,
-households, and investors face heightened uncertainty about the future path of policy, demand,
-and financing conditions, which can delay investment, hiring, consumption, and portfolio
-adjustment \citep{bloom2009impact,bloom2014fluctuations,handley2022tpu}. Because these
-uncertainty episodes often arrive as sharp monthly spikes rather than smooth quarterly
-movements, this project uses monthly data so that it can capture high-frequency changes in
-uncertainty while still retaining real-side macroeconomic information such as industrial
-production, trade, labor-market outcomes, and prices.}
-
-\textcolor{blue}{The central difficulty is that existing uncertainty measures usually do not reveal
-the \emph{channel} through which uncertainty is transmitted. Widely used indicators such as the
-VIX or the \citet{baker2016measuring} Economic Policy Uncertainty index compress multiple
-dimensions of uncertainty into a single scalar and therefore cannot show whether a given
-external disturbance primarily propagates through trade, production, and demand, or through
-asset prices, capital flows, exchange-rate pressure, and credit conditions. For Taiwan, this
-distinction is not cosmetic. A macroeconomic transmission channel points toward export demand,
-production linkages, and real-side adjustment, whereas a financial transmission channel points
-toward liquidity, risk premia, market volatility, and credit-market stress.}
+This project therefore asks how external uncertainty shocks from the United States, China, and the global economy operate in Taiwan, and which structural friction explains their macroeconomic effects. It answers this question by moving from source, to channel, to mechanism. Year 1 identifies the source and reduced-form transmission channel of external uncertainty by estimating Taiwan's macroeconomic and financial uncertainty factors and by classifying external drivers according to their time-varying association with these factors. Year 2 provides the structural mapping by deriving how competing mechanisms, including collateral constraints, risk-premium channels, working-capital frictions, and small-open-economy trade or input-finance channels, should appear in Business Cycle Accounting wedges. Year 3 validates the mechanism empirically by constructing Taiwan's BCA wedges and testing which wedge signature best matches the response to the uncertainty shocks identified in Year 1.
 
 \subsection{Research Questions}
 
@@ -315,6 +236,8 @@ anchors, 8 Taiwan financial anchors, and 22 unclassified variables that include 
 and Taiwan-domestic variables whose channel may vary over time. The data appendix documents
 the source groups, transformation rules, treatment of upstream price data, and reproducibility
 pipeline.
+
+
 
 The raw data collection already covers Taiwan macroeconomic indicators from the
 Directorate-General of Budget, Accounting and Statistics (DGBAS), Ministry of Economic
