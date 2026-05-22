@@ -21,12 +21,29 @@ The revised position is:
 - The real computational risk is PCG convergence and preconditioning, not whether the matrix-vector product exists.
 - Identification of `B0` is conditional on sampled latent paths unless a separate mixed-frequency identification argument is supplied.
 
+Protocol gate:
+
+- The thread plan is now treated as a high-level roadmap only. Formal mathematical definitions, algorithmic protocols, validation invariants, benchmark accounting rules, and forbidden claims live in `protocols/`.
+- Review `protocols/GLOBAL_DEFINITIONS.md` before any further correction rerun or Thread 2c implementation.
+- Review the relevant thread protocol before executing that thread. If implementation and protocol conflict, revise the protocol first rather than resolving the ambiguity in code.
+- No Thread 2c coding should start until `protocols/THREAD2C_MATRIX_FREE_PROTOCOL.md` is reviewed and accepted.
+- No Thread 4, Thread 5, Thread 6, Thread SV, or Thread 7 work should start until the corresponding protocol is reviewed. Thread 7 is gate-level only until Threads 1-6 and the SV/classification protocol pass for any enabled volatility or classification block.
+
+Known protocol risks before execution:
+
+- Thread 5 stationarity rejection can become an MCMC failure mode in high-dimensional VARs. High rejection must trigger a constrained-sampling or prior-bias discussion, not just smaller priors.
+- Thread 5 must specify the time-varying-covariance SUR posterior for `Gamma_k`, not only basis reconstruction and companion screening.
+- Thread 4 lambda choices must be checked against solver-specific stability. A lambda that CHOLMOD can handle may still break Thread 2c's banded Cholesky route.
+- Thread 6 conditional `B0` identification does not guarantee marginal identification or good Thread 7 mixing. Weak-ID and multimodality diagnostics must feed into the full-MCMC gate.
+- The Step 4 SV and classification update is governed by `protocols/THREAD_SV_CLASSIFICATION_PROTOCOL.md`; DHK inheritance alone is not a standalone validation.
+
 Thread 2 update:
 
 - The lightweight PCG route did not pass the go/no-go checkpoint. `none`, diagonal Jacobi, and date block-Jacobi all show explosive `iter_PCG` as SV dispersion rises.
 - The time-averaged CHOLMOD preconditioner works at baseline and moderate SV dispersion, but it remains slower than direct CHOLMOD at Taiwan-scale monthly dimensions.
 - For `n ~= 5`, `T <= 1920`, and monthly lags, direct CHOLMOD is the production baseline. Matrix-free PCG should be treated as a fallback for memory pressure, larger systems, or extreme-frequency settings, not as the default per-sweep speed advantage.
 - The computational story is now: direct sparse Cholesky is best at Taiwan scale; matrix-free remains relevant for avoiding assembly/memory pressure and for larger regimes, but only with strong global preconditioning.
+- Correction status: the original Thread 2 `time_averaged_{lu,chol}` implementation used `B0' diag(1 / mean_t U_t) B0`, while the intended time-averaged precision is `D_bar = mean_t(D_t) = B0' diag(mean_t 1/U_t) B0`. The code has been corrected, but the Thread 2 PCG tables must be rerun before treating the time-averaged iteration counts as final.
 
 Thread 2b update:
 
@@ -34,7 +51,39 @@ Thread 2b update:
 - Once assembly, factorisation, solve time, and memory proxies are all counted, `direct_cholmod` wins on total time at every completed grid cell. The current matrix-free PCG path with an explicit `Kbar_avg` preconditioner is uniformly slower because it still pays global sparse assembly and factor storage costs.
 - At Taiwan-scale dimensions (`n ~= 5`, `T <= 1920`, `p in 2..12`), the production latent-state Gaussian solver should be direct CHOLMOD. Matrix-free PCG should not be advertised as a per-iteration speed advantage.
 - The only unresolved matrix-free opportunity is a genuinely no-explicit-`Kbar_avg` preconditioner for larger stress regimes such as `(n=20, T=10000, p=24)`, where explicit sparse assembly was skipped by the memory rule.
-- The next executable thread is Thread 3: validate perturbation-optimisation draws using direct CHOLMOD as the production accuracy reference. PCG comparisons should be limited to controlled diagnostic regimes, not presented as production candidates.
+- Thread 3 can continue, but its role is validation infrastructure: direct CHOLMOD supplies the reference Gaussian draw against which any future scalable sampler is tested. It is not the endpoint of the general methodological contribution.
+- Correction status: the direct CHOLMOD rows remain valid, but PCG rows using `Kbar_avg` must be rerun with the corrected precision-average `D_bar`. The existing Thread 2b total-cost conclusion should be treated as provisional for PCG until this reduced rerun is complete.
+
+Thread 2c motivation:
+
+- The project is not meant to develop a Taiwan-only method. Direct CHOLMOD is the Taiwan-scale production baseline, but the general MF-OI-SVMVAR contribution still needs a scalable matrix-free route.
+- Thread 2b showed that the current `time_avg_chol` PCG route fails to exploit matrix-free structure because it still assembles and factors an explicit global `Kbar_avg`.
+- The next matrix-free research task is therefore not another Jacobi-style benchmark. It is to design and test a no-explicit-`Kbar_avg` preconditioner or sampler that avoids global `Tn x Tn` precision assembly.
+
+Thread 3 update:
+
+- Thread 3 is complete. The perturbation-optimisation validation is documented in `code/thread3_po_draws/THREAD3_NOTE.md`, with summary outputs in `po_moments.csv`, `po_functionals.csv`, and `pcg_tolerance.csv`.
+- Direct CHOLMOD PO draws reproduce the intended Gaussian posterior: sample means are within theoretical Monte Carlo standard error, marginal variances match `diag(K^{-1})` at the expected sampling error scale, and functional diagnostics are consistent with exact Gaussian draws.
+- Matrix-free PCG with `time_averaged_chol` matches direct CHOLMOD within Monte Carlo error in controlled regimes (`sv_sigma in {0.1, 0.3}`), but remains much slower per draw and is diagnostic-only.
+- `rtol = 1e-8` is the documented diagnostic-mode PCG tolerance. `rtol = 1e-10` adds cost without visible accuracy gain, while `rtol = 1e-6` is already close at the tested Monte Carlo precision.
+- The production/reference latent-state draw is direct CHOLMOD perturbation-optimisation. The next general-method thread is Thread 2c: a scalable no-explicit-`Kbar_avg` matrix-free preconditioner or sampler.
+- Correction status: the direct CHOLMOD PO validation remains valid. PCG diagnostic iteration counts, solve times, and tolerance comparisons should be rerun after the corrected time-averaged precision preconditioner because the old `D_bar` differed by roughly 18-52% in the Thread 1 regression checks.
+
+Thread 1 rerun and correction update:
+
+- Thread 1 has been rerun after the preconditioner correction. The original explicit-vs-matrix-free `Kbar` equivalence test still passes at roughly `3e-16` to `5e-16` across the tested configurations.
+- A new `test_time_avg_precision.py` regression verifies that `D_bar = mean_t(D_t)` equals `B0' diag(mean_t 1/U_t) B0`, and that the corrected `_build_time_averaged_kbar` matches an independent reference to numerical precision.
+- The old `1 / mean(U_t)` construction differs from the corrected precision average by about 18-27% at `sv_sigma = 0.3` and 42-52% at `sv_sigma = 0.5`, explaining why Thread 2/2b/3 PCG numbers require revalidation.
+- Thread 1 documentation has been reframed: the implementation does not materialise the SV-dependent `Kbar`, but it does materialise and reuse the time-invariant `H_B` shell. `bench_amortised.py` is now explicitly superseded by Thread 2b's fair total-cost benchmark.
+- `SVAwareKbar` no longer stores a separate CSR copy of `H_B.T`; it applies `self.H_B.T @ u` directly. Initial-condition truncation and the need to vectorise `build_H_B` before Thread 2c stress dimensions are documented.
+- The controlled DGP now defaults to a dense unit-diagonal `B0` to match the order-invariant target. Lower-triangular `B0` remains available only as an explicit legacy test option.
+
+Protocol review update:
+
+- The protocol gate is substantively passable after review of `protocols/README.md` and the 11 protocol files.
+- Follow-up edits have been applied before Thread 2c implementation: Thread 2c now pins lower-band SciPy storage, restricts `H_B` boundary corrections to the first `p` dates, requires explicit `M'M` bandwidth-pattern checks, documents the 800MB+ headline-cell feasibility issue, and states that `K_pre` setup cannot be amortized across full MCMC sweeps after `B0` or volatility changes.
+- Thread 7 now carries the same Thread 2c cost invariant for full-sampler accounting.
+- Thread 5 now records that DHK-style `n=23, K=5` SUR updates remain plausibly dense-Cholesky feasible, so PCG/block SUR is an escape route for materially larger systems rather than a required bottleneck workaround at protocol DGP scales.
 
 ## Thread 1: SV-Aware Matrix-Free Matvec
 
@@ -178,7 +227,11 @@ Benchmark PCG convergence for the SV-aware matrix-free latent-state precision in
 
 Objective:
 
-Validate Gaussian latent-state draws from the same conditional posterior under the solver strategy implied by Threads 2 and 2b. Direct CHOLMOD is the production reference at Taiwan scale; matrix-free PCG is a fallback that should be checked only as a diagnostic in regimes where Thread 2 shows controlled convergence.
+Validate Gaussian latent-state draws from the same conditional posterior under the solver strategy implied by Threads 2 and 2b. Direct CHOLMOD is the production reference at Taiwan scale and the validation reference for future scalable samplers; matrix-free PCG is a fallback that should be checked only as a diagnostic in regimes where Thread 2 shows controlled convergence.
+
+Status:
+
+- Complete. See `code/thread3_po_draws/THREAD3_NOTE.md`.
 
 Scope:
 
@@ -198,8 +251,8 @@ Deliverables:
 - Simulation results comparing direct CHOLMOD posterior summaries with matrix-free PCG posterior summaries in the controlled PCG regime.
 - Diagnostics for PCG tolerance effects on sampling accuracy.
 - Recommendation for the latent-state draw used in the full MCMC:
-  - direct CHOLMOD for Taiwan-scale production, since Thread 2b confirms total-cost dominance;
-  - matrix-free PCG only in larger-scale or memory-constrained regimes.
+  - direct CHOLMOD for Taiwan-scale production and as the gold-standard validation sampler;
+  - matrix-free PCG only in larger-scale or memory-constrained regimes after a scalable preconditioner is supplied.
 
 Acceptance criteria:
 
@@ -207,10 +260,14 @@ Acceptance criteria:
 - PCG tolerance recommendation documented for the controlled regime.
 - No claim that matrix-free PCG is production-ready at high SV dispersion.
 
+Result:
+
+- PASS. Direct PO draws reproduce the Gaussian posterior summaries, PCG draws match direct CHOLMOD within Monte Carlo error for `sv_sigma in {0.1, 0.3}`, and `rtol = 1e-8` is the recommended diagnostic tolerance.
+
 Suggested thread prompt:
 
 ```text
-Validate perturbation-optimisation Gaussian draws for the SV-aware MF latent-state sampler. Thread 2b has confirmed that direct CHOLMOD is the Taiwan-scale production solver on total cost. Treat direct CHOLMOD as the production accuracy reference. Compare matrix-free PCG with time_averaged_chol only as a diagnostic in controlled regimes where Thread 2 showed convergence, initially sv_sigma in {0.1, 0.3}. Report posterior means, selected variances, linear-functional diagnostics, and PCG tolerance sensitivity. Do not present none/jacobi/block_jacobi PCG as production candidates.
+Validate perturbation-optimisation Gaussian draws for the SV-aware MF latent-state sampler. Thread 2b has confirmed that direct CHOLMOD is the Taiwan-scale production solver on total cost. Treat direct CHOLMOD as both the production accuracy reference and the gold-standard validation benchmark for future scalable samplers. Compare matrix-free PCG with time_averaged_chol only as a diagnostic in controlled regimes where Thread 2 showed convergence, initially sv_sigma in {0.1, 0.3}. Report posterior means, selected variances, linear-functional diagnostics, and PCG tolerance sensitivity. Do not present none/jacobi/block_jacobi PCG as production candidates, and do not frame direct CHOLMOD as the endpoint of the general methodological contribution.
 ```
 
 ## Thread 2b: Fair Solver Cost and Memory Benchmark
@@ -267,6 +324,75 @@ Suggested thread prompt:
 Run a fair total-cost benchmark for the MF-OI-SVMVAR latent-state solver using Thread 1 and Thread 2 code. Compare direct_cholmod_total = explicit Kbar assembly + CHOLMOD factor + solve against matrix-free PCG with time_averaged_chol preconditioning. Separate assembly, setup/factorisation, solve time, total time, and memory proxy. Stress n, T, p, and sv_sigma beyond the Taiwan-scale baseline. The goal is to identify where direct CHOLMOD is production-dominant and where matrix-free becomes useful.
 ```
 
+## Thread 2c: No-Explicit-Kbar Matrix-Free Preconditioner
+
+Objective:
+
+Develop a genuinely scalable matrix-free preconditioner or sampler path that avoids explicit global `Tn x Tn` precision assembly. This is the computational thread needed for a general MF-OI-SVMVAR method, beyond the Taiwan-scale direct CHOLMOD baseline.
+
+Why this is needed:
+
+- Thread 2b showed that `direct_cholmod` wins at Taiwan-scale dimensions, but the project is not meant to be a Taiwan-only computational method.
+- The current `pcg_time_avg_chol_explicit_avgK` path does not deliver a matrix-free advantage because it assembles and factors `Kbar_avg`, which has the same sparsity pattern and factor-storage burden as `Kbar`.
+- A general scalable contribution requires avoiding global sparse precision assembly in the preconditioner, not merely using a matrix-free matvec inside PCG.
+
+Candidate routes:
+
+- Analytic block implementation of
+
+```text
+K_pre x = H_B' (I_T kron D_bar) H_B x + lambda M' M x
+```
+
+  without materialising the global `Kbar_avg` matrix.
+- Block-banded or banded Cholesky exploiting the VAR lag bandwidth directly.
+- State-space / Kalman simulation-smoother formulation of the same Gaussian latent-path draw.
+- FFT or block-Toeplitz approximations only if their approximation error can be diagnosed against Thread 3's direct CHOLMOD reference.
+
+Current implementation note:
+
+- Threads 1-3 validate an `H_B`-materialized sparse-shell path, not Zhu's exact FFT basis-filter path.
+- Therefore the `log T` term in the proposal-facing complexity expression is a Zhu best-case reference until Thread 2c, or a later exact FFT/block-Toeplitz thread, validates an exact basis-filter implementation.
+
+Scope:
+
+- Start from the Gaussian latent-path problem used in Threads 1-3.
+- Do not revisit `none`, scalar Jacobi, or date block-Jacobi as production candidates.
+- Implement at least one no-explicit-`Kbar_avg` route for applying or approximately solving with the time-averaged preconditioner.
+- Benchmark against:
+  - `direct_cholmod` from Thread 2b;
+  - `pcg_time_avg_chol_explicit_avgK` from Thread 2b;
+  - Thread 3 direct draw diagnostics when the method is used inside perturbation-optimisation.
+- Stress the regimes where direct sparse assembly starts to bind:
+  - `n = 10, 20`;
+  - `T = 5000, 10000`;
+  - `p = 12, 24`;
+  - `sv_sigma = 0.1, 0.3, 0.5`.
+
+Deliverables:
+
+- A short design note explaining the chosen no-explicit-`Kbar_avg` route and why it avoids the assembly/factor-storage bottleneck found in Thread 2b.
+- Code under `theory/mf_oi_svmvar_report/code/thread2c_matrix_free_preconditioner/`.
+- Benchmarks separating setup, apply/solve, total time, iteration count, and memory proxy.
+- Accuracy diagnostics against Thread 3's direct CHOLMOD reference if the method is used for posterior draws.
+- A revised computational claim for the proposal:
+  - direct CHOLMOD for Taiwan-scale production;
+  - scalable matrix-free route only where it beats direct CHOLMOD on time, memory, or feasibility.
+
+Acceptance criteria:
+
+- The method does not assemble a global `Tn x Tn` `Kbar` or `Kbar_avg` matrix as part of the matrix-free route.
+- The benchmark includes a regime where direct sparse assembly/factorisation is expensive or skipped by memory rules.
+- PCG iteration counts remain controlled in at least one large stress regime, or the note clearly explains why the route fails.
+- Any approximation error is measured against the direct CHOLMOD reference established in Thread 3.
+- No claim of a general scalable sampler is made unless total cost, memory, and accuracy all support it.
+
+Suggested thread prompt:
+
+```text
+Design and benchmark a no-explicit-Kbar matrix-free preconditioner or sampler for the SV-aware MF-OI-SVMVAR latent Gaussian problem. Thread 2b showed that the current time_avg_chol PCG path loses because it assembles and factors an explicit global Kbar_avg. Do not revisit Jacobi or date block-Jacobi. Implement a route that avoids global Tn x Tn precision assembly, such as analytic block application of H_B' (I kron D_bar) H_B + lambda M'M, a banded/block-banded solver, or a state-space simulation smoother. Benchmark against direct_cholmod and pcg_time_avg_chol_explicit_avgK in large stress regimes, and use Thread 3 direct CHOLMOD draw diagnostics as the accuracy reference if posterior draws are produced.
+```
+
 ## Thread 4: Lambda Sensitivity and Exact Aggregation Limit
 
 Objective:
@@ -310,6 +436,7 @@ Make the basis-lag restriction operational and stationarity-safe.
 Scope:
 
 - Generate `B_j = sum_k Gamma_k phi_k(j/p)`.
+- Define and test the time-varying-covariance SUR posterior update for `Gamma_k`.
 - Compare basis choices:
   - normalized Legendre;
   - normalized Almon;
@@ -321,18 +448,50 @@ Scope:
 Deliverables:
 
 - A small module that maps `Gamma_k` to `B_1, ..., B_p`.
+- A posterior-update note or module implementing the Gaussian conditional precision for `vec(Gamma)`.
 - Stability diagnostics by basis and prior scale.
 - Recommended prior scaling.
 
 Acceptance criteria:
 
 - Stationarity check is automated.
+- The SUR posterior update uses date-specific `D_t = B0' U_t^{-1} B0` weights and documents Minnesota or Horseshoe shrinkage hyperparameter handling.
 - Prior scale recommendation keeps rejection rates manageable.
 
 Suggested thread prompt:
 
 ```text
 Build and test the parametric lag expansion for the MF-OI-SVMVAR report. Implement basis-to-VAR coefficient reconstruction and companion-matrix stationarity screening. Compare normalized Legendre, Almon, and exponential bases, and recommend prior scaling for Gamma_k.
+```
+
+## Thread SV: Volatility and Classification Block
+
+Objective:
+
+Validate the Step 4 block from `main.tex`: common volatility paths, idiosyncratic volatility paths, and Markov classification states.
+
+Scope:
+
+- Work conditional on a sampled high-frequency path `y*`.
+- Use DHK/CHKP band-sparse ARMH logic for volatility paths, or an explicitly documented equivalent.
+- Use FFBS or an equivalent exact finite-state smoother for unclassified-variable state paths.
+- Rebuild `U_t` and `D_t` after accepted volatility moves.
+
+Deliverables:
+
+- Standalone synthetic volatility recovery test.
+- Standalone classification-path recovery test when classifications are enabled.
+- ARMH acceptance rates, volatility ESS, and classification switching frequencies.
+
+Acceptance criteria:
+
+- The block passes `protocols/THREAD_SV_CLASSIFICATION_PROTOCOL.md`.
+- Thread 7 cannot enable SV or classification blocks unless this standalone protocol has passed.
+
+Suggested thread prompt:
+
+```text
+Implement and validate the standalone SV/classification block for the MF-OI-SVMVAR report. Work conditional on a sampled high-frequency path y*. Follow protocols/THREAD_SV_CLASSIFICATION_PROTOCOL.md: update common and idiosyncratic volatility paths with DHK/CHKP-style band-sparse ARMH or an explicitly documented equivalent, update unclassified-variable Markov state paths with FFBS when classifications are enabled, rebuild U_t and D_t after accepted volatility moves, and report ARMH acceptance rates, volatility ESS, classification switching frequencies, and synthetic recovery diagnostics. Do not compose this into Thread 7 until the standalone tests pass.
 ```
 
 ## Thread 6: Identification Diagnostics for B0
@@ -351,12 +510,19 @@ Scope:
   - sensitivity to `lambda`;
   - recovery of known `B0` in controlled DGPs.
 - Identify what a formal lemma would need to show.
+- Use DHK's simulation study as the template for Monte Carlo comparisons:
+  `references/davidson-hou-koop-investigating-economic-uncertainty-using-stochastic-volatility-in-mean-vars-the-importance-of-model-size-order-invariance-and-classification-2025.pdf`
+  (Section 3, Table 1, Figures 1-3). Adapt its OI vs triangular, large vs
+  small, and time-varying classification comparisons to the mixed-frequency
+  latent-path setting.
 
 Deliverables:
 
 - A theory note, not necessarily code-first.
 - A proposed rank diagnostic.
 - A Monte Carlo design for `B0` recovery.
+- A DHK-inspired comparison ladder: `HF-oracle-OI-TVC`, `MF-OI-TVC`,
+  `MF-triangular-TVC`, `MF-OI-small`, and `MF-OI-fixed-classification`.
 - A list of assumptions needed for a formal result.
 
 Acceptance criteria:
@@ -374,20 +540,25 @@ Write a technical note on B0 identification in the latent mixed-frequency MF-OI-
 
 Objective:
 
-Only after Threads 1-6 are credible, assemble the full sampler.
+Only after Threads 1-6 and the SV/classification block are credible, assemble the full sampler.
 
 Scope:
 
 - Latent path draw from Threads 1-4.
 - Parametric lag update from Thread 5.
 - `B0` update from DHK conditional on `y*`.
-- Volatility and classification update from DHK/CHKP.
+- Volatility and classification update from the standalone SV/classification protocol.
+- Synthetic DGP comparisons should follow the DHK Section 3 logic, with a
+  correctly specified large OI/TVC benchmark and misspecified alternatives for
+  order dependence, omitted variables, and fixed classification.
 
 Deliverables:
 
 - Full block-Gibbs algorithm in pseudocode.
 - Minimal implementation on a small synthetic DGP.
 - Convergence diagnostics and timing profile.
+- Synthetic recovery tables that separate mixed-frequency loss from
+  order-dependence, model-size, and classification misspecification.
 
 Acceptance criteria:
 
@@ -406,10 +577,14 @@ Assemble a minimal full MF-OI-SVMVAR block-Gibbs sampler using the validated lat
 1. [done] Thread 1: SV-aware matvec.
 2. [done] Thread 2: PCG/preconditioner benchmark.
 3. [done] Thread 2b: fair solver cost and memory benchmark.
-4. [next] Thread 3: perturbation-optimisation draw validation.
-5. Thread 4: lambda sensitivity.
-6. Thread 5: parametric lag stability.
-7. Thread 6: identification diagnostics.
-8. Thread 7: full MCMC architecture.
+4. [done] Thread 3: perturbation-optimisation draw validation as the direct CHOLMOD reference benchmark.
+5. [done] Protocol review: `protocols/GLOBAL_DEFINITIONS.md` and all thread protocols, including `THREAD_SV_CLASSIFICATION_PROTOCOL.md`.
+6. [next] Correction rerun: reduced Thread 2 / Thread 2b / Thread 3 PCG diagnostics with corrected `D_bar = mean_t(D_t)`.
+7. Thread 2c: no-explicit-Kbar matrix-free preconditioner.
+8. Thread 4: lambda sensitivity.
+9. Thread 5: parametric lag stability.
+10. Thread 6: identification diagnostics.
+11. Thread SV: volatility and classification block.
+12. Thread 7: full MCMC architecture.
 
-The Thread 2b go/no-go checkpoint has been reached: after counting assembly, factorisation, solve time, and memory proxies, direct CHOLMOD remains dominant at Taiwan-scale monthly dimensions. The production implementation should use direct CHOLMOD for Taiwan-scale latent Gaussian solves and keep matrix-free PCG as a larger-scale fallback or preconditioner-design research item. Move next to Thread 3 to validate perturbation-optimisation draws under this solver strategy.
+The Thread 1 correction checkpoint has been reached: the actual SV-aware `Kbar` matvec remains correct, and the time-averaged precision preconditioner now uses `D_bar = mean_t(D_t)`. Before starting any further execution, first review the protocol specs in `protocols/`. Then rerun the reduced Thread 2/2b/3 PCG diagnostics so the scalable-method baseline is based on the corrected precision-average preconditioner rather than the old `1 / mean(U_t)` construction.

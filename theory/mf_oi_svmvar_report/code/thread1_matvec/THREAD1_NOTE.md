@@ -51,7 +51,7 @@ The downstream PCG / solver story is treated in Thread 2 / 2b / 3.
 |---|---|---|
 | `H_B`  | Banded `Tn × Tn` sparse (`scipy.sparse.csr_matrix`). Diagonal blocks `I_n`, sub-diagonal blocks `-B_i` for lag `i = 1..p`. Lags that fall before `t=1` are truncated (initial conditions absorbed in `c_B`). | bandwidth `p*n`; nnz `O(T p n^2)` |
 | `B_1, ..., B_p` | Independent Gaussian entries, jointly rescaled so the companion matrix spectral radius equals a target (default `0.9`). | guarantees stationarity for the PoC DGP |
-| `B0` | Lower triangular, unit diagonal, Gaussian off-diagonals (scale `0.3`). | matches DHK structural normalisation |
+| `B0` | Default dense unit-diagonal matrix with Gaussian off-diagonals; lower-triangular remains available as a legacy controlled case. | matches the OI target by avoiding recursive zero restrictions |
 | `U_t` | Diagonal of `exp(h_{i,t})`, with each `h_{i,t}` an independent AR(1): `h_{i,t} = mu + rho (h_{i,t-1} - mu) + sigma * eta`. | The per-variable `h_{i,t}` here is a PoC log-variance path, distinct from the common volatility factor `h_t` in main.tex eq (1). `sv_sigma` is tunable for Thread 2. |
 | `S^m` | `I_{Tn}` in this PoC (all entries treated as latent). | observed-entry embedding deferred to a later PoC |
 | `M_m` | Mariano–Murasawa monthly→quarterly growth weights `(1/3, 2/3, 1, 2/3, 1/3)` placed on the chosen low-frequency variable index, for each quarter whose end-month lies in `[6, T]`. | at most 5 nonzeros per row |
@@ -97,13 +97,13 @@ no measured speed gain.
 Test sweep (`test_equivalence.py`): 5 configurations × 4 seeds × 20
 random vectors per config. Tolerance: `1e-10`.
 
-| (n, T, p, λ, σ_SV)         | seeds | max relative error |
-|----------------------------|-------|--------------------|
-| (3, 20, 1, 1e2, 0.1)       | 0,1,7,42 | 4.2e-16 |
-| (3, 20, 2, 1e4, 0.3)       | 0,1,7,42 | 4.2e-16 |
-| (5, 30, 2, 1e4, 0.5)       | 0,1,7,42 | 3.9e-16 |
-| (5, 60, 3, 1e6, 0.8)       | 0,1,7,42 | 3.3e-16 |
-| (7, 45, 4, 1e4, 0.3)       | 0,1,7,42 | 4.6e-16 |
+| (n, T, p, λ, σ_SV, B0)              | seeds | max relative error |
+|-------------------------------------|-------|--------------------|
+| (3, 20, 1, 1e2, 0.1, dense)         | 0,1,7,42 | 4.1e-16 |
+| (3, 20, 2, 1e4, 0.3, lower)         | 0,1,7,42 | 4.3e-16 |
+| (5, 30, 2, 1e4, 0.5, dense)         | 0,1,7,42 | 3.9e-16 |
+| (5, 60, 3, 1e6, 0.8, dense)         | 0,1,7,42 | 3.2e-16 |
+| (7, 45, 4, 1e4, 0.3, dense)         | 0,1,7,42 | 4.5e-16 |
 
 **All cases: max relative error ≈ 3–5 × 10⁻¹⁶ (machine precision).**
 Acceptance criterion satisfied with six orders of magnitude margin.

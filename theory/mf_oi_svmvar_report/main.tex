@@ -1,0 +1,176 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{bm}
+\usepackage{graphicx}
+\usepackage{geometry}
+\geometry{a4paper, margin=1in}
+\usepackage{natbib}
+\usepackage{hyperref}
+
+\title{A Matrix-Free Mixed-Frequency Approach to \\ Order-Invariant SVMVARs}
+\author{Independent Research Report}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+This report develops a methodological research agenda for extending the Order-Invariant Stochastic Volatility in Mean Vector Autoregression (OI-SVMVAR) of \citet{davidson2025investigating} to a mixed-frequency setting. To reduce temporal aggregation bias, the model is written as a high-frequency latent state-space system. The proposed implementation combines the matrix-valued basis-lag representation of \citet{zhu2026structural} with Gaussian latent-state samplers \citep{papandreou2010gaussian,bardsley2012mcmc}. The extension is not a mechanical application of Zhu's sampler: Zhu's baseline is homoskedastic and explicitly leaves stochastic volatility as future work. The key computational idea is that SV destroys Zhu's time-invariant middle precision block, but not the matrix-free factorisation itself: the operator becomes a time-invariant VAR shell with a time-varying sequence of small precision blocks. Pilot benchmarks show that this observation is not sufficient for a speed claim. Lightweight PCG preconditioners have iteration counts that explode with SV dispersion, while direct sparse Cholesky is the practical production solver at Taiwan-scale monthly dimensions. Matrix-free PCG remains a memory and larger-scale fallback, conditional on stronger global preconditioning.
+\end{abstract}
+
+\section{Introduction}
+The \citet{davidson2025investigating} OI-SVMVAR model effectively disentangles the real effects of macroeconomic and financial uncertainty without imposing arbitrary recursive orderings. However, its single-frequency nature forces researchers to aggregate timely financial data to a quarterly clock. As \citet{zhu2026structural} demonstrates, temporal aggregation can obscure immediate financial responses and distort structural identification. 
+
+This report sets out a Matrix-Free MF-OI-SVMVAR and records the extra obligations created by combining these literatures. The high-frequency representation preserves the timing information that is lost under low-frequency aggregation, but it does not automatically inherit all identification and computational results from the source papers. In particular, \citet{davidson2025investigating} prove point identification in an observed single-frequency system, while \citet{zhu2026structural} develop the matrix-free mixed-frequency sampler under homoskedastic innovations. The computational contribution is narrower than originally hoped: the SV-aware matrix-free product exists, but simple preconditioners do not make PCG competitive at the target Taiwan-scale dimensions. The practical near-term implementation should therefore benchmark direct sparse Cholesky as the production latent-state solver and reserve matrix-free PCG for memory-constrained or larger-frequency-gap regimes. The identification contribution is harder and remains separate: one must show that DHK's heteroskedasticity-based identification survives the latent mixed-frequency likelihood rather than only the imputed high-frequency conditional likelihood.
+
+\section{The High-Frequency Latent State-Space}
+We assume the true economic dynamics operate at a high frequency (e.g., monthly). Let $\mathbf{y}_t^*$ be an $n \times 1$ vector of latent high-frequency variables, partitioned into fully observed high-frequency financial variables and partially observed low-frequency macroeconomic variables (e.g., GDP). The structural model follows the OI-SVMVAR process:
+\begin{equation}
+    \mathbf{y}_t^* = \mathbf{b}_0 + \sum_{i=1}^p \mathbf{B}_i \mathbf{y}_{t-i}^* + \sum_{j=0}^q \mathbf{A}_j \mathbf{h}_{t-j} + \mathbf{B}_0^{-1} \bm{\epsilon}^y_t, \quad \bm{\epsilon}^y_t \sim \mathcal{N}(\mathbf{0}, \mathbf{U}_t)
+\end{equation}
+where $\mathbf{B}_0$ is the order-invariant contemporaneous impact matrix with ones on the diagonal and unconstrained off-diagonal elements. The intercept $\mathbf{b}_0$ is added as a location term relative to the baseline DHK exposition; it can be absorbed into the stacked intercept without affecting the identification argument conditional on the latent path.
+
+Stacking the observations over time $t=1,\dots,T$, we can express the system in matrix form:
+\begin{equation}
+    \mathbf{H}_{\mathbf{B}} \mathbf{y}^* = \mathbf{A}_{\mathbf{h}} \mathbf{h} + \mathbf{c}_{\mathbf{B}} + (\mathbf{I}_T \otimes \mathbf{B}_0^{-1}) \bm{\epsilon}^y, \quad \bm{\epsilon}^y \sim \mathcal{N}(\mathbf{0}, \mathbf{U})
+\end{equation}
+where $\mathbf{H}_{\mathbf{B}}$ is a banded $Tn \times Tn$ matrix built from the VAR coefficient matrices $\mathbf{B}_i$, $\mathbf{c}_{\mathbf{B}}$ contains intercepts and initial conditions, and $\mathbf{U}=\operatorname{diag}(\mathbf{U}_1,\ldots,\mathbf{U}_T)$ is the full block-diagonal stochastic-volatility covariance. Equivalently, the innovation precision used below is
+\begin{equation}
+    \mathbf{D} = \operatorname{diag}(\mathbf{D}_1,\ldots,\mathbf{D}_T), 
+    \qquad \mathbf{D}_t = \mathbf{B}_0' \mathbf{U}_t^{-1} \mathbf{B}_0 .
+\end{equation}
+This notation is deliberately not $\mathbf{I}_T\otimes \mathbf{D}$ unless the shocks are homoskedastic.
+
+To distinguish directly observed and missing high-frequency entries, write
+\begin{equation}
+    \mathbf{y}^*=\mathbf{S}^o\mathbf{y}^o+\mathbf{S}^m\mathbf{y}^m ,
+\end{equation}
+where $\mathbf{y}^o$ collects entries observed at the high-frequency clock, $\mathbf{y}^m$ collects latent entries, and $\mathbf{S}^o,\mathbf{S}^m$ are selection matrices. Following \citet{mariano2003new} and \citet{zhu2026structural}, low-frequency observations enter through a sparse aggregation matrix. After substituting the observed high-frequency entries, the low-frequency measurement equation can be written as
+\begin{equation}
+    \tilde{\mathbf{y}}^L = \mathbf{M}_m \mathbf{y}^m + \mathbf{v}, 
+    \quad \tilde{\mathbf{y}}^L \equiv \mathbf{y}^L-\mathbf{M}_o\mathbf{y}^o,
+    \quad \mathbf{v} \sim \mathcal{N}(\mathbf{0}, \lambda^{-1} \mathbf{I}) .
+\end{equation}
+For flow variables in growth rates, rows of $\mathbf{M}_m$ contain the Mariano--Murasawa triangular weights; for stock variables they are selection rows. The finite-$\lambda$ version is best interpreted as a numerical penalty around an exact aggregation restriction, not as ordinary measurement error. The limit $\lambda\rightarrow\infty$ recovers the exact aggregation hyperplane, while large finite $\lambda$ may worsen conditioning and must be checked by sensitivity analysis.
+
+\section{Statistical Bottleneck: Parametric Lag Expansion}
+A monthly VAR requires a large lag order $p$ to capture sluggish macroeconomic propagation. To prevent parameter proliferation ($p n^2$ free parameters), we represent the lag sequence $\mathbf{B}_1, \dots, \mathbf{B}_p$ as a linear combination of a small number of known basis functions evaluated on a normalised grid:
+\begin{equation}
+    \mathbf{B}_j = \sum_{k=1}^K \mathbf{\Gamma}_k \phi_k(j/p), \quad j = 1, \dots, p
+\end{equation}
+where $\phi_k(\cdot)$ are known basis functions and $\mathbf{\Gamma}_k$ are $n \times n$ coefficient matrices. The matrix-valued VAR version follows \citet[][Section 3.1]{zhu2026structural}, who motivates the sieve representation with approximation results such as \citet{chen2007large}. The related TVP-MIDAS paper of \citet{chan2025time} supports the broader use of linear-in-parameters basis expansions, but it is a scalar single-equation MIDAS framework with Fourier and Almon bases rather than a VAR with matrix-valued lag coefficients.
+
+This representation replaces $p n^2$ autoregressive parameters with $K n^2$ basis parameters. It does not by itself guarantee stationarity. The posterior simulation must either impose a stationarity-preserving prior on $\{\mathbf{\Gamma}_k\}_{k=1}^K$ or reject draws for which the companion matrix implied by $\{\mathbf{B}_j\}_{j=1}^p$ has spectral radius at least one. Near-unit-root draws are also computationally costly because they increase the condition number of the latent-state precision and hence the number of PCG iterations.
+
+\section{Matrix-Free State Sampling}
+In conventional mixed-frequency settings, drawing the latent high-frequency path involves a precision matrix. Using the selection notation above, let
+\begin{equation}
+    \mathbf{A}=\mathbf{H}_{\mathbf{B}}\mathbf{S}^m,
+    \qquad 
+    \mathbf{r}=\mathbf{A}_{\mathbf{h}}\mathbf{h}+\mathbf{c}_{\mathbf{B}}-\mathbf{H}_{\mathbf{B}}\mathbf{S}^o\mathbf{y}^o .
+\end{equation}
+The penalised precision for the missing path is
+\begin{equation}
+    \overline{\mathbf{K}} = \mathbf{A}'\mathbf{D}\mathbf{A} + \lambda \mathbf{M}_m'\mathbf{M}_m .
+\end{equation}
+When bridging large frequency gaps with long lags, $\overline{\mathbf{K}}$ becomes wide-band. Direct sparse Cholesky factorisation \citep{chan2009efficient} scales poorly with the bandwidth square.
+
+\subsection{SV-Aware Matrix-Vector Product}
+Following \citet{zhu2026structural}, direct factorisation can be replaced by a matrix-free precision product. The important point is that stochastic volatility changes the middle precision block, not the VAR shell. The operator can be applied as
+\begin{enumerate}
+    \item Embed a trial vector $\mathbf{x}$ into the missing high-frequency locations and apply the forward VAR operator: $\mathbf{w}=\mathbf{A}\mathbf{x}$.
+    \item For each high-frequency date, apply the local SV precision block: $\mathbf{u}_t=\mathbf{D}_t\mathbf{w}_t$, where $\mathbf{D}_t=\mathbf{B}_0'\mathbf{U}_t^{-1}\mathbf{B}_0$.
+    \item Apply the adjoint VAR operator: $\mathbf{z}=\mathbf{A}'\mathbf{u}$.
+    \item Add the soft-aggregation contribution: $\overline{\mathbf{K}}\mathbf{x}=\mathbf{z}+\lambda\mathbf{M}_m'\mathbf{M}_m\mathbf{x}$.
+\end{enumerate}
+This product remains matrix-free because no $Tn\times Tn$ precision matrix is formed. The extra SV cost is the local multiplication by $T$ small $n\times n$ matrices, which is $\mathcal{O}(Tn^2)$ under dense contemporaneous covariance blocks. For moderate $n$, this is not a qualitative change relative to the forward and adjoint basis-filter operations. It is, however, a substantive extension of Zhu: he notes that the time-invariant precision operator in his homoskedastic baseline would not survive a daily stochastic-volatility process. In the present proposal, that warning is not a dead end; it defines the open algorithmic subproblem.
+
+\subsection{Preconditioning and Complexity}
+The computational claim must therefore be stated conditionally. Zhu's best case is $\mathcal{O}(Tn)$ memory and $\mathcal{O}(\text{iter}_{PCG}KT(\log T+n))$ work per draw when basis filters are implemented with FFTs. In the present SV-in-mean extension, a more explicit accounting adds the local block cost, giving\footnote{The $\log T$ term assumes Zhu's FFT-based basis-filter implementation. The current pilot validation uses a materialised sparse $\mathbf{H}_{\mathbf{B}}$ shell and does not by itself realise this term.}
+\begin{equation}
+    \mathcal{O}\left(\text{iter}_{PCG}\{KT(\log T+n)+Tn^2+\operatorname{nnz}(\mathbf{M}_m)\}\right)
+\end{equation}
+per draw. Thus this complexity expression is a proposal-facing target rather than an already validated cost for the present code path. The term that can destroy the speedup is not the existence of the $Tn^2$ local block multiplication but the behaviour of $\text{iter}_{PCG}$.
+
+Pilot benchmarks on the Gaussian latent-state problem confirm this risk. With $n=5$, $T=480$, $p=2$, $\lambda=10^4$, and target VAR radius 0.9, unpreconditioned PCG requires roughly 2500 iterations at moderate SV dispersion and reaches the iteration cap under high dispersion. Scalar Jacobi and date-wise block-Jacobi improve this only marginally. A time-averaged sparse-factor preconditioner reduces iterations substantially at moderate dispersion, but at Taiwan-scale monthly dimensions it is still slower than direct sparse Cholesky. The immediate production recommendation is therefore direct sparse Cholesky for the latent-state Gaussian solve, with the matrix-free operator retained for memory diagnostics, assembly-cost benchmarks, and larger-scale fallback experiments.
+
+A natural lightweight preconditioner is block-Jacobi,
+\begin{equation}
+    \mathbf{P}_{BJ}=\operatorname{blockdiag}(\overline{\mathbf{K}}_{11},\ldots,\overline{\mathbf{K}}_{TT}),
+\end{equation}
+where each diagonal block is computed from the local contribution of $\mathbf{D}_t$ and the local aggregation penalty. The benchmark evidence indicates that this local scaling is not enough: the hard conditioning comes from the global lag-shell structure in $\mathbf{A}'\mathbf{D}\mathbf{A}$, not only from date-specific volatility scales. Any future matrix-free speed claim therefore requires a stronger preconditioner, such as an approximate sparse factor built from a time-averaged or otherwise smoothed precision operator, and must be evaluated against a direct Cholesky baseline that includes explicit $\overline{\mathbf{K}}$ assembly cost.
+
+\section{High-Frequency Identification of \texorpdfstring{$\mathbf{B}_0$}{B0}}
+Conditional on a sampled high-frequency path $\mathbf{y}^*$, the DHK row-by-row sampler can be applied exactly as in a single-frequency OI-SVMVAR. The identification of $\mathbf{B}_0$ then relies on heteroskedasticity in the structural shocks \citep{lutkepohl2020bayesian,davidson2025investigating}: the diagonal volatility paths must provide enough independent variation to satisfy the usual rank condition, with the remaining sign and permutation normalisations fixed by the unit diagonal and labelling convention.
+
+The unconditional mixed-frequency identification claim is weaker. DHK's proof is for observed monthly data, whereas the present likelihood integrates over latent high-frequency macro paths subject to aggregation restrictions. Thus the model should be described as preserving the DHK identification argument \emph{conditional on} $\mathbf{y}^*$ and as requiring an additional mixed-frequency identification check. Two diagnostics are necessary: first, verify the heteroskedastic rank condition across posterior draws of $\mathbf{y}^*$; second, examine whether the condition remains stable as $\lambda\rightarrow\infty$, when the latent path is restricted to the exact Mariano--Murasawa aggregation hyperplane. This moves the proposal away from the over-strong claim that high-frequency modelling automatically eliminates the low-frequency identification conflict.
+
+\section{Posterior Simulation: The MCMC Algorithm}
+Combining the high-frequency state-space with the SVMVAR structure alters the joint likelihood, requiring a custom block-Gibbs sampling scheme. Conditional on the structural parameters, the model remains a linear Gaussian state-space, but the mean equations are augmented by the stochastic volatility components. The MCMC algorithm cycles through the following steps:
+
+\subsection{Step 1: Drawing the Latent High-Frequency Path \texorpdfstring{$(\mathbf{y}^*)$}{(y*)}}
+Conditional on all parameters and volatilities, the missing high-frequency path satisfies the Gaussian system
+\begin{equation}
+    \mathbf{A}\mathbf{y}^m = \mathbf{r}+\bm{\eta}_1, 
+    \quad \bm{\eta}_1\sim\mathcal{N}(\mathbf{0},\mathbf{D}^{-1}),
+    \qquad
+    \tilde{\mathbf{y}}^L = \mathbf{M}_m\mathbf{y}^m+\bm{\eta}_2,
+    \quad \bm{\eta}_2\sim\mathcal{N}(\mathbf{0},\lambda^{-1}\mathbf{I}).
+\end{equation}
+The conditional posterior is $\mathbf{y}^m \sim \mathcal{N}(\bm{\mu}_{m}, \overline{\mathbf{K}}^{-1})$, where $\overline{\mathbf{K}}=\mathbf{A}'\mathbf{D}\mathbf{A}+\lambda\mathbf{M}_m'\mathbf{M}_m$. The mean vector satisfies
+\begin{equation}
+    \overline{\mathbf{K}} \bm{\mu}_{m} = \mathbf{A}' \mathbf{D} \mathbf{r} + \lambda \mathbf{M}_m' \tilde{\mathbf{y}}^L .
+\end{equation}
+For the perturbation-optimisation draw \citep{papandreou2010gaussian,bardsley2012mcmc}, sample independent $\bm{\eta}_1$ and $\bm{\eta}_2$ from the distributions above and solve
+\begin{equation}
+    \overline{\mathbf{K}} \mathbf{y}^{m,draw}
+    =
+    \mathbf{A}'\mathbf{D}(\mathbf{r}+\bm{\eta}_1)
+    +\lambda \mathbf{M}_m'(\tilde{\mathbf{y}}^L+\bm{\eta}_2)
+\end{equation}
+by PCG using the matrix-free product described in Section 4. The full latent path is then reconstructed as $\mathbf{y}^{*,draw}=\mathbf{S}^o\mathbf{y}^o+\mathbf{S}^m\mathbf{y}^{m,draw}$.
+
+\subsection{Step 2: Drawing the Order-Invariant Impact Matrix \texorpdfstring{$(\mathbf{B}_0)$}{(B0)}}
+Conditional on the latent high-frequency path $\mathbf{y}^*$, we define the SVMVAR residuals $\hat{\mathbf{y}}_t = \mathbf{y}_t^* - \sum_{i=1}^p \mathbf{B}_i \mathbf{y}_{t-i}^* - \sum_{j=0}^q \mathbf{A}_j \mathbf{h}_{t-j}$. We then apply the parameter transformation and mixture approximation algorithm of \citet{davidson2025investigating} row-by-row to $\mathbf{B}_0$, treating $\hat{\mathbf{y}}_t$ as fully observed high-frequency data.
+
+\subsection{Step 3: Drawing Parametric Lag Coefficients \texorpdfstring{$(\mathbf{\Gamma}_k)$}{(Gamma k)}}
+Conditional on $\mathbf{y}^*$, $\mathbf{h}$, and $\mathbf{B}_0$, the system is linear in the basis coefficients $\mathbf{\Gamma}_k$. Define the basis-weighted lag regressors
+\begin{equation}
+    \mathbf{z}_{k,t}=\sum_{j=1}^p \phi_k(j/p)\mathbf{y}_{t-j}^*,
+    \qquad k=1,\ldots,K,
+\end{equation}
+and subtract the volatility-in-mean term,
+\begin{equation}
+    \mathbf{y}_t^\dagger
+    =
+    \mathbf{y}_t^*-\mathbf{b}_0-\sum_{j=0}^q\mathbf{A}_j\mathbf{h}_{t-j}.
+\end{equation}
+Then
+\begin{equation}
+    \mathbf{y}_t^\dagger
+    =
+    \sum_{k=1}^K \mathbf{\Gamma}_k\mathbf{z}_{k,t}
+    +
+    \mathbf{B}_0^{-1}\bm{\epsilon}^y_t,
+    \qquad \bm{\epsilon}^y_t\sim\mathcal{N}(\mathbf{0},\mathbf{U}_t).
+\end{equation}
+This is a SUR update with time-varying covariance after conditioning on $\mathbf{B}_0$ and $\{\mathbf{U}_t\}$, equipped with shrinkage priors such as Minnesota or Horseshoe priors. Stationarity screening is applied after reconstructing $\mathbf{B}_1,\ldots,\mathbf{B}_p$ from the proposed $\mathbf{\Gamma}_k$ draw.
+
+\subsection{Step 4: Drawing Common Volatilities \texorpdfstring{$(\mathbf{h})$}{(h)} and Classifications}
+Conditional on $\mathbf{y}^*$ and the VAR parameters, the extraction of the common macro and financial volatilities $\mathbf{h}_t$, the idiosyncratic volatilities, and the Markov-switching classification states follows exactly the band-sparse Acceptance-Rejection Metropolis-Hastings steps developed by \citet{davidson2025investigating}, operated entirely at the high frequency.
+
+\section{Methodological Strategy: Finite-Sample Inference}
+Following the established paradigm of large Bayesian VAR literature, our approach explicitly departs from large-sample asymptotics:
+\begin{enumerate}
+    \item \textbf{Guaranteed Posterior Propriety via Proper Priors:} Because $\mathbf{B}_0$ is unrestricted, we circumvent divergent posteriors by strictly specifying \textit{proper priors} (e.g., Gaussian, Horseshoe) for all parameters, mathematically guaranteeing a proper posterior distribution.
+    \item \textbf{Focus on Finite-Sample Regularization:} In high-dimensional regimes, traditional $T \to \infty$ asymptotics fail. Our methodology embraces Bayesian shrinkage and parametric lag restriction as finite-sample regularization techniques.
+    \item \textbf{Validation via Simulation:} The validity and computational tractability of the MF-OI-SVMVAR must be demonstrated empirically through Monte Carlo simulations. The design should vary SV dispersion directly and report PCG iteration counts, total wall-clock time against direct sparse Cholesky including assembly cost, memory use, sensitivity to $\lambda$, stability rejection rates, and the posterior rank diagnostics for $\mathbf{B}_0$.
+\end{enumerate}
+
+\section{Conclusion and Next Steps}
+This document is a revised theoretical blueprint rather than a completed proof. It identifies a feasible route to an MF-OI-SVMVAR, but the hard parts are precisely those raised by the source papers. On the computational side, the task is not to rescue matrix-free sampling from stochastic volatility; the matrix-vector product still exists. The current evidence says that lightweight PCG is not the production path at Taiwan-scale monthly dimensions. Direct sparse Cholesky should be the default solver unless a fair total-cost and memory benchmark shows that assembly or memory pressure reverses the ranking. Matrix-free PCG remains useful as a larger-scale fallback and as a preconditioner-design research problem. On the identification side, the harder problem is proving or diagnosing mixed-frequency identification of $\mathbf{B}_0$, because DHK's proof applies at the observed frequency while this likelihood integrates over latent high-frequency macro paths.
+
+\bibliographystyle{aea.bst}
+\bibliography{references}
+
+\end{document}

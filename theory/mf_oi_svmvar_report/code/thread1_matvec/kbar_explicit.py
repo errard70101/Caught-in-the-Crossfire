@@ -18,7 +18,9 @@ def build_D_block_diag(B0: np.ndarray, U: np.ndarray) -> sp.csr_matrix:
 
     Parameters
     ----------
-    B0 : (n, n) lower-triangular structural impact matrix with unit diagonal.
+    B0 : (n, n) structural impact matrix with unit diagonal. The production
+         OI target is general dense; lower-triangular inputs are legacy test
+         cases only.
     U  : (T, n) array of diagonal entries of U_t (volatilities, *not* log-vols).
     """
     T, n = U.shape

@@ -34,6 +34,7 @@ class DGP:
     M_m: sp.csr_matrix
     lam: float
     seed: int
+    b0_structure: str = "dense"
 
     @property
     def Tn(self) -> int:
@@ -145,13 +146,48 @@ def simulate_log_variance(n: int, T: int, mu: np.ndarray, rho: float, sigma: flo
     return np.exp(h)
 
 
-def build_B0(n: int, rng: np.random.Generator, off_diag_scale: float = 0.3) -> np.ndarray:
-    """Lower-triangular B0 with unit diagonal and Gaussian off-diagonals."""
-    B0 = np.eye(n)
-    for i in range(1, n):
-        for j in range(i):
-            B0[i, j] = off_diag_scale * rng.standard_normal()
-    return B0
+def build_B0(
+    n: int,
+    rng: np.random.Generator,
+    *,
+    structure: str = "dense",
+    off_diag_scale: float | None = None,
+    max_cond: float = 100.0,
+    max_tries: int = 100,
+) -> np.ndarray:
+    """Build a unit-diagonal contemporaneous impact matrix.
+
+    The production MF-OI-SVMVAR target uses a general dense `B0` subject to
+    normalization, not a recursive triangular zero pattern. Lower-triangular
+    `B0` remains available only as a legacy controlled-DGP option.
+    """
+    structure_key = structure.lower().replace("-", "_")
+    if structure_key in {"dense", "unrestricted", "oi", "order_invariant"}:
+        scale = 0.15 if off_diag_scale is None else off_diag_scale
+        for _ in range(max_tries):
+            B0 = np.eye(n)
+            off_diag = scale * rng.standard_normal((n, n))
+            np.fill_diagonal(off_diag, 0.0)
+            B0 += off_diag
+            if np.linalg.cond(B0) <= max_cond:
+                return B0
+        raise RuntimeError(
+            f"failed to draw well-conditioned dense B0 after {max_tries} tries "
+            f"(n={n}, off_diag_scale={scale}, max_cond={max_cond})"
+        )
+
+    if structure_key in {"lower", "lower_triangular", "triangular", "recursive"}:
+        scale = 0.3 if off_diag_scale is None else off_diag_scale
+        B0 = np.eye(n)
+        for i in range(1, n):
+            for j in range(i):
+                B0[i, j] = scale * rng.standard_normal()
+        return B0
+
+    raise ValueError(
+        "unknown B0 structure "
+        f"{structure!r}; expected dense/order_invariant or lower_triangular"
+    )
 
 
 def build_M_m_growth(T: int, n: int, lf_indices: list[int], start_quarter: int = 2) -> sp.csr_matrix:
@@ -185,17 +221,22 @@ def build_M_m_growth(T: int, n: int, lf_indices: list[int], start_quarter: int =
 
 def sample_dgp(n: int, T: int, p: int, *, seed: int = 0, target_radius: float = 0.9,
                sv_mu: float = -1.0, sv_rho: float = 0.95, sv_sigma: float = 0.3,
-               lam: float = 1e4, lf_indices: list[int] | None = None) -> DGP:
+               lam: float = 1e4, lf_indices: list[int] | None = None,
+               b0_structure: str = "dense",
+               b0_off_diag_scale: float | None = None) -> DGP:
     """Sample a full DGP draw for the matvec PoC."""
     rng = np.random.default_rng(seed)
     B_list = _stable_var_coefs(n, p, target_radius, rng)
-    B0 = build_B0(n, rng)
+    B0 = build_B0(n, rng, structure=b0_structure, off_diag_scale=b0_off_diag_scale)
     mu = sv_mu * np.ones(n)
     U = simulate_log_variance(n, T, mu, sv_rho, sv_sigma, rng)
     if lf_indices is None:
         lf_indices = [0]
     M_m = build_M_m_growth(T, n, lf_indices)
-    return DGP(n=n, T=T, p=p, B_list=B_list, B0=B0, U=U, M_m=M_m, lam=lam, seed=seed)
+    return DGP(
+        n=n, T=T, p=p, B_list=B_list, B0=B0, U=U, M_m=M_m, lam=lam,
+        seed=seed, b0_structure=b0_structure,
+    )
 
 
 if __name__ == "__main__":
@@ -204,4 +245,5 @@ if __name__ == "__main__":
     H_B = build_H_B(dgp.B_list, dgp.T)
     print(f"H_B shape={H_B.shape}, nnz={H_B.nnz}")
     print(f"M_m shape={dgp.M_m.shape}, nnz={dgp.M_m.nnz}")
+    print(f"B0 structure={dgp.b0_structure}, cond={np.linalg.cond(dgp.B0):.2f}")
     print(f"companion radius={max(abs(np.linalg.eigvals(_companion(dgp.B_list)))):.4f}")

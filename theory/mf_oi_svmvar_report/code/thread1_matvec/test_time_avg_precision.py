@@ -92,8 +92,9 @@ def _reference_kbar_avg(dgp, D_bar: np.ndarray) -> sp.csc_matrix:
 
 
 CASES = [
-    dict(n=3, T=20, p=2, sv_sigma=0.3, lam=1e4),
-    dict(n=5, T=30, p=3, sv_sigma=0.5, lam=1e4),
+    dict(n=3, T=20, p=2, sv_sigma=0.3, lam=1e4, b0_structure="dense"),
+    dict(n=5, T=30, p=3, sv_sigma=0.5, lam=1e4, b0_structure="dense"),
+    dict(n=5, T=30, p=3, sv_sigma=0.5, lam=1e4, b0_structure="lower_triangular"),
 ]
 SEEDS = (0, 1, 7)
 
@@ -132,8 +133,8 @@ def run_case(case: dict, seed: int) -> dict:
 
 
 def main() -> int:
-    print(f"{'case':<40} {'seed':>4} {'err_A':>10} {'err_B_fro':>12} {'err_B_mv':>11} {'|old-new|':>11}  status")
-    print("-" * 100)
+    print(f"{'case':<62} {'seed':>4} {'err_A':>10} {'err_B_fro':>12} {'err_B_mv':>11} {'|old-new|':>11}  status")
+    print("-" * 122)
     fail = False
     for c in CASES:
         for s in SEEDS:
@@ -144,13 +145,13 @@ def main() -> int:
                   and r["rel_diff_old"] > TOL_DIFFER)
             if not ok:
                 fail = True
-            tag = f"n={c['n']} T={c['T']} p={c['p']} sv={c['sv_sigma']}"
+            tag = f"n={c['n']} T={c['T']} p={c['p']} sv={c['sv_sigma']} B0={c['b0_structure']}"
             print(
-                f"{tag:<40} {s:>4} "
+                f"{tag:<62} {s:>4} "
                 f"{r['err_A']:>10.2e} {r['err_B_fro']:>12.2e} {r['err_B_mv']:>11.2e} "
                 f"{r['rel_diff_old']:>11.2e}  {'OK' if ok else 'FAIL'}"
             )
-    print("-" * 100)
+    print("-" * 122)
     if fail:
         print(f"FAIL: at least one case violated TOL_EQ={TOL_EQ:.0e} "
               f"or TOL_DIFFER={TOL_DIFFER:.0e}")

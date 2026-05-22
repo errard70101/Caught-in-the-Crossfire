@@ -53,14 +53,12 @@ class SVAwareKbar:
 
         For each date t: u_t = B0' (diag(1/U_t) (B0 w_t)).
 
-        Note on triangular structure
-        ----------------------------
-        B0 is unit-diagonal lower-triangular, so B0 w_t and B0' v_t could theoretically
-        be applied via batched triangular solves/multiplications (e.g. dtrmv) to save 50%
-        of flops. However, dense matrix multiplication W @ B0.T is highly optimized via
-        Level 3 BLAS in NumPy, whereas Python loops or custom batched triangular operations
-        would introduce interpreter overhead. Thus, dense multiplication is retained as it
-        is faster and simpler in practice.
+        Order-invariant target
+        ----------------------
+        Production `B0` is a general dense matrix under the DHK-style
+        order-invariant target. Lower-triangular `B0` can be used in controlled
+        legacy DGPs, but this operator must not rely on a triangular zero
+        pattern. Dense multiplication is therefore the baseline path.
         """
         W = w_flat.reshape(self.T, self.n)
         # B0 w_t for all t simultaneously: shape (T, n)
