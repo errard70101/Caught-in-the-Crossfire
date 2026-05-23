@@ -132,7 +132,8 @@ def _build_kbar_explicit_timed(dgp: DGP) -> tuple[sp.csr_matrix, float]:
 def _build_kbar_avg(dgp: DGP) -> sp.csr_matrix:
     """Time-invariant Kbar with U_t replaced by row-mean."""
     n, T = dgp.n, dgp.T
-    U_avg = np.broadcast_to(dgp.U.mean(axis=0), (T, n)).copy()
+    inv_U_mean = (1.0 / dgp.U).mean(axis=0)
+    U_avg = np.broadcast_to(1.0 / inv_U_mean, (T, n)).copy()
     dgp_avg = DGP(
         n=n, T=T, p=dgp.p,
         B_list=dgp.B_list, B0=dgp.B0, U=U_avg,
