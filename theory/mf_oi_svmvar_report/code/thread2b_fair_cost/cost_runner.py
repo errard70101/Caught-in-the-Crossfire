@@ -18,8 +18,9 @@ Paths
     phase3_solve     -- single ``splu.solve(b)`` call
 
 ``pcg_time_avg_chol_explicit_avgK``
-    phase1_assembly  -- build Kbar_avg (replace U_t by row-mean,
-                        explicit Tn x Tn sparse)
+    phase1_assembly  -- build Kbar_avg from the corrected
+                        D_bar = B0' diag(mean_t 1/U_t) B0 precision
+                        average (explicit Tn x Tn sparse)
     phase2_factor    -- CHOLMOD on Kbar_avg (preconditioner setup)
     phase3_solve     -- PCG to rtol=1e-8 using matrix-free Kbar matvec
                        and CHOLMOD(Kbar_avg) preconditioner apply
@@ -31,9 +32,10 @@ Paths
 
 ``pcg_time_avg_chol_frozen_amortized_50`` (derived; not run separately)
     Same numbers as the PCG path but with phase1 and phase2 divided
-    by 50. Reports the best-case cost if ``Ū`` is held fixed across
-    50 MCMC sweeps. Labelled clearly so it cannot be misread as the
-    production figure.
+    by 50. Reports a best-case derived cost if the time-averaged
+    precision preconditioner setup were held fixed across 50 MCMC
+    sweeps. Labelled clearly so it cannot be misread as the production
+    full-chain figure.
 
 Skip rule
 ---------
@@ -130,7 +132,7 @@ def _build_kbar_explicit_timed(dgp: DGP) -> tuple[sp.csr_matrix, float]:
 
 
 def _build_kbar_avg(dgp: DGP) -> sp.csr_matrix:
-    """Time-invariant Kbar with U_t replaced by row-mean."""
+    """Time-invariant Kbar using D_bar = B0' diag(mean_t 1/U_t) B0."""
     n, T = dgp.n, dgp.T
     inv_U_mean = (1.0 / dgp.U).mean(axis=0)
     U_avg = np.broadcast_to(1.0 / inv_U_mean, (T, n)).copy()

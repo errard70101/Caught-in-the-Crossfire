@@ -22,6 +22,16 @@ implemented:
   preconditioner (`none`, `jacobi`, `block_jacobi`) is exercised
   because Thread 2 already showed they fail at realistic SV dispersion.
 
+Correction rerun status (2026-05-23): the matrix-free PCG PO path uses
+the `time_averaged_chol` preconditioner from
+`thread2_pcg/preconditioners.py`, which has been corrected to use the
+precision average `D_bar = mean_t(D_t) = B0' diag(mean_t 1/U_t) B0`
+instead of the old `B0' diag(1 / mean_t U_t) B0` construction. The
+PCG diagnostics, `pcg_tolerance.csv`, `po_moments.csv`, and
+`po_functionals.csv` have been refreshed accordingly. The direct
+CHOLMOD reference is unaffected by the preconditioner correction (it
+factors the exact `Kbar`, not `Kbar_avg`).
+
 ## Perturbation-optimisation recipe
 
 For each draw:

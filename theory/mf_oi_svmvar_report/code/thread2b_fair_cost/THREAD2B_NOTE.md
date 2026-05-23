@@ -20,8 +20,14 @@ re-factor every iteration, and the PCG path must re-assemble and
 re-factor the time-averaged preconditioner every iteration.
 
 A clearly labelled best-case row (`*_frozen_amortized_50`) reports the
-PCG path when `Ū` is held fixed across 50 MCMC sweeps -- this is the
-upper bound on the matrix-free advantage, not the production figure.
+PCG path when the time-averaged precision preconditioner setup is held
+fixed across 50 MCMC sweeps -- this is the upper bound on the
+matrix-free advantage, not the production full-chain figure.
+
+Correction rerun status (2026-05-23): `cost_runner.py` and
+`results.csv` now use the corrected precision average
+`D_bar = mean_t(D_t) = B0' diag(mean_t 1/U_t) B0`, replacing the old
+`B0' diag(1 / mean_t U_t) B0` construction.
 
 ## Design
 
@@ -32,12 +38,13 @@ so the table aggregates directly:
 |---|---|---|---|
 | `direct_cholmod` | build explicit `Kbar` from `(H_B, D_t, λ M'M)` | CHOLMOD supernodal Cholesky on `Kbar` | `factor(b)` |
 | `direct_splu` | build explicit `Kbar` | `scipy.sparse.linalg.splu` on `Kbar` | `splu.solve(b)` |
-| `pcg_time_avg_chol_explicit_avgK` | build `Kbar_avg` (`U_t` replaced by row-mean) | CHOLMOD on `Kbar_avg` | PCG to `rtol=1e-8` (matrix-free matvec, CHOLMOD preconditioner) |
+| `pcg_time_avg_chol_explicit_avgK` | build `Kbar_avg` from `D_bar = B0' diag(mean_t 1/U_t) B0` | CHOLMOD on `Kbar_avg` | PCG to `rtol=1e-8` (matrix-free matvec, CHOLMOD preconditioner) |
 | `pcg_time_avg_chol_frozen_amortized_50` *(derived row)* | `phase1 / 50` | `phase2 / 50` | same PCG solve time |
 
 The amortised row is **not** a separate run; it is the same PCG numbers
 re-presented with setup costs divided by 50 -- the upper bound on the
-matrix-free advantage if `Ū` is frozen.
+matrix-free advantage if the time-averaged precision preconditioner is
+frozen.
 
 The name `explicit_avgK` records that this PCG path still materialises
 `Kbar_avg` as a `Tn × Tn` sparse matrix. A truly no-explicit-`Kbar_avg`

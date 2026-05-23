@@ -19,6 +19,13 @@ under realistic SV dispersion even with block-Jacobi, the computational
 contribution of the MF approach must shift to preconditioner design before
 any full MCMC work.
 
+Correction rerun status (2026-05-23): the benchmark artifacts have been
+refreshed after replacing the old `B0' diag(1 / mean_t U_t) B0`
+construction with the intended precision average
+`D_bar = mean_t(D_t) = B0' diag(mean_t 1/U_t) B0`. Current
+`results.csv`, `summary_median.csv`, and figures reflect the corrected
+time-averaged preconditioner.
+
 ## Preconditioners Tested
 
 Per the discussion preceding this note (and the rationale that
@@ -32,7 +39,7 @@ Cholesky), against two sparse-direct baselines:
 | `none` | identity | 0 | 0 (no work) |
 | `jacobi` | scalar diagonal, `M^{-1} = diag(1/diag(Kbar))` | extract diag | `O(Tn)` |
 | `block_jacobi` | by date: each `K[t,t]` factored separately | `T` n x n inversions, batched LAPACK | `np.einsum('tij,tj->ti', ...)`, `O(Tn^2)` |
-| `time_averaged_lu` | replace `U_t` by row-mean `bar U`, build time-invariant Kbar_avg, sparse LU once, reuse | `scipy.sparse.linalg.splu` | `splu.solve` |
+| `time_averaged_lu` | build time-invariant `Kbar_avg` from `D_bar = B0' diag(mean_t 1/U_t) B0`, sparse LU once, reuse | `scipy.sparse.linalg.splu` | `splu.solve` |
 | `time_averaged_chol` | same with CHOLMOD (supernodal sparse Cholesky via `sksparse.cholmod`) | `cholmod.cholesky` | `factor(x)` |
 | `direct_splu` | sparse LU of the actual Kbar | one `splu` | `splu.solve` |
 | `direct_cholmod` | sparse Cholesky of the actual Kbar via CHOLMOD | one `cholmod.cholesky` | `factor(x)` |
