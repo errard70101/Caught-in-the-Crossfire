@@ -43,7 +43,7 @@ Thread 2 update:
 - The time-averaged CHOLMOD preconditioner works at baseline and moderate SV dispersion, but it remains slower than direct CHOLMOD at Taiwan-scale monthly dimensions.
 - For `n ~= 5`, `T <= 1920`, and monthly lags, direct CHOLMOD is the production baseline. Matrix-free PCG should be treated as a fallback for memory pressure, larger systems, or extreme-frequency settings, not as the default per-sweep speed advantage.
 - The computational story is now: direct sparse Cholesky is best at Taiwan scale; matrix-free remains relevant for avoiding assembly/memory pressure and for larger regimes, but only with strong global preconditioning.
-- Correction status: the original Thread 2 `time_averaged_{lu,chol}` implementation used `B0' diag(1 / mean_t U_t) B0`, while the intended time-averaged precision is `D_bar = mean_t(D_t) = B0' diag(mean_t 1/U_t) B0`. The code has been corrected, but the Thread 2 PCG tables must be rerun before treating the time-averaged iteration counts as final.
+- Correction rerun status: the Thread 2 PCG sweep has been rerun with the corrected `D_bar = mean_t(D_t) = B0' diag(mean_t 1/U_t) B0` time-averaged precision preconditioner. Current `results.csv`, `summary_median.csv`, and figures are the operative artifacts; the old `B0' diag(1 / mean_t U_t) B0` numbers are superseded.
 
 Thread 2b update:
 
@@ -52,7 +52,7 @@ Thread 2b update:
 - At Taiwan-scale dimensions (`n ~= 5`, `T <= 1920`, `p in 2..12`), the production latent-state Gaussian solver should be direct CHOLMOD. Matrix-free PCG should not be advertised as a per-iteration speed advantage.
 - The only unresolved matrix-free opportunity is a genuinely no-explicit-`Kbar_avg` preconditioner for larger stress regimes such as `(n=20, T=10000, p=24)`, where explicit sparse assembly was skipped by the memory rule.
 - Thread 3 can continue, but its role is validation infrastructure: direct CHOLMOD supplies the reference Gaussian draw against which any future scalable sampler is tested. It is not the endpoint of the general methodological contribution.
-- Correction status: the direct CHOLMOD rows remain valid, but PCG rows using `Kbar_avg` must be rerun with the corrected precision-average `D_bar`. The existing Thread 2b total-cost conclusion should be treated as provisional for PCG until this reduced rerun is complete.
+- Correction rerun status: Thread 2b has been rerun with the corrected precision-average `D_bar`. The direct CHOLMOD conclusion remains unchanged: at Taiwan-scale dimensions, direct sparse Cholesky is still the production latent-state Gaussian solver, while the current explicit-`Kbar_avg` PCG route remains a diagnostic/scaling baseline rather than a per-sweep speed advantage.
 
 Thread 2c motivation:
 
@@ -67,13 +67,13 @@ Thread 3 update:
 - Matrix-free PCG with `time_averaged_chol` matches direct CHOLMOD within Monte Carlo error in controlled regimes (`sv_sigma in {0.1, 0.3}`), but remains much slower per draw and is diagnostic-only.
 - `rtol = 1e-8` is the documented diagnostic-mode PCG tolerance. `rtol = 1e-10` adds cost without visible accuracy gain, while `rtol = 1e-6` is already close at the tested Monte Carlo precision.
 - The production/reference latent-state draw is direct CHOLMOD perturbation-optimisation. The next general-method thread is Thread 2c: a scalable no-explicit-`Kbar_avg` matrix-free preconditioner or sampler.
-- Correction status: the direct CHOLMOD PO validation remains valid. PCG diagnostic iteration counts, solve times, and tolerance comparisons should be rerun after the corrected time-averaged precision preconditioner because the old `D_bar` differed by roughly 18-52% in the Thread 1 regression checks.
+- Correction rerun status: Thread 3 PCG diagnostic iteration counts, solve times, and tolerance comparisons have been refreshed with the corrected time-averaged precision preconditioner. Direct CHOLMOD remains the reference PO draw path; PCG remains diagnostic for controlled regimes and a target for future scalable preconditioning.
 
 Thread 1 rerun and correction update:
 
 - Thread 1 has been rerun after the preconditioner correction. The original explicit-vs-matrix-free `Kbar` equivalence test still passes at roughly `3e-16` to `5e-16` across the tested configurations.
 - A new `test_time_avg_precision.py` regression verifies that `D_bar = mean_t(D_t)` equals `B0' diag(mean_t 1/U_t) B0`, and that the corrected `_build_time_averaged_kbar` matches an independent reference to numerical precision.
-- The old `1 / mean(U_t)` construction differs from the corrected precision average by about 18-27% at `sv_sigma = 0.3` and 42-52% at `sv_sigma = 0.5`, explaining why Thread 2/2b/3 PCG numbers require revalidation.
+- The old `1 / mean(U_t)` construction differs from the corrected precision average by about 18-27% at `sv_sigma = 0.3` and 42-52% at `sv_sigma = 0.5`, explaining why the Thread 2/2b/3 PCG correction rerun was required.
 - Thread 1 documentation has been reframed: the implementation does not materialise the SV-dependent `Kbar`, but it does materialise and reuse the time-invariant `H_B` shell. `bench_amortised.py` is now explicitly superseded by Thread 2b's fair total-cost benchmark.
 - `SVAwareKbar` no longer stores a separate CSR copy of `H_B.T`; it applies `self.H_B.T @ u` directly. Initial-condition truncation and the need to vectorise `build_H_B` before Thread 2c stress dimensions are documented.
 - The controlled DGP now defaults to a dense unit-diagonal `B0` to match the order-invariant target. Lower-triangular `B0` remains available only as an explicit legacy test option.
@@ -579,12 +579,20 @@ Assemble a minimal full MF-OI-SVMVAR block-Gibbs sampler using the validated lat
 3. [done] Thread 2b: fair solver cost and memory benchmark.
 4. [done] Thread 3: perturbation-optimisation draw validation as the direct CHOLMOD reference benchmark.
 5. [done] Protocol review: `protocols/GLOBAL_DEFINITIONS.md` and all thread protocols, including `THREAD_SV_CLASSIFICATION_PROTOCOL.md`.
-6. [next] Correction rerun: reduced Thread 2 / Thread 2b / Thread 3 PCG diagnostics with corrected `D_bar = mean_t(D_t)`.
-7. Thread 2c: no-explicit-Kbar matrix-free preconditioner.
-8. Thread 4: lambda sensitivity.
+6. [done] Correction rerun: reduced Thread 2 / Thread 2b / Thread 3 PCG diagnostics with corrected `D_bar = mean_t(D_t)`.
+7. [done] Thread 2c: no-explicit-Kbar matrix-free preconditioner.
+8. [next] Thread 4: lambda sensitivity.
 9. Thread 5: parametric lag stability.
 10. Thread 6: identification diagnostics.
 11. Thread SV: volatility and classification block.
 12. Thread 7: full MCMC architecture.
 
-The Thread 1 correction checkpoint has been reached: the actual SV-aware `Kbar` matvec remains correct, and the time-averaged precision preconditioner now uses `D_bar = mean_t(D_t)`. Before starting any further execution, first review the protocol specs in `protocols/`. Then rerun the reduced Thread 2/2b/3 PCG diagnostics so the scalable-method baseline is based on the corrected precision-average preconditioner rather than the old `1 / mean(U_t)` construction.
+Thread 2c is complete. The banded no-explicit-Kbar_avg preconditioner is
+implemented and benchmarked. At the headline stress regime (n=20, T=10000,
+p=24, sv=0.3) both direct and explicit PCG paths are memory-skipped; the
+banded path converges in 462 iters in 74 s. Banded assembly is 3.5–16×
+faster than explicit Kbar_avg assembly across large-cell reference points.
+Lambda stress (1e4–1e7) leaves PCG iteration counts unchanged (±3). See
+`code/thread2c_matrix_free_preconditioner/THREAD2C_NOTE.md`.
+
+The next execution step is Thread 4: lambda sensitivity.
